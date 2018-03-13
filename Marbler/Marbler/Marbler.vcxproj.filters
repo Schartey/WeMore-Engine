@@ -54,6 +54,18 @@
     <ClCompile Include="Engine\Core\VPhysics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\Asset\VMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Asset\VMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Asset\VTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\VShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VActor.h">
@@ -90,6 +102,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\VPhysics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Asset\VMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Asset\VMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Asset\VTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\VShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

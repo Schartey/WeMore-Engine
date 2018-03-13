@@ -89,12 +89,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Uni\SkyRacer\external\PhysX\include;D:\Uni\SkyRacer\external\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\external\PhysX\include;..\..\external\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\Uni\SkyRacer\external\PhysX\lib;D:\Uni\SkyRacer\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\external\PhysX\lib;..\..\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,8 +126,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Core\Asset\VMesh.cpp" />
     <ClCompile Include="Engine\Core\Components\VMeshComponent.cpp" />
     <ClCompile Include="Engine\Core\Debugger.cpp" />
+    <ClCompile Include="Engine\Core\VShader.cpp" />
     <ClCompile Include="Engine\Utils\Configs.cpp" />
     <ClCompile Include="Engine\Core\IEngine.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -139,10 +141,14 @@
     <ClCompile Include="Engine\Core\VScene.cpp" />
     <ClCompile Include="Engine\Core\Components\VSceneComponent.cpp" />
     <ClCompile Include="Engine\Core\VPhysics.cpp" />
+    <ClCompile Include="Engine\Core\Asset\VMaterial.cpp" />
+    <ClCompile Include="Engine\Core\Asset\VTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Core\Asset\VMesh.h" />
     <ClInclude Include="Engine\Core\Components\VMeshComponent.h" />
     <ClInclude Include="Engine\Core\Debugger.h" />
+    <ClInclude Include="Engine\Core\VShader.h" />
     <ClInclude Include="Engine\Utils\Configs.h" />
     <ClInclude Include="Engine\Core\VActor.h" />
     <ClInclude Include="Engine\Core\Components\VActorComponent.h" />
@@ -153,6 +159,8 @@
     <ClInclude Include="Engine\Core\VScene.h" />
     <ClInclude Include="Engine\Core\Components\VSceneComponent.h" />
     <ClInclude Include="Engine\Core\VPhysics.h" />
+    <ClInclude Include="Engine\Core\Asset\VMaterial.h" />
+    <ClInclude Include="Engine\Core\Asset\VTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
