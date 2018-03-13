@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+Marbler/Debug
+Marbler/Marbler/Debug
+Marbler/Marbler/Marbler/Debug
+
+Marbler/.vs
+Marbler/Marbler/x64
+Marbler/x64
