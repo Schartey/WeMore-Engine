@@ -5,23 +5,25 @@
 
 #include <iostream>
 
-VMeshComponent::VMeshComponent(std::string path)
+VMeshComponent::VMeshComponent()
 {
-	LoadScene(path);
+
 }
 
-void VMeshComponent::LoadScene(std::string path)
+void VMeshComponent::SetMesh(VMesh* Mesh)
 {
-	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	this->Mesh = Mesh;
+}
 
-	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+void VMeshComponent::Draw()
+{
+	VSceneComponent::Draw();
+
+	if (this->Mesh != nullptr)
 	{
-		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
-		return;
+		ModelMatrix = TranslationMatrix * RotationMatrix*ScaleMatrix;
+		Mesh->Draw(ModelMatrix);
 	}
-
-	this->ProcessScene(scene);
 }
 
 VMeshComponent::~VMeshComponent()

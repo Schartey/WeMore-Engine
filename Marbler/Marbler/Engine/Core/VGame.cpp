@@ -1,9 +1,12 @@
 #include "VGame.h"
 
-
-
 VGame::VGame()
 {
+}
+
+void VGame::OnInitialize()
+{
+
 }
 
 void VGame::Update()
@@ -14,6 +17,16 @@ void VGame::Update()
 void VGame::Draw()
 {
 	ActiveScene->Draw();
+}
+
+void VGame::SetWindow(VWindow* Window)
+{
+	this->Window = Window;
+}
+
+void VGame::SetActiveScene(VScene* Scene)
+{
+	ActiveScene = Scene;
 }
 
 VGame::~VGame()

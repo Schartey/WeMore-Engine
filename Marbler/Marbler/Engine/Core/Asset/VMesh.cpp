@@ -1,11 +1,16 @@
 #include "VMesh.h"
 
+#include "../Components/VCameraComponent.h"
+#include "../VGame.h"
 
-VMesh::VMesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, VMaterial* Material)
+#include <glm/gtc/type_ptr.hpp>
+
+VMesh::VMesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, VMaterial* Material, VScene* Scene)
 {
 	Vertices = vertices;
 	Indices = indices;
 	this->Material = Material;
+	this->Scene = Scene;
 
 	this->setupMesh();
 }
@@ -46,17 +51,25 @@ void VMesh::setupMesh()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void VMesh::draw()
+void VMesh::SetTranslationMatrix(glm::mat4 TranslationMatrix)
+{
+	this->TranslationMatrix = TranslationMatrix;
+}
+
+void VMesh::Draw(glm::mat4 ParentModelMatrix)
 {
 	//Use shading, set textures and lighting information
 	Material->Use();
+	VShader* Shader = Material->GetShader();
 	
+	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
 	//Set Mesh data in Material
-	//glUniformMatrix4fv(glGetUniformLocation(_shader->programHandle, "model"), 1, GL_FALSE, glm::value_ptr(_modelmatrix));
-	//glUniformMatrix4fv(glGetUniformLocation(_shader->programHandle, "transform"), 1, GL_FALSE, glm::value_ptr(_transfmatrix));
-	//glUniformMatrix4fv(glGetUniformLocation(_shader->programHandle, "ptransform"), 1, GL_FALSE, glm::value_ptr(_parenttransform));
-	//glUniformMatrix4fv(glGetUniformLocation(_shader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(GlobalSpace::getActiveObject()->getActiveCamera()->getViewMatrix()));
-	//glUniformMatrix4fv(glGetUniformLocation(_shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(GlobalSpace::getActiveObject()->getActiveCamera()->getProjectionMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(TranslationMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "rotation"), 1, GL_FALSE, glm::value_ptr(RotationMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(ScaleMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "pmodel"), 1, GL_FALSE, glm::value_ptr(ParentModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
 
 	//Light and material properties should be set in Material -> where does it get that information from?
 

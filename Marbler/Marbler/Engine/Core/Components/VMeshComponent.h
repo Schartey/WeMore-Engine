@@ -2,21 +2,23 @@
 
 #include "VSceneComponent.h"
 #include "../Asset/VMaterial.h"
+#include "../Asset/VMesh.h"
 #include <string>
+#include <vector>
 #include "assimp/Scene.h"
 
-class VMeshComponent : VSceneComponent
+class VMeshComponent : public VSceneComponent
 {
 public:
-	VMeshComponent(std::string Path);
+	VMeshComponent();
 
-	VMaterial GetMaterial();
+	void SetMesh(VMesh* Mesh);
 
-	~VMeshComponent();
+	virtual void Draw() override;
+
+	virtual ~VMeshComponent();
 
 private:
-	void LoadScene(std::string Path);
-	void ProcessScene(const aiScene* Scene);
-
+	VMesh * Mesh;
 };
 

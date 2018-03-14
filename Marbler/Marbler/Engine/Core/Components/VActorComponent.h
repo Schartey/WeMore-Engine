@@ -7,11 +7,10 @@ class VActorComponent
 public:
 	VActorComponent();
 
-	void SetOwner(VActor* Actor);
-
+	virtual void SetOwner(VActor* Actor);
 	virtual void Update();
 
-	~VActorComponent();
+	virtual ~VActorComponent();
 
 private:
 	VActor* Owner;

@@ -48,7 +48,9 @@ int VEngine::Initialize(const char* cfgpath)
 void VEngine::Setup(VGame* Game)
 {
 	this->Game = Game;
+	this->Game->SetWindow(Window);
 
+	this->Game->OnInitialize();
 }
 
 void VEngine::Run()
@@ -71,7 +73,7 @@ void VEngine::Run()
 		if (!bPause) {
 			//Game->updatePhysics();
 			//Game->update(deltaT);
-			//Game->draw();
+			Game->Draw();
 		}
 
 		//_game->drawGUI();

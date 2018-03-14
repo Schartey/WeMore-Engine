@@ -93,7 +93,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;assimp-vc140-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external\PhysX\lib;..\..\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -126,6 +126,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Core\Components\VCameraComponent.cpp" />
+    <ClCompile Include="Engine\Utils\Assimp\VAssimpScene.cpp" />
+    <ClCompile Include="Engine\Utils\Assimp\VAssimpUtils.cpp" />
     <ClCompile Include="Engine\Core\Asset\VMesh.cpp" />
     <ClCompile Include="Engine\Core\Components\VMeshComponent.cpp" />
     <ClCompile Include="Engine\Core\Debugger.cpp" />
@@ -143,8 +146,12 @@
     <ClCompile Include="Engine\Core\VPhysics.cpp" />
     <ClCompile Include="Engine\Core\Asset\VMaterial.cpp" />
     <ClCompile Include="Engine\Core\Asset\VTexture.cpp" />
+    <ClCompile Include="Game\Marbler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Core\Components\VCameraComponent.h" />
+    <ClInclude Include="Engine\Utils\Assimp\VAssimpScene.h" />
+    <ClInclude Include="Engine\Utils\Assimp\VAssimpUtils.h" />
     <ClInclude Include="Engine\Core\Asset\VMesh.h" />
     <ClInclude Include="Engine\Core\Components\VMeshComponent.h" />
     <ClInclude Include="Engine\Core\Debugger.h" />
@@ -161,9 +168,12 @@
     <ClInclude Include="Engine\Core\VPhysics.h" />
     <ClInclude Include="Engine\Core\Asset\VMaterial.h" />
     <ClInclude Include="Engine\Core\Asset\VTexture.h" />
+    <ClInclude Include="Game\Marbler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
+    <None Include="Engine\Shader\base.frag" />
+    <None Include="Engine\Shader\base.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

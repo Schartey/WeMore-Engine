@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 
 #include "VMaterial.h"
+#include "../VScene.h"
 
 struct Vertex
 {
@@ -15,22 +16,30 @@ struct Vertex
 	glm::vec2 texCoords;
 };
 
+class SceneComponent;
+
 class VMesh
 {
 public:
-	VMesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, VMaterial* material);
+	VMesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, VMaterial* material, VScene* Scene);
 
-	std::vector<Vertex> Vertices;
-	std::vector<GLuint> Indices;
-	VMaterial* Material;
+	void SetTranslationMatrix(glm::mat4 TranslationMatrix);
 
-	void draw();
+	void Draw(glm::mat4 ParentModelMatrix);
 	
 	~VMesh();
 
 private:
 	GLuint VAO, VBO, EBO;
-	glm::mat4 _modelmatrix;
+	glm::mat4 TranslationMatrix = glm::mat4();
+	glm::mat4 RotationMatrix = glm::mat4();
+	glm::mat4 ScaleMatrix = glm::mat4();
+
+	std::vector<Vertex> Vertices;
+	std::vector<GLuint> Indices;
+
+	VMaterial* Material;
+	VScene* Scene;
 
 	void setupMesh();
 };

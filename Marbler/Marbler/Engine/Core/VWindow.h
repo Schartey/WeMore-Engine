@@ -12,6 +12,9 @@ public:
 	bool Initialize(int &error);
 	void Draw();
 
+	int GetWidth() { return width; }
+	int GetHeight() { return height; }
+
 	~VWindow();
 
 private:
