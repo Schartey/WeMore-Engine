@@ -15,13 +15,13 @@ void VMeshComponent::SetMesh(VMesh* Mesh)
 	this->Mesh = Mesh;
 }
 
-void VMeshComponent::Draw()
+void VMeshComponent::Draw(glm::mat4 ParentModelMatrix)
 {
-	VSceneComponent::Draw();
+	VSceneComponent::Draw(ModelMatrix);
 
 	if (this->Mesh != nullptr)
 	{
-		ModelMatrix = TranslationMatrix * RotationMatrix*ScaleMatrix;
+		ModelMatrix = ParentModelMatrix*TranslationMatrix * RotationMatrix*ScaleMatrix;
 		Mesh->Draw(ModelMatrix);
 	}
 }

@@ -12,7 +12,7 @@ public:
 
 	virtual ~VActorComponent();
 
-private:
+protected:
 	VActor* Owner;
 };
 

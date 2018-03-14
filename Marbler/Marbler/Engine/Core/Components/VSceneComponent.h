@@ -11,7 +11,7 @@ public:
 
 	void Translate(glm::vec3 vector);
 
-	virtual void Draw();
+	virtual void Draw(glm::mat4 ParentModelMatrix);
 
 	virtual  ~VSceneComponent();
 

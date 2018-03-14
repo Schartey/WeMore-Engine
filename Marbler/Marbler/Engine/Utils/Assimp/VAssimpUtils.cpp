@@ -102,7 +102,7 @@ VMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpScene* 
 	{
 		aiMaterial* Material = iscene->mMaterials[Mesh->mMaterialIndex];
 
-		//pMaterial = ProcessMaterial(path, Material);
+		pMaterial = ProcessMaterial(path, Material);
 	}
 
 	VMesh* pMesh = new VMesh(vertices, indices, pMaterial, Scene);

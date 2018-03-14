@@ -12,7 +12,7 @@ void VSceneComponent::Translate(glm::vec3 vector)
 	TranslationMatrix = glm::translate(TranslationMatrix, vector);
 }
 
-void VSceneComponent::Draw()
+void VSceneComponent::Draw(glm::mat4 ParentModelMatrix)
 {
 
 }

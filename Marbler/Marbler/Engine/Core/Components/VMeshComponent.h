@@ -14,7 +14,7 @@ public:
 
 	void SetMesh(VMesh* Mesh);
 
-	virtual void Draw() override;
+	virtual void Draw(glm::mat4 ParentModelMatrix) override;
 
 	virtual ~VMeshComponent();
 

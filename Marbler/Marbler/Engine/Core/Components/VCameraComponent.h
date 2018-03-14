@@ -10,6 +10,7 @@ public:
 
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();
+	void SetLookAt(glm::vec3 LookAtVector);
 	void SetProjectionMatrix(glm::mat4 ProjectionMatrix);
 
 	virtual ~VCameraComponent();

@@ -41,15 +41,21 @@ public:
 		VSceneComponent* SceneComponent = dynamic_cast<VSceneComponent*>(AddComponent);
 		if (SceneComponent != nullptr)
 		{
+			SceneComponent->SetOwner(this);
 			SceneComponents.push_back(SceneComponent);
 			return;
 		}
 		VActorComponent* ActorComponent = dynamic_cast<VActorComponent*>(AddComponent); 
 		if (ActorComponent != nullptr)
 		{
+			ActorComponent->SetOwner(this);
 			ActorComponents.push_back(ActorComponent);
 		}
 	}
+
+	void Translate(glm::vec3 vector);
+
+	glm::mat4 GetModelMatrix();
 
 	virtual void Update();
 	void Draw();
@@ -60,5 +66,10 @@ private:
 	VScene* Scene;
 	std::vector<VActorComponent*> ActorComponents;
 	std::vector<VSceneComponent*> SceneComponents;
+
+	glm::mat4 ModelMatrix = glm::mat4();
+	glm::mat4 TranslationMatrix = glm::mat4();
+	glm::mat4 RotationMatrix = glm::mat4();
+	glm::mat4 ScaleMatrix = glm::mat4();
 };
 
