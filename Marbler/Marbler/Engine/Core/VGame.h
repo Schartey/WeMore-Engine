@@ -11,9 +11,11 @@ public:
 	VGame();
 
 	virtual void OnInitialize();
-	virtual void Update();
-	virtual void Draw();
+	virtual void Update(double deltaT);
+	void RenderPass(VShader* Shader);
+	void Draw();
 	void SetWindow(VWindow* Window);
+	VScene* GetActiveScene();
 
 	~VGame();
 

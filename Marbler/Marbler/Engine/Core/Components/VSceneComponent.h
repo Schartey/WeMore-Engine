@@ -9,7 +9,11 @@ class VSceneComponent : public VActorComponent
 public:
 	VSceneComponent();
 
+	glm::mat4 GetModelMatrix();
+
 	void Translate(glm::vec3 vector);
+
+	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix);
 
 	virtual void Draw(glm::mat4 ParentModelMatrix);
 

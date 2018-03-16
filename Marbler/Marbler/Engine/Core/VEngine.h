@@ -4,6 +4,7 @@
 #include "VGame.h"
 #include "VWindow.h"
 #include "VPhysics.h"
+#include "VGBuffer.h"
 
 #include <string>
 
@@ -28,6 +29,8 @@ private:
 	VWindow * Window;
 	VPhysics* Physics;
 	VGame * Game;
+
+	VGBuffer* GBuffer;
 
 	bool bPause = false;
 	bool bRunning = false;

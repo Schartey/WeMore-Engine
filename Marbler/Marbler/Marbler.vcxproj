@@ -126,7 +126,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Core\Asset\VDirectionalLight.cpp" />
+    <ClCompile Include="Engine\Core\Asset\VPointLight.cpp" />
     <ClCompile Include="Engine\Core\Components\VCameraComponent.cpp" />
+    <ClCompile Include="Engine\Core\InputManager.cpp" />
     <ClCompile Include="Engine\Utils\Assimp\VAssimpScene.cpp" />
     <ClCompile Include="Engine\Utils\Assimp\VAssimpUtils.cpp" />
     <ClCompile Include="Engine\Core\Asset\VMesh.cpp" />
@@ -135,6 +138,8 @@
     <ClCompile Include="Engine\Core\VShader.cpp" />
     <ClCompile Include="Engine\Utils\Configs.cpp" />
     <ClCompile Include="Engine\Core\IEngine.cpp" />
+    <ClCompile Include="Engine\Core\VGBuffer.cpp" />
+    <ClCompile Include="Engine\Core\Components\VInputComponent.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine\Core\VActor.cpp" />
     <ClCompile Include="Engine\Core\Components\VActorComponent.cpp" />
@@ -149,7 +154,10 @@
     <ClCompile Include="Game\Marbler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Core\Asset\VDirectionalLight.h" />
+    <ClInclude Include="Engine\Core\Asset\VPointLight.h" />
     <ClInclude Include="Engine\Core\Components\VCameraComponent.h" />
+    <ClInclude Include="Engine\Core\InputManager.h" />
     <ClInclude Include="Engine\Utils\Assimp\VAssimpScene.h" />
     <ClInclude Include="Engine\Utils\Assimp\VAssimpUtils.h" />
     <ClInclude Include="Engine\Core\Asset\VMesh.h" />
@@ -168,12 +176,22 @@
     <ClInclude Include="Engine\Core\VPhysics.h" />
     <ClInclude Include="Engine\Core\Asset\VMaterial.h" />
     <ClInclude Include="Engine\Core\Asset\VTexture.h" />
+    <ClInclude Include="Engine\Utils\Input\InputMapping.h" />
     <ClInclude Include="Game\Marbler.h" />
+    <ClInclude Include="Engine\Core\VGBuffer.h" />
+    <ClInclude Include="Engine\Core\Components\VInputComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
     <None Include="Engine\Shader\base.frag" />
     <None Include="Engine\Shader\base.vert" />
+    <None Include="Engine\Shader\gBuffer\directionallight_pass.frag" />
+    <None Include="Engine\Shader\gBuffer\geometry_pass.frag" />
+    <None Include="Engine\Shader\gBuffer\geometry_pass.vert" />
+    <None Include="Engine\Shader\gBuffer\null.frag" />
+    <None Include="Engine\Shader\gBuffer\null.vert" />
+    <None Include="Engine\Shader\gBuffer\pointlight_pass.frag" />
+    <None Include="Engine\Shader\gBuffer\light_pass.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

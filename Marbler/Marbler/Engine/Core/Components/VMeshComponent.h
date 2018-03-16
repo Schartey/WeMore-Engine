@@ -14,6 +14,7 @@ public:
 
 	void SetMesh(VMesh* Mesh);
 
+	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix) override;
 	virtual void Draw(glm::mat4 ParentModelMatrix) override;
 
 	virtual ~VMeshComponent();

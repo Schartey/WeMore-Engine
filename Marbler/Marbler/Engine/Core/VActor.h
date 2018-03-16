@@ -12,8 +12,6 @@ class VActor
 public:
 	VActor(VScene* Scene);
 
-	void ImportMesh(std::string path, std::string filename);
-
 	template <typename T>
 	inline T* GetComponentByClass()
 	{
@@ -58,6 +56,7 @@ public:
 	glm::mat4 GetModelMatrix();
 
 	virtual void Update();
+	void RenderPass(class VShader* Shader);
 	void Draw();
 
 	~VActor();

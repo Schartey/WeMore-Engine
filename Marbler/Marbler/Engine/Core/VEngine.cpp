@@ -1,5 +1,6 @@
 #include "VEngine.h"
 #include "../Utils/Configs.h"
+#include "IL/il.h"
 
 VEngine::VEngine()
 {
@@ -35,12 +36,17 @@ int VEngine::Initialize(const char* cfgpath)
 	}
 
 	Physics = new VPhysics();
-	
+
 	if (!Physics->Initialize())
 	{
 		std::cout << "Creating physics failed." << std::endl;
 		return InitPhysicsError;
 	}
+
+	GBuffer = new VGBuffer();
+	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
+
+	ilInit();
 
 	return InitSuccess;
 }
@@ -65,16 +71,37 @@ void VEngine::Run()
 		auto time = glfwGetTime();
 		deltaT = (float)(time - lastTime);
 		lastTime = time;
-
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		glfwPollEvents();
 
+
 		if (!bPause) {
 			//Game->updatePhysics();
-			//Game->update(deltaT);
-			Game->Draw();
+			Game->Update(deltaT);
+			GBuffer->StartFrame();
+			GBuffer->BeginGeometryPass();
+			Game->RenderPass(GBuffer->GetGeometryShader());
+			GBuffer->EndGeometryPass();
+
+			glEnable(GL_STENCIL_TEST);
+
+			for (unsigned int i = 0; i < Game->GetActiveScene()->GetPointLights().size(); i++) {
+				GBuffer->StencilPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
+				GBuffer->PointLightPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
+			}
+			glDisable(GL_STENCIL_TEST);
+
+			if (Game->GetActiveScene()->GetDirectionalLight() != nullptr)
+			{
+				GBuffer->DirectionalLightPass(Game->GetActiveScene());
+			}
+
+			GBuffer->FinalPass();
+			//Game->Draw();
 		}
+
 
 		//_game->drawGUI();
 		//_gui->draw();

@@ -10,7 +10,8 @@ class VTexture
 public:
 	VTexture();
 
-	GLuint LoadTextureFromFile(std::string name, std::string path);
+	int GetId();
+	GLuint LoadTextureFromFile(std::string name);
 
 	~VTexture();
 

@@ -6,25 +6,26 @@ VTexture::VTexture()
 {
 }
 
-GLuint VTexture::LoadTextureFromFile(std::string name, std::string path) {
+int VTexture::GetId()
+{
+	return Id;
+}
+
+GLuint VTexture::LoadTextureFromFile(std::string name) {
 
 	FILE *fp;
 	errno_t err;
-
-	std::string tPath = path;
-	tPath.append(name);
-	tPath.append('\0');
 							  /* try to open the file */
-	err = fopen_s(&fp, path.c_str(), "rb");
+	err = fopen_s(&fp, name.c_str(), "rb");
 	if (err != 0) {
-		printf("%s could not be opened. Are you in the right directory ? Don't forget to read the FAQ !\n", tPath.c_str()); getchar();
+		printf("%s could not be opened. Are you in the right directory ? Don't forget to read the FAQ !\n", name.c_str()); getchar();
 		return -1;
 	}
 
 	/* verify the type of file */
 	char filecode[4];
 	fread(filecode, 1, 4, fp);
-	this->Id = this->LoadImage(tPath.c_str());
+	this->Id = this->LoadImage(name.c_str());
 	fclose(fp);
 }
 
@@ -34,7 +35,7 @@ GLuint VTexture::LoadImage(const char* path)
 
 	GLuint textureID;			// Create a texture ID as a GLuint
 
-	ILboolean success;			// Create a flag to keep track of success/failure
+	bool success;			// Create a flag to keep track of success/failure
 
 	ILenum error;				// Create a flag to keep track of the IL error state
 

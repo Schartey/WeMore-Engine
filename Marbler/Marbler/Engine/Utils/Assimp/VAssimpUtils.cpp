@@ -13,6 +13,7 @@ VAssimpScene* VAssimpUtils::LoadScene(VScene* Scene, std::string path, std::stri
 {
 	std::string filepath;
 	filepath.assign(path);
+	filepath.append("/");
 	filepath.append(filename);
 
 	Assimp::Importer import;
@@ -29,6 +30,72 @@ VAssimpScene* VAssimpUtils::LoadScene(VScene* Scene, std::string path, std::stri
 	ProcessScene(Scene, path, AssimpScene, iscene);
 
 	return AssimpScene;
+}
+
+VMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string path, std::string filename)
+{
+	std::string filepath;
+	filepath.assign(path);
+	filepath.append("/");
+	filepath.append(filename);
+
+	Assimp::Importer import;
+	const aiScene* iscene = import.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	if (!iscene || iscene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !iscene->mRootNode)
+	{
+		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+		return nullptr;
+	}
+
+	VAssimpScene* AssimpScene = new VAssimpScene();
+
+	ProcessScene(Scene, path, AssimpScene, iscene);
+
+	return AssimpScene->GetMeshes().size() > 0 ? AssimpScene->GetMeshes().at(0) : nullptr;
+}
+
+VPointLight* VAssimpUtils::LoadPointLight(std::string path, std::string filename)
+{
+	VMesh* Mesh = LoadMesh(nullptr, path, filename);
+	VPointLight* Light = new VPointLight();
+	Light->Setup(Mesh->GetVertices(), Mesh->GetIndices(), Mesh->GetMaterial(), nullptr);
+
+	return Light;
+}
+
+VDirectionalLight* VAssimpUtils::LoadDirectionalLight(std::string path, std::string filename)
+{
+	VMesh* Mesh = LoadMesh(nullptr, path, filename);
+	VDirectionalLight* Light = new VDirectionalLight();
+	Light->Setup(Mesh->GetVertices(), Mesh->GetIndices(), Mesh->GetMaterial(), nullptr);
+
+	return Light;
+}
+
+void VAssimpUtils::LoadData(std::string path, std::string filename, std::vector<Vertex> Vertices, std::vector<GLuint> Indices)
+{
+	std::string filepath;
+	filepath.assign(path);
+	filepath.append("/");
+	filepath.append(filename);
+
+	Assimp::Importer import;
+	const aiScene* iscene = import.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	if (!iscene || iscene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !iscene->mRootNode)
+	{
+		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+		return;
+	}
+
+	VAssimpScene* AssimpScene = new VAssimpScene();
+
+	ProcessScene(nullptr, path, AssimpScene, iscene);
+
+	VMesh* Mesh = AssimpScene->GetMeshes().size() > 0 ? AssimpScene->GetMeshes().at(0) : nullptr;
+	Vertices = Mesh->GetVertices();
+	Indices = Mesh->GetIndices();
 }
 
 void VAssimpUtils::ProcessScene(VScene* Scene, std::string path, VAssimpScene* AssimpScene, const aiScene* iscene)
@@ -101,14 +168,15 @@ VMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpScene* 
 	if (Mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* Material = iscene->mMaterials[Mesh->mMaterialIndex];
-
+			
 		pMaterial = ProcessMaterial(path, Material);
 	}
 
-	VMesh* pMesh = new VMesh(vertices, indices, pMaterial, Scene);
+	VMesh* pMesh = new VMesh();
 
 	pMesh->SetTranslationMatrix(ConvertMat4(Node->mTransformation));
 
+	pMesh->Setup(vertices, indices, pMaterial, Scene);
 	return pMesh;
 }
 
@@ -120,18 +188,26 @@ VMaterial* VAssimpUtils::ProcessMaterial(std::string path, aiMaterial* Material)
 	{
 		aiString str;
 		Material->GetTexture(aiTextureType_DIFFUSE, i, &str);
+		std::string name = str.C_Str();
+		path = path.substr(0, path.find_last_of('/'));
+		path.append("/Textures");
+
 		VTexture* texture = new VTexture();
-		texture->LoadTextureFromFile(str.C_Str(), path);
+		texture->LoadTextureFromFile(str.C_Str());
+
 		pMaterial->AddDiffuseTexture(texture);
 	}
-	for (GLuint i = 0; i < Material->GetTextureCount(aiTextureType_LIGHTMAP); i++)
-	{
-		aiString str;
-		Material->GetTexture(aiTextureType_LIGHTMAP, i, &str);
-		VTexture* texture = new VTexture();
-		texture->LoadTextureFromFile(str.C_Str(), path);
-		pMaterial->AddLightMapTexture(texture);
-	}
+
+	glm::vec3 color;
+	Material->Get(AI_MATKEY_COLOR_AMBIENT, color);
+	pMaterial->SetAmbient(color);
+	Material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+	pMaterial->SetDiffuse(color);
+	Material->Get(AI_MATKEY_COLOR_SPECULAR, color);
+	pMaterial->SetSpecular(color);
+	float shininess;
+	Material->Get(AI_MATKEY_SHININESS, shininess);
+	pMaterial->SetShininess(shininess);
 
 	return pMaterial;
 }

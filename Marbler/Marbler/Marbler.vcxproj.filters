@@ -78,6 +78,21 @@
     <ClCompile Include="Game\Marbler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\VGBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Asset\VPointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Asset\VDirectionalLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Components\VInputComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\InputManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VActor.h">
@@ -140,10 +155,35 @@
     <ClInclude Include="Game\Marbler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\Asset\VDirectionalLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Asset\VPointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\VGBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Components\VInputComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\Input\InputMapping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
     <None Include="Engine\Shader\base.frag" />
     <None Include="Engine\Shader\base.vert" />
+    <None Include="Engine\Shader\gBuffer\geometry_pass.vert" />
+    <None Include="Engine\Shader\gBuffer\geometry_pass.frag" />
+    <None Include="Engine\Shader\gBuffer\pointlight_pass.frag" />
+    <None Include="Engine\Shader\gBuffer\light_pass.vert" />
+    <None Include="Engine\Shader\gBuffer\directionallight_pass.frag" />
+    <None Include="Engine\Shader\gBuffer\null.vert" />
+    <None Include="Engine\Shader\gBuffer\null.frag" />
   </ItemGroup>
 </Project>

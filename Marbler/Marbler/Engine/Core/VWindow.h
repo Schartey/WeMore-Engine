@@ -12,6 +12,7 @@ public:
 	bool Initialize(int &error);
 	void Draw();
 
+	GLFWwindow* GetGLFWWindow() { return GlfwWindow; }
 	int GetWidth() { return width; }
 	int GetHeight() { return height; }
 
