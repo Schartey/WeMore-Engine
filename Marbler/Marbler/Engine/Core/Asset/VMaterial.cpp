@@ -22,6 +22,41 @@ void VMaterial::Use()
 	Shader->useShader();
 }
 
+void VMaterial::ApplyRenderPassInformation(VShader* Shader)
+{
+	int texturesInUse = 0;
+
+	glUniform1i(glGetUniformLocation(Shader->programHandle, "diffuseTextureSize"), this->DiffuseTextures.size());
+	glUniform1i(glGetUniformLocation(Shader->programHandle, "lightmapTextureSize"), this->LightMapTextures.size());
+
+	for (int i = 0; i < DiffuseTextures.size() && DiffuseTextures.size() < 10; i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + texturesInUse);
+		glBindTexture(GL_TEXTURE_2D, this->DiffuseTextures[i]->GetId());
+
+		GLuint uUniform = glGetUniformLocation(Shader->programHandle, ("diffuseTexture[" + std::to_string(i) + "]").c_str());
+		glUniform1i(uUniform, texturesInUse);
+
+		texturesInUse++;
+	}
+
+	for (int i = 0; i < LightMapTextures.size() && LightMapTextures.size() < 10; i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + texturesInUse);
+		glBindTexture(GL_TEXTURE_2D, this->LightMapTextures[i]->GetId());
+
+		GLuint uUniform = glGetUniformLocation(Shader->programHandle, ("lightmapTexture[" + std::to_string(i) + "]").c_str());
+		glUniform1i(uUniform, texturesInUse);
+
+		texturesInUse++;
+	}
+
+	glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.diffuse"), 1, glm::value_ptr(Diffuse));
+	//glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.specularColor"), 1, glm::value_ptr(SpecularColor));
+	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.specularIntensity"), SpecularIntensity);
+	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.specularPower"), SpecularPower);
+}
+
 void VMaterial::ApplyInformation()
 {
 	int texturesInUse = 0;
@@ -51,10 +86,10 @@ void VMaterial::ApplyInformation()
 		texturesInUse++;
 	}
 
-	glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.ambient"), 1, glm::value_ptr(Ambient));
 	glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.diffuse"), 1, glm::value_ptr(Diffuse));
-	glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.specular"), 1, glm::value_ptr(Specular));
-	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.shininess"), Shininess);
+	//glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.specularColor"), 1, glm::value_ptr(SpecularColor));
+	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.specularIntensity"), SpecularIntensity);
+	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.specularPower"), SpecularPower);
 }
 
 void VMaterial::Release()
@@ -62,7 +97,7 @@ void VMaterial::Release()
 
 }
 
-void VMaterial::SetAmbient(glm::vec3 Ambient)
+void VMaterial::SetAmbient(float Ambient)
 {
 	this->Ambient = Ambient;
 }
@@ -72,14 +107,19 @@ void VMaterial::SetDiffuse(glm::vec3 Diffuse)
 	this->Diffuse = Diffuse;
 }
 
-void VMaterial::SetSpecular(glm::vec3 Specular)
+void VMaterial::SetSpecularColor(glm::vec3 SpecularColor)
 {
-	this->Specular = Specular;
+	this->SpecularColor = SpecularColor;
 }
 
-void VMaterial::SetShininess(float Shininess)
+void VMaterial::SetSpecularIntensity(float SpecularIntensity)
 {
-	this->Shininess = Shininess;
+	this->SpecularIntensity = SpecularIntensity;
+}
+
+void VMaterial::SetSpecularPower(float SpecularPower)
+{
+	this->SpecularPower = SpecularPower;
 }
 
 void VMaterial::AddDiffuseTexture(VTexture* Texture)

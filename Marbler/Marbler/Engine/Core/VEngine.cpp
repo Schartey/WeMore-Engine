@@ -79,7 +79,7 @@ void VEngine::Run()
 
 		if (!bPause) {
 			//Game->updatePhysics();
-			Game->Update(deltaT);
+			//Game->Update(deltaT);
 			GBuffer->StartFrame();
 			GBuffer->BeginGeometryPass();
 			Game->RenderPass(GBuffer->GetGeometryShader());

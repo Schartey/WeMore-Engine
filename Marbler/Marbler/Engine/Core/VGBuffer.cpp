@@ -136,6 +136,7 @@ void VGBuffer::PointLightPass(VScene* Scene, VPointLight* PointLight)
 	glUniform1i(glGetUniformLocation(PointLightShader->programHandle, "gPositionMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
 	glUniform1i(glGetUniformLocation(PointLightShader->programHandle, "gColorMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
 	glUniform1i(glGetUniformLocation(PointLightShader->programHandle, "gNormalMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	glUniform1i(glGetUniformLocation(PointLightShader->programHandle, "gSpecularMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
 	glUniform2f(glGetUniformLocation(PointLightShader->programHandle, "gScreenSize"), (float)Width, (float)Height);
 
 	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
@@ -206,18 +207,19 @@ void VGBuffer::DirectionalLightPass(VScene* Scene)
 	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gPositionMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
 	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gColorMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
 	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gNormalMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gSpecularMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
 	glUniform2f(glGetUniformLocation(DirectionalLightShader->programHandle, "gScreenSize"), (float)Width, (float)Height);
 
 	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
 
 	//glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "cmodel"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetModelMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
+	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
 
 	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
 	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
 
-	glUniform3f(glGetUniformLocation(DirectionalLightShader->programHandle, "gDirectionalLight.Direction"), Scene->GetDirectionalLight()->GetColor().x, Scene->GetDirectionalLight()->GetColor().y, Scene->GetDirectionalLight()->GetColor().z);
+	glUniform3f(glGetUniformLocation(DirectionalLightShader->programHandle, "gDirectionalLight.Direction"), Scene->GetDirectionalLight()->GetDirection().x, Scene->GetDirectionalLight()->GetDirection().y, Scene->GetDirectionalLight()->GetDirection().z);
 	glUniform1f(glGetUniformLocation(DirectionalLightShader->programHandle, "gDirectionalLight.Base.Ambient"), Scene->GetDirectionalLight()->GetAmbient());
 	glUniform3f(glGetUniformLocation(DirectionalLightShader->programHandle, "gDirectionalLight.Base.Color"), Scene->GetDirectionalLight()->GetColor().x, Scene->GetDirectionalLight()->GetColor().y, Scene->GetDirectionalLight()->GetColor().z);
 	glUniform1f(glGetUniformLocation(DirectionalLightShader->programHandle, "gDirectionalLight.Base.Diffuse"), Scene->GetDirectionalLight()->GetDiffuse());

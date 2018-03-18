@@ -100,7 +100,7 @@ void VMesh::Scale(glm::vec3 ScaleVector)
 void VMesh::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
 {
 	//Don't use local Shader, already set by GBuffer, but add information
-	Material->ApplyInformation();
+	Material->ApplyRenderPassInformation(Shader);
 
 	//VShader* Shader = Material->GetShader();
 

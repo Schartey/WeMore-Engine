@@ -21,34 +21,42 @@ void Marbler::OnInitialize()
 
 	VScene* MainScene = new VScene();
 
-	VActor* RandomActor = MainScene->CreateActor();
+
+
+	VActor* FloorActor = MainScene->CreateActor();
+
+	VMesh* FloorMesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
+	VTexture* FloorTexture = new VTexture();
+	FloorTexture->LoadTextureFromFile(texturePath + "/Lightmap.png");
+	FloorMesh->GetMaterial()->AddLightMapTexture(FloorTexture);
+	FloorMesh->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
+	FloorMesh->GetMaterial()->SetSpecularIntensity(1.0f);
+	FloorMesh->GetMaterial()->SetSpecularPower(1);
+	FloorMesh->Scale(glm::vec3(10.0f, 10.0f, 0.1f));
+	FloorMesh->Translate(glm::vec3(0.0f, 0.0f, -2.0f));
+
+	VMeshComponent* FloorMeshComponent = new VMeshComponent();
+	FloorMeshComponent->SetMesh(FloorMesh);
+	FloorActor->AddComponent(FloorMeshComponent);
 
 	VMesh* Mesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
 	VTexture* texture = new VTexture();
 	texture->LoadTextureFromFile(texturePath + "/Lightmap.png");
 	Mesh->GetMaterial()->AddLightMapTexture(texture);
+	Mesh->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
+	Mesh->GetMaterial()->SetSpecularIntensity(0.5f);
+	Mesh->GetMaterial()->SetSpecularPower(32);
 
 	VMeshComponent* MeshComponent = new VMeshComponent();
 	MeshComponent->SetMesh(Mesh);
+
+	VActor* RandomActor = MainScene->CreateActor();
+
 	RandomActor->AddComponent(MeshComponent);
-
-
-	VActor* FloorActor = MainScene->CreateActor();
-
-	Mesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
-	texture = new VTexture();
-	texture->LoadTextureFromFile(texturePath + "/Lightmap.png");
-	Mesh->GetMaterial()->AddLightMapTexture(texture);
-	Mesh->Scale(glm::vec3(10.0f, 10.0f, 0.1f));
-	Mesh->Translate(glm::vec3(0.0f, 0.0f, -2.0f));
-
-	MeshComponent = new VMeshComponent();
-	MeshComponent->SetMesh(Mesh);
-	FloorActor->AddComponent(MeshComponent);
 	
 
 	VActor* CameraActor = MainScene->CreateActor();
-	CameraActor->Translate(glm::vec3(-20.0f, 10.0f, -10.0f));
+	CameraActor->Translate(glm::vec3(20.0f, 10.0f, 10.0f));
 	
 	VCameraComponent* CameraComponent = new VCameraComponent();
 	CameraActor->AddComponent(CameraComponent);
@@ -59,7 +67,7 @@ void Marbler::OnInitialize()
 	DirectionalLight->SetAmbient(0.1f);
 	DirectionalLight->SetColor(glm::vec3(1.0f, 1.0f, 0.0f));
 	DirectionalLight->SetDiffuse(0.5f);
-	DirectionalLight->SetDirection(glm::vec3(0.0f, 1.0f, 0.0f));
+	DirectionalLight->SetDirection(glm::vec3(0.0f, -1.0f, 0.5f));
 
 	MainScene->SetDirectionalLight(DirectionalLight);
 
@@ -68,9 +76,9 @@ void Marbler::OnInitialize()
 	PointLight1->SetDiffuse(0.5f);
 	PointLight1->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	PointLight1->SetTranslationMatrix(glm::mat4());
-	PointLight1->Translate(glm::vec3(-1.0f));
-	PointLight1->SetAttenuation(VAttenuation(0.0f, 0.0f, 0.5f));
-	PointLight1->Scale(glm::vec3(9.0f));
+	PointLight1->Translate(glm::vec3(3.0f, -3.0f, -1.0f));
+	PointLight1->SetAttenuation(VAttenuation(0.0f, 0.0f, 0.3f));
+	PointLight1->Scale(glm::vec3(5.0f));
 
 	//MainScene->AddPointLight(PointLight1);
 

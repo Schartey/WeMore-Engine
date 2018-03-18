@@ -10,6 +10,7 @@ public:
 	float GetAmbient();
 	glm::vec3 GetColor();
 	float GetDiffuse();
+	glm::vec3 GetDirection();
 
 	void SetAmbient(float Ambient);
 	void SetColor(glm::vec3 Color);

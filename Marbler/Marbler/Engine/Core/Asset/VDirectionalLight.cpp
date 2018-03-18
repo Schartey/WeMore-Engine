@@ -20,6 +20,11 @@ float VDirectionalLight::GetDiffuse()
 	return Diffuse;
 }
 
+glm::vec3 VDirectionalLight::GetDirection()
+{
+	return Direction;
+}
+
 void VDirectionalLight::SetAmbient(float Ambient)
 {
 	this->Ambient = Ambient;

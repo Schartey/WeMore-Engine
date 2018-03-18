@@ -198,16 +198,19 @@ VMaterial* VAssimpUtils::ProcessMaterial(std::string path, aiMaterial* Material)
 		pMaterial->AddDiffuseTexture(texture);
 	}
 
+	float ambient;
+	//Material->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
+	//pMaterial->SetAmbient(ambient);
 	glm::vec3 color;
-	Material->Get(AI_MATKEY_COLOR_AMBIENT, color);
-	pMaterial->SetAmbient(color);
 	Material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
 	pMaterial->SetDiffuse(color);
 	Material->Get(AI_MATKEY_COLOR_SPECULAR, color);
-	pMaterial->SetSpecular(color);
-	float shininess;
-	Material->Get(AI_MATKEY_SHININESS, shininess);
-	pMaterial->SetShininess(shininess);
+	pMaterial->SetSpecularColor(color);
+	float SpecularIntensity;
+	Material->Get(AI_MATKEY_SHININESS, SpecularIntensity);
+	pMaterial->SetSpecularIntensity(SpecularIntensity);
+	Material->Get(AI_MATKEY_SHININESS_STRENGTH, SpecularIntensity);
+	pMaterial->SetSpecularPower(SpecularIntensity);
 
 	return pMaterial;
 }

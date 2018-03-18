@@ -185,5 +185,7 @@
     <None Include="Engine\Shader\gBuffer\directionallight_pass.frag" />
     <None Include="Engine\Shader\gBuffer\null.vert" />
     <None Include="Engine\Shader\gBuffer\null.frag" />
+    <None Include="Engine\Shader\gBuffer\shadow_pass.vert" />
+    <None Include="Engine\Shader\gBuffer\shadow_pass.frag" />
   </ItemGroup>
 </Project>

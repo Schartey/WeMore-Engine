@@ -192,6 +192,8 @@
     <None Include="Engine\Shader\gBuffer\null.vert" />
     <None Include="Engine\Shader\gBuffer\pointlight_pass.frag" />
     <None Include="Engine\Shader\gBuffer\light_pass.vert" />
+    <None Include="Engine\Shader\gBuffer\shadow_pass.frag" />
+    <None Include="Engine\Shader\gBuffer\shadow_pass.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
