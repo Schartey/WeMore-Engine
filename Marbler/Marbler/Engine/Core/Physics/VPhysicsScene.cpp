@@ -8,11 +8,9 @@ VPhysicsScene::VPhysicsScene(PxScene* Scene, VPhysics* Physics)
 	this->Physics = Physics;
 }
 
-PxRigidDynamic* VPhysicsScene::CreateDynamic(const PxTransform& t)
+void VPhysicsScene::AddPhysicsActor(VPhysicsActor* PhysicsActor)
 {
-	PxRigidDynamic* dynamic = this->Physics->GetPxPhysics()->createRigidDynamic(t);
-	Scene->addActor(*dynamic);
-	return dynamic;
+	this->Scene->addActor(*PhysicsActor->GetRigidBody());
 }
 
 

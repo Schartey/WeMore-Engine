@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Physics/VPhysicsScene.h"
+#include "Physics/VPhysicsActor.h"
 
 #include "PxScene.h"
 
@@ -24,6 +25,9 @@ public:
 
 	std::vector<VPointLight*> GetPointLights();
 	VDirectionalLight* GetDirectionalLight();
+
+	void AddPhysicsActor(VPhysicsActor* PhysicsActor); 
+	VPhysicsScene* GetPhysicsScene();
 
 	VActor* GetActivePlayerActor();
 	void SetActivePlayerActor(VActor* Actor);

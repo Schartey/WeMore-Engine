@@ -4,7 +4,7 @@
 #include <glm/gtx/norm.hpp>
 #include "../VActor.h"
 
-VCameraComponent::VCameraComponent()
+VCameraComponent::VCameraComponent(VScene* Scene) : VSceneComponent(Scene)
 {
 
 }

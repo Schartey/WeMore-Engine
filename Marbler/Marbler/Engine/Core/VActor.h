@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "Physics/VPhysicsActor.h"
+
 class VScene;
 
 class VActor
@@ -31,6 +33,7 @@ public:
 				return Component;
 			}
 		}
+		return nullptr;
 	}
 
 	template <typename T>
@@ -53,9 +56,15 @@ public:
 		}
 	}
 
+	void SetupBasicRigidBody();
+
+	void AddPhysicsShape(VPhysicsShape* PhysicsShape);
+
 	void Translate(glm::vec3 vector);
 
 	glm::mat4 GetModelMatrix();
+	glm::mat4 GetTransformationMatrix();
+	void SetTransformationMatrix(glm::mat4 TransformationMatrix);
 
 	virtual void Update();
 	void RenderPass(class VShader* Shader);
@@ -65,6 +74,8 @@ public:
 
 private:
 	VScene* Scene;
+	VPhysicsActor* PhysicsActor;
+
 	std::vector<VActorComponent*> ActorComponents;
 	std::vector<VSceneComponent*> SceneComponents;
 
@@ -72,5 +83,7 @@ private:
 	glm::mat4 TranslationMatrix = glm::mat4();
 	glm::mat4 RotationMatrix = glm::mat4();
 	glm::mat4 ScaleMatrix = glm::mat4();
+
+	glm::mat4 TransformationMatrix = glm::mat4();
 };
 

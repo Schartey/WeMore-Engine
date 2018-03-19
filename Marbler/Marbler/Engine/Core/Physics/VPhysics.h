@@ -9,14 +9,23 @@ using namespace physx;
 class VPhysics
 {
 public:
-	VPhysics();
+	static VPhysics* GetInstance() {
+		if (instance == nullptr)
+			instance = new VPhysics();
+
+		return instance;
+	}
 
 	bool Initialize();
 	PxPhysics* GetPxPhysics();
 
-	~VPhysics();
+	~VPhysics() { delete instance; }
 
 private:
+	VPhysics();
+
+	static VPhysics* instance;
+
 	PxDefaultAllocator Allocator;
 	PxDefaultErrorCallback ErrorCallback;
 

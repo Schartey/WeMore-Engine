@@ -32,7 +32,7 @@ VAssimpScene* VAssimpUtils::LoadScene(VScene* Scene, std::string path, std::stri
 	return AssimpScene;
 }
 
-VMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string path, std::string filename)
+VAssimpMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string path, std::string filename)
 {
 	std::string filepath;
 	filepath.assign(path);
@@ -57,45 +57,20 @@ VMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string path, std::string filen
 
 VPointLight* VAssimpUtils::LoadPointLight(std::string path, std::string filename)
 {
-	VMesh* Mesh = LoadMesh(nullptr, path, filename);
+	VAssimpMesh* Mesh = LoadMesh(nullptr, path, filename);
 	VPointLight* Light = new VPointLight();
-	Light->Setup(Mesh->GetVertices(), Mesh->GetIndices(), Mesh->GetMaterial(), nullptr);
+	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetMaterial(), nullptr);
 
 	return Light;
 }
 
 VDirectionalLight* VAssimpUtils::LoadDirectionalLight(std::string path, std::string filename)
 {
-	VMesh* Mesh = LoadMesh(nullptr, path, filename);
+	VAssimpMesh* Mesh = LoadMesh(nullptr, path, filename);
 	VDirectionalLight* Light = new VDirectionalLight();
-	Light->Setup(Mesh->GetVertices(), Mesh->GetIndices(), Mesh->GetMaterial(), nullptr);
+	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetMaterial(), nullptr);
 
 	return Light;
-}
-
-void VAssimpUtils::LoadData(std::string path, std::string filename, std::vector<Vertex> Vertices, std::vector<GLuint> Indices)
-{
-	std::string filepath;
-	filepath.assign(path);
-	filepath.append("/");
-	filepath.append(filename);
-
-	Assimp::Importer import;
-	const aiScene* iscene = import.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-	if (!iscene || iscene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !iscene->mRootNode)
-	{
-		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
-		return;
-	}
-
-	VAssimpScene* AssimpScene = new VAssimpScene();
-
-	ProcessScene(nullptr, path, AssimpScene, iscene);
-
-	VMesh* Mesh = AssimpScene->GetMeshes().size() > 0 ? AssimpScene->GetMeshes().at(0) : nullptr;
-	Vertices = Mesh->GetVertices();
-	Indices = Mesh->GetIndices();
 }
 
 void VAssimpUtils::ProcessScene(VScene* Scene, std::string path, VAssimpScene* AssimpScene, const aiScene* iscene)
@@ -115,12 +90,12 @@ void VAssimpUtils::ProcessNode(VScene* Scene, std::string path, VAssimpScene* As
 	{
 		aiMesh* Mesh = iscene->mMeshes[Node->mMeshes[i]];
 
-		VMesh* pMesh = ProcessMesh(Scene, path, AssimpScene, Mesh, Node, iscene);
-		AssimpScene->AddMesh(pMesh);
+		VAssimpMesh* AssimpMesh = ProcessMesh(Scene, path, AssimpScene, Mesh, Node, iscene);
+		AssimpScene->AddMesh(AssimpMesh);
 	}
 }
 
-VMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpScene* AssimpScene, aiMesh* Mesh, const aiNode* Node, const aiScene* iscene)
+VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpScene* AssimpScene, aiMesh* Mesh, const aiNode* Node, const aiScene* iscene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
@@ -174,10 +149,11 @@ VMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpScene* 
 
 	VMesh* pMesh = new VMesh();
 
-	//pMesh->SetTranslationMatrix(ConvertMat4(Node->mTransformation));
-
 	pMesh->Setup(vertices, indices, pMaterial, Scene);
-	return pMesh;
+
+	VAssimpMesh* AssimpMesh = new VAssimpMesh(pMesh, pMaterial, ConvertMat4(Node->mTransformation));
+
+	return AssimpMesh;
 }
 
 VMaterial* VAssimpUtils::ProcessMaterial(std::string path, aiMaterial* Material)
@@ -199,9 +175,6 @@ VMaterial* VAssimpUtils::ProcessMaterial(std::string path, aiMaterial* Material)
 		pMaterial->AddDiffuseTexture(texture);
 	}
 
-	float ambient;
-	//Material->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
-	//pMaterial->SetAmbient(ambient);
 	glm::vec3 color;
 	Material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
 	pMaterial->SetDiffuse(color);

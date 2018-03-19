@@ -6,9 +6,24 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
+#include "VScene.h"
+
 VActor::VActor(VScene* Scene)
 {
 	this->Scene = Scene;
+}
+
+void VActor::SetupBasicRigidBody()
+{
+	this->PhysicsActor = new VPhysicsActor();
+	PhysicsActor->CreateRigidBody(this);
+}
+
+void VActor::AddPhysicsShape(VPhysicsShape* PhysicsShape)
+{
+	PhysicsActor->AttachPhysicsShape(PhysicsShape);
+
+	Scene->AddPhysicsActor(PhysicsActor);
 }
 
 void VActor::Translate(glm::vec3 vector)
@@ -23,8 +38,22 @@ glm::mat4 VActor::GetModelMatrix()
 	return ModelMatrix;
 }
 
+glm::mat4 VActor::GetTransformationMatrix()
+{
+	return TransformationMatrix;
+}
+void VActor::SetTransformationMatrix(glm::mat4 TransformationMatrix)
+{
+	this->TransformationMatrix = TransformationMatrix;
+}
+
 void VActor::Update()
 {
+	if (PhysicsActor != nullptr)
+	{
+		this->TransformationMatrix = PhysicsActor->GetTransformation();
+	}
+
 	for (VActorComponent* ActorComponent : ActorComponents)
 	{
 		ActorComponent->Update();

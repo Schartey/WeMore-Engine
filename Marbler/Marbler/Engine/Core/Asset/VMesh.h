@@ -37,7 +37,7 @@ public:
 	void Translate(glm::vec3 TranslationVector);
 	void Scale(glm::vec3 ScaleVector);
 
-	void RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix);
+	void RenderPass();
 	virtual void Draw(glm::mat4 ParentModelMatrix);
 	
 	~VMesh();

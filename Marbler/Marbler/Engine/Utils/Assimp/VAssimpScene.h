@@ -1,19 +1,19 @@
 #pragma once
 
 #include <vector>
-#include "../../Core/Asset/VMesh.h"
+#include "VAssimpMesh.h"
 
 class VAssimpScene
 {
 public:
 	VAssimpScene();
 
-	void AddMesh(VMesh* Mesh);
-	std::vector<VMesh*> GetMeshes();
+	void AddMesh(VAssimpMesh* Mesh);
+	std::vector<VAssimpMesh*> GetMeshes();
 
 	~VAssimpScene();
 
 private:
-	std::vector<VMesh*> Meshes;
+	std::vector<VAssimpMesh*> Meshes;
 };
 

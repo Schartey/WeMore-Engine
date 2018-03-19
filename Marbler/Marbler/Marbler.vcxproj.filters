@@ -102,6 +102,9 @@
     <ClCompile Include="Engine\Core\Physics\VPhysicsShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Utils\Assimp\VAssimpMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VActor.h">
@@ -189,6 +192,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\Physics\VPhysicsShape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\Assimp\VAssimpMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

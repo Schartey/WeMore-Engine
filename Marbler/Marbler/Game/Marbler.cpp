@@ -24,22 +24,45 @@ void Marbler::OnInitialize()
 	VScene* MainScene = CreateScene();
 
 
-
 	VActor* FloorActor = MainScene->CreateActor();
+	VMeshComponent* FloorMeshComponent = new VMeshComponent(MainScene);
 
-	VMesh* FloorMesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
+	FloorActor->AddComponent(FloorMeshComponent);
+	FloorActor->SetupBasicRigidBody();
+
+	PxMaterial* PMaterial = Physics->GetPxPhysics()->createMaterial(0.5f, 0.5f, 0.6f);
+	FloorMeshComponent->AttachBasicPhysicsShape(PxBoxGeometry(PxVec3(10.0f, 10.0f, 10.0f)), PMaterial);
+
+	FloorMeshComponent->LoadMesh(modelPath, "box.fbx");
+	FloorMeshComponent->Scale(glm::vec3(10.0f, 10.0f, 0.1f));
+	FloorMeshComponent->Translate(glm::vec3(0.0f, 0.0f, 0.0f));
+
 	VTexture* FloorTexture = new VTexture();
 	FloorTexture->LoadTextureFromFile(texturePath + "/Lightmap.png");
-	FloorMesh->GetMaterial()->AddLightMapTexture(FloorTexture);
-	FloorMesh->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
-	FloorMesh->GetMaterial()->SetSpecularIntensity(1.0f);
-	FloorMesh->GetMaterial()->SetSpecularPower(1);
+	FloorMeshComponent->GetMaterial()->AddLightMapTexture(FloorTexture);
+	FloorMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
+	FloorMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
+	FloorMeshComponent->GetMaterial()->SetSpecularPower(1);
 
-	VMeshComponent* FloorMeshComponent = new VMeshComponent();
-	FloorMeshComponent->SetMesh(FloorMesh);
-	FloorMesh->Scale(glm::vec3(10.0f, 10.0f, 0.1f));
-	FloorMesh->Translate(glm::vec3(0.0f, 0.0f, 2.0f));
-	FloorActor->AddComponent(FloorMeshComponent);
+
+	VActor* BoxTestActor = MainScene->CreateActor();
+	BoxTestActor->Translate(glm::vec3(0.0f, 0.0f, -5.0f));
+	VMeshComponent* BoxTestMeshComponent = new VMeshComponent(MainScene);
+
+	BoxTestActor->AddComponent(BoxTestMeshComponent);
+	BoxTestActor->SetupBasicRigidBody();
+
+	PxMaterial* BoxTestPMaterial = Physics->GetPxPhysics()->createMaterial(0.5f, 0.5f, 0.6f);
+	BoxTestMeshComponent->AttachBasicPhysicsShape(PxBoxGeometry(PxVec3(10.0f, 10.0f, 10.0f)), BoxTestPMaterial);
+
+	BoxTestMeshComponent->LoadMesh(modelPath, "box.fbx");
+
+	VTexture* BoxTestTexture = new VTexture();
+	BoxTestTexture->LoadTextureFromFile(texturePath + "/Lightmap.png");
+	BoxTestMeshComponent->GetMaterial()->AddLightMapTexture(BoxTestTexture);
+	BoxTestMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
+	BoxTestMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
+	BoxTestMeshComponent->GetMaterial()->SetSpecularPower(1);
 
 	/*VMesh* Mesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
 	VTexture* texture = new VTexture();
@@ -60,13 +83,14 @@ void Marbler::OnInitialize()
 	VActor* CameraActor = MainScene->CreateActor();
 	CameraActor->Translate(glm::vec3(0.0f, 1.0f, -10.0f));
 	
-	VCameraComponent* CameraComponent = new VCameraComponent();
+	VCameraComponent* CameraComponent = new VCameraComponent(MainScene);
 	CameraActor->AddComponent(CameraComponent);
 	CameraComponent->SetProjectionMatrix(glm::perspective(glm::radians(90.0f), Window->GetWidth() / (float)Window->GetHeight(), 0.1f, 1000.0f));
 	//CameraComponent->SetLookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+	CameraComponent->Translate(glm::vec3(0.0f, -5.0f, 0.0f));
 	CameraComponent->Rotate(glm::vec3(0.0f, 1.5f, 0.0f));
 
-	VInputComponent* InputComponent = new VInputComponent();
+	VInputComponent* InputComponent = new VInputComponent(MainScene);
 	CameraActor->AddComponent(InputComponent);
 
 	VDirectionalLight* DirectionalLight = VAssimpUtils::LoadDirectionalLight(modelPath, "box.fbx");

@@ -1,13 +1,15 @@
 #pragma once
 
 #include "VPhysics.h"
+#include "VPhysicsActor.h"
 
 class VPhysicsScene
 {
 public:
 	VPhysicsScene(PxScene* Scene, VPhysics* Physics);
 
-	PxRigidDynamic* CreateDynamic(const PxTransform& t);
+	void AddPhysicsActor(VPhysicsActor* PhysicsActor);
+	PxScene* GetScene() { return Scene; }
 
 	~VPhysicsScene();
 

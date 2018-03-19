@@ -6,7 +6,7 @@
 class VCameraComponent : public VSceneComponent
 {
 public:
-	VCameraComponent();
+	VCameraComponent(VScene* Scene);
 
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();

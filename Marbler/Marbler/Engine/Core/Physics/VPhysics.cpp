@@ -1,5 +1,7 @@
 #include "VPhysics.h"
 
+VPhysics* VPhysics::instance = 0;
+
 VPhysics::VPhysics()
 {
 }
@@ -19,8 +21,4 @@ bool VPhysics::Initialize()
 PxPhysics* VPhysics::GetPxPhysics()
 {
 	return Physics;
-}
-
-VPhysics::~VPhysics()
-{
 }

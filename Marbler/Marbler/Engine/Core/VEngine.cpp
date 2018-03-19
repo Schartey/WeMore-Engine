@@ -36,7 +36,7 @@ int VEngine::Initialize(const char* cfgpath)
 		return error;
 	}
 
-	Physics = new VPhysics();
+	Physics = VPhysics::GetInstance();
 
 	if (!Physics->Initialize())
 	{
@@ -82,8 +82,8 @@ void VEngine::Run()
 
 
 		if (!bPause) {
-			//Game->updatePhysics();
-			//Game->Update(deltaT);
+			StepPhysics(deltaT);
+			Game->Update(deltaT);
 			GBuffer->StartFrame();
 			GBuffer->BeginGeometryPass();
 			Game->RenderPass(GBuffer->GetGeometryShader());
@@ -127,6 +127,13 @@ VWindow* VEngine::GetWindow()
 VPhysics* VEngine::GetPhysics()
 {
 	return Physics;
+}
+
+void VEngine::StepPhysics(float deltaTime)
+{
+	PX_UNUSED(true);
+	Game->GetActiveScene()->GetPhysicsScene()->GetScene()->simulate(1.0f / 60.0f);
+	Game->GetActiveScene()->GetPhysicsScene()->GetScene()->fetchResults(true);
 }
 
 VEngine::~VEngine()

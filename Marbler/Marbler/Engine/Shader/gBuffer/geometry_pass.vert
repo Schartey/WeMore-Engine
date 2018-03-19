@@ -1,9 +1,6 @@
 #version 330 
 
-uniform mat4 translate;
-uniform mat4 rotation;
-uniform mat4 scale;
-uniform mat4 pmodel;
+uniform mat4 cmt;
 
 uniform mat4 view;
 uniform mat4 projection;
@@ -18,9 +15,8 @@ out vec3 fragNormal; //worldNormal
 
 void main()
 { 
-	mat4 model = translate * rotation * scale;
-    gl_Position = projection * view * pmodel * model * vec4(position, 1);
+    gl_Position = projection * view * cmt * vec4(position, 1);
 	fragTexCoord = uv;
-	fragNormal = (model * vec4(normal,0)).xyz;
-	fragVert = (model * vec4(position, 1.0f)).xyz;
+	fragNormal = (cmt * vec4(normal,0)).xyz;
+	fragVert = (cmt * vec4(position, 1.0f)).xyz;
 }

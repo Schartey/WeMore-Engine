@@ -1,11 +1,12 @@
 #pragma once
 
 class VActor;
+class VScene;
 
 class VActorComponent
 {
 public:
-	VActorComponent();
+	VActorComponent(VScene* Scene);
 
 	virtual void SetOwner(VActor* Actor);
 	virtual void Update();
@@ -15,6 +16,7 @@ public:
 	virtual ~VActorComponent();
 
 protected:
+	VScene * Scene;
 	VActor* Owner;
 };
 

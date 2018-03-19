@@ -8,7 +8,6 @@ VScene::VScene(VPhysicsScene* PhysicsScene)
 VActor* VScene::CreateActor()
 {
 	VActor* Actor = new VActor(this);
-	//PhysicsScene->CreateDynamic(physx::PxTransform());
 
 	Actors.push_back(Actor);
 
@@ -45,6 +44,16 @@ std::vector<VPointLight*> VScene::GetPointLights()
 VDirectionalLight* VScene::GetDirectionalLight()
 {
 	return DirectionalLight;
+}
+
+void VScene::AddPhysicsActor(VPhysicsActor* PhysicsActor)
+{
+	PhysicsScene->AddPhysicsActor(PhysicsActor);
+}
+
+VPhysicsScene* VScene::GetPhysicsScene()
+{
+	return PhysicsScene;
 }
 
 VActor* VScene::GetActivePlayerActor()

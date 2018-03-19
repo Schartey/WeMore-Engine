@@ -34,5 +34,7 @@ private:
 
 	bool bPause = false;
 	bool bRunning = false;
+
+	void StepPhysics(float deltaTime);
 };
 

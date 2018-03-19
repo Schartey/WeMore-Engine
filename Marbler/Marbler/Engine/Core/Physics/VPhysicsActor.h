@@ -1,15 +1,21 @@
 #pragma once
 
 #include "VPhysics.h"
+#include "VPhysicsShape.h"
+
+class VActor;
 
 class VPhysicsActor
 {
 public:
-	VPhysicsActor(VPhysics* Physics);
-
-	PxShape* CreatePhysicsShapeSphere(const PxTransform& t);
-
+	VPhysicsActor();
+	
+	void CreateRigidBody(VActor* Actor);
+	void AttachPhysicsShape(VPhysicsShape* PhysicsShape);
+	PxRigidDynamic* GetRigidBody();
 	void SetRigidBody(PxRigidDynamic* RigidBody);
+
+	glm::mat4 GetTransformation();
 
 	~VPhysicsActor();
 

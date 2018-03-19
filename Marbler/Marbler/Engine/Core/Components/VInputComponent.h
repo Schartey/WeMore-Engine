@@ -5,10 +5,11 @@
 class VInputComponent : public VActorComponent
 {
 public:
-	VInputComponent();
+	VInputComponent(VScene* Scene);
 
 	virtual void OnInitialize();
 	void OnForward();
+	void Turn();
 
 	~VInputComponent();
 };

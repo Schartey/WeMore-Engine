@@ -12,10 +12,17 @@
 class VMeshComponent : public VSceneComponent
 {
 public:
-	VMeshComponent();
+	VMeshComponent(VScene* Scene);
+
+	void LoadMesh(std::string MeshPath, std::string MeshFileName);
+	VMesh* GetMesh();
+	VMaterial* GetMaterial();
+	VPhysicsShape* GetPhysicsShape();
 
 	void SetMesh(VMesh* Mesh);
-	void SetPhysicsShape(VPhysicsShape* PhysicsShape);
+	void SetMaterial(VMaterial* Material);
+
+	void AttachBasicPhysicsShape(PxBoxGeometry Geometry, PxMaterial* Material);
 
 	void Translate(glm::vec3 TranslationVector);
 	void Scale(glm::vec3 ScaleVector);
@@ -27,6 +34,7 @@ public:
 
 private:
 	VMesh * Mesh;
+	VMaterial* Material;
 
 	VPhysicsShape* PhysicsShape;
 };

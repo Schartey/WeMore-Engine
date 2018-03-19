@@ -6,12 +6,12 @@ VAssimpScene::VAssimpScene()
 {
 }
 
-void VAssimpScene::AddMesh(VMesh* Mesh)
+void VAssimpScene::AddMesh(VAssimpMesh* Mesh)
 {
 	Meshes.push_back(Mesh);
 }
 
-std::vector<VMesh*> VAssimpScene::GetMeshes()
+std::vector<VAssimpMesh*> VAssimpScene::GetMeshes()
 {
 	return Meshes;
 }

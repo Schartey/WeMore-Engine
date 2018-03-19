@@ -97,14 +97,14 @@ void VMesh::Scale(glm::vec3 ScaleVector)
 	ScaleMatrix = glm::scale(ScaleMatrix, ScaleVector);
 }
 
-void VMesh::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
+void VMesh::RenderPass()
 {
 	//Don't use local Shader, already set by GBuffer, but add information
-	Material->ApplyRenderPassInformation(Shader);
+	//Material->ApplyRenderPassInformation(Shader);
 
 	//VShader* Shader = Material->GetShader();
 
-	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
+	/*VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
 
 	//Set Mesh data in Material
 	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(TranslationMatrix));
@@ -113,13 +113,13 @@ void VMesh::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
 	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "pmodel"), 1, GL_FALSE, glm::value_ptr(ParentModelMatrix));
 	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
-
+	*/
 	// Draw mesh
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	Material->Release();
+	//Material->Release();
 }
 
 void VMesh::Draw(glm::mat4 ParentModelMatrix)

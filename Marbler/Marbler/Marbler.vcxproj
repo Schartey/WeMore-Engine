@@ -155,6 +155,7 @@
     <ClCompile Include="Engine\Core\Physics\VPhysicsScene.cpp" />
     <ClCompile Include="Engine\Core\Physics\VPhysicsActor.cpp" />
     <ClCompile Include="Engine\Core\Physics\VPhysicsShape.cpp" />
+    <ClCompile Include="Engine\Utils\Assimp\VAssimpMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\Asset\VDirectionalLight.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Engine\Core\Physics\VPhysicsScene.h" />
     <ClInclude Include="Engine\Core\Physics\VPhysicsActor.h" />
     <ClInclude Include="Engine\Core\Physics\VPhysicsShape.h" />
+    <ClInclude Include="Engine\Utils\Assimp\VAssimpMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

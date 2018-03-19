@@ -2,8 +2,9 @@
 
 #include "../VActor.h"
 
-VActorComponent::VActorComponent()
+VActorComponent::VActorComponent(VScene* Scene)
 {
+	this->Scene = Scene;
 }
 
 void VActorComponent::SetOwner(VActor* Actor) {
