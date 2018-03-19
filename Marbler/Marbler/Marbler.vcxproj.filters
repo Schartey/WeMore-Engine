@@ -51,9 +51,6 @@
     <ClCompile Include="Engine\Core\Components\VMeshComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\VPhysics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Core\Asset\VMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -90,7 +87,19 @@
     <ClCompile Include="Engine\Core\Components\VInputComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\InputManager.cpp">
+    <ClCompile Include="Engine\Core\VInputManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Physics\VPhysics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Physics\VPhysicsScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Physics\VPhysicsActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Physics\VPhysicsShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -126,9 +135,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\Components\VMeshComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Core\VPhysics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\Asset\VMesh.h">
@@ -167,10 +173,22 @@
     <ClInclude Include="Engine\Core\Components\VInputComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Core\InputManager.h">
+    <ClInclude Include="Engine\Core\VInputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Utils\Input\InputMapping.h">
+    <ClInclude Include="Engine\Utils\Input\VInputKey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Physics\VPhysics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Physics\VPhysicsScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Physics\VPhysicsActor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Physics\VPhysicsShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

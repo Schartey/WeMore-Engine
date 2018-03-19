@@ -12,6 +12,7 @@ public:
 	VPhysics();
 
 	bool Initialize();
+	PxPhysics* GetPxPhysics();
 
 	~VPhysics();
 

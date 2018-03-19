@@ -8,6 +8,7 @@
 
 #include "VWindow.h"
 #include "Components/VInputComponent.h"
+#include "../Utils/Input/VInputKey.h"
 
 enum VActionType {
 	Pressed,
@@ -20,6 +21,7 @@ struct VActionMapping {
 	VInputComponent* InputComponent;
 	void(VInputComponent::*pmemfn)();
 
+	VActionMapping() {}
 	VActionMapping(std::string iActionName, VActionType iActionType, VInputComponent* iInputComponent, void(VInputComponent::*ipmemfn)()) {
 		ActionName = iActionName;
 		ActionType = iActionType;
@@ -28,21 +30,23 @@ struct VActionMapping {
 	}
 };
 
-class InputManager
+class VInputManager
 {
 public:
+	static void Initialize(VWindow* Window);
+	static void BindAction(std::string ActionName, VInputKey InputKey, VActionType ActionType, VInputComponent& InputComponent, void(VInputComponent::*pmemfn)());
 
-	InputManager(VWindow* Window);
-
-	void BindAction(std::string ActionName, VActionType ActionType, VInputComponent& InputComponent, void(VInputComponent::*pmemfn)());
 	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-	~InputManager();
-
 private:
-//	static InputMapping* vInputMapping;
 
-//	static std::map<std::string, VActionMapping> ActionMappings;
+	static std::map<VInputKey, VActionMapping> ActionMappings;
+	static std::map <int, VInputKey> inputMap;
+	VInputManager();
+
+
+public:
+	~VInputManager();
 
 };
 

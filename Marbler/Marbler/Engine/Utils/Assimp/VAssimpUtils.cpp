@@ -174,7 +174,7 @@ VMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpScene* 
 
 	VMesh* pMesh = new VMesh();
 
-	pMesh->SetTranslationMatrix(ConvertMat4(Node->mTransformation));
+	//pMesh->SetTranslationMatrix(ConvertMat4(Node->mTransformation));
 
 	pMesh->Setup(vertices, indices, pMaterial, Scene);
 	return pMesh;
@@ -191,6 +191,7 @@ VMaterial* VAssimpUtils::ProcessMaterial(std::string path, aiMaterial* Material)
 		std::string name = str.C_Str();
 		path = path.substr(0, path.find_last_of('/'));
 		path.append("/Textures");
+		std::string npath = "../" + name;
 
 		VTexture* texture = new VTexture();
 		texture->LoadTextureFromFile(str.C_Str());

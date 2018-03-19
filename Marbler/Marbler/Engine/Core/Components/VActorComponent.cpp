@@ -15,6 +15,10 @@ void VActorComponent::Update()
 
 }
 
+void VActorComponent::OnInitialize()
+{
+
+}
 
 VActorComponent::~VActorComponent()
 {

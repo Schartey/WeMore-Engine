@@ -2,6 +2,7 @@
 
 #include "VScene.h"
 #include "VWindow.h"
+#include "Physics/VPhysics.h"
 
 #include <vector>
 
@@ -15,12 +16,16 @@ public:
 	void RenderPass(VShader* Shader);
 	void Draw();
 	void SetWindow(VWindow* Window);
+	void SetPhysics(VPhysics* Physics);
 	VScene* GetActiveScene();
+
+	VScene* CreateScene();
 
 	~VGame();
 
 protected:
-	VWindow* Window;
+	VWindow * Window;
+	VPhysics* Physics;
 
 	void SetActiveScene(VScene* Scene);
 

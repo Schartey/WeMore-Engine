@@ -6,10 +6,14 @@
 
 #include <vector>
 
+#include "Physics/VPhysicsScene.h"
+
+#include "PxScene.h"
+
 class VScene
 {
 public:
-	VScene();
+	VScene(VPhysicsScene* PhysicsScene);
 
 	VActor* CreateActor();
 	VPointLight* CreatePointLight();
@@ -36,5 +40,7 @@ private:
 	std::vector<VActor*> Actors;
 	std::vector<VPointLight*> PointLights;
 	VDirectionalLight* DirectionalLight;
+
+	VPhysicsScene* PhysicsScene;
 };
 

@@ -16,6 +16,11 @@ bool VPhysics::Initialize()
 	return true;
 }
 
+PxPhysics* VPhysics::GetPxPhysics()
+{
+	return Physics;
+}
+
 VPhysics::~VPhysics()
 {
 }

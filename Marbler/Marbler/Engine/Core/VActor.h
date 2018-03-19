@@ -40,6 +40,7 @@ public:
 		if (SceneComponent != nullptr)
 		{
 			SceneComponent->SetOwner(this);
+			SceneComponent->OnInitialize();
 			SceneComponents.push_back(SceneComponent);
 			return;
 		}
@@ -47,6 +48,7 @@ public:
 		if (ActorComponent != nullptr)
 		{
 			ActorComponent->SetOwner(this);
+			ActorComponent->OnInitialize();
 			ActorComponents.push_back(ActorComponent);
 		}
 	}

@@ -1,6 +1,7 @@
 #include "VEngine.h"
 #include "../Utils/Configs.h"
 #include "IL/il.h"
+#include "VInputManager.h"
 
 VEngine::VEngine()
 {
@@ -43,6 +44,8 @@ int VEngine::Initialize(const char* cfgpath)
 		return InitPhysicsError;
 	}
 
+	VInputManager::Initialize(Window);
+
 	GBuffer = new VGBuffer();
 	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
 
@@ -55,6 +58,7 @@ void VEngine::Setup(VGame* Game)
 {
 	this->Game = Game;
 	this->Game->SetWindow(Window);
+	this->Game->SetPhysics(Physics);
 
 	this->Game->OnInitialize();
 }
@@ -120,6 +124,10 @@ VWindow* VEngine::GetWindow()
 	return Window;
 }
 
+VPhysics* VEngine::GetPhysics()
+{
+	return Physics;
+}
 
 VEngine::~VEngine()
 {

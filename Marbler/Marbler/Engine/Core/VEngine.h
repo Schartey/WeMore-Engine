@@ -3,7 +3,7 @@
 #include "IEngine.h"
 #include "VGame.h"
 #include "VWindow.h"
-#include "VPhysics.h"
+#include "Physics/VPhysics.h"
 #include "VGBuffer.h"
 
 #include <string>

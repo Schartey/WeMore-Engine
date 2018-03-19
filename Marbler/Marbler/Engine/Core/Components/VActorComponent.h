@@ -10,6 +10,8 @@ public:
 	virtual void SetOwner(VActor* Actor);
 	virtual void Update();
 
+	virtual void OnInitialize();
+
 	virtual ~VActorComponent();
 
 protected:

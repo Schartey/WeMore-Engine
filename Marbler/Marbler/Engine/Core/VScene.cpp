@@ -1,12 +1,14 @@
 #include "VScene.h"
 
-VScene::VScene()
+VScene::VScene(VPhysicsScene* PhysicsScene)
 {
+	this->PhysicsScene = PhysicsScene;
 }
 
 VActor* VScene::CreateActor()
 {
 	VActor* Actor = new VActor(this);
+	//PhysicsScene->CreateDynamic(physx::PxTransform());
 
 	Actors.push_back(Actor);
 

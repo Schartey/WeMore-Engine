@@ -2,6 +2,8 @@
 
 #include "../Engine/Core/Components/VCameraComponent.h"
 #include "../Engine/Core/Components/VMeshComponent.h"
+#include "../Engine/Core/Components/VInputComponent.h"
+
 #include "../Engine/Core/Asset/VTexture.h"
 #include "../Engine/Utils/Assimp/VAssimpUtils.h"
 
@@ -19,7 +21,7 @@ void Marbler::OnInitialize()
 	std::string modelPath = "../../Models";
 	std::string texturePath = "../../Textures";
 
-	VScene* MainScene = new VScene();
+	VScene* MainScene = CreateScene();
 
 
 
@@ -32,14 +34,14 @@ void Marbler::OnInitialize()
 	FloorMesh->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
 	FloorMesh->GetMaterial()->SetSpecularIntensity(1.0f);
 	FloorMesh->GetMaterial()->SetSpecularPower(1);
-	FloorMesh->Scale(glm::vec3(10.0f, 10.0f, 0.1f));
-	FloorMesh->Translate(glm::vec3(0.0f, 0.0f, -2.0f));
 
 	VMeshComponent* FloorMeshComponent = new VMeshComponent();
 	FloorMeshComponent->SetMesh(FloorMesh);
+	FloorMesh->Scale(glm::vec3(10.0f, 10.0f, 0.1f));
+	FloorMesh->Translate(glm::vec3(0.0f, 0.0f, 2.0f));
 	FloorActor->AddComponent(FloorMeshComponent);
 
-	VMesh* Mesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
+	/*VMesh* Mesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
 	VTexture* texture = new VTexture();
 	texture->LoadTextureFromFile(texturePath + "/Lightmap.png");
 	Mesh->GetMaterial()->AddLightMapTexture(texture);
@@ -52,16 +54,20 @@ void Marbler::OnInitialize()
 
 	VActor* RandomActor = MainScene->CreateActor();
 
-	RandomActor->AddComponent(MeshComponent);
+	RandomActor->AddComponent(MeshComponent);*/
 	
 
 	VActor* CameraActor = MainScene->CreateActor();
-	CameraActor->Translate(glm::vec3(20.0f, 10.0f, 10.0f));
+	CameraActor->Translate(glm::vec3(0.0f, 1.0f, -10.0f));
 	
 	VCameraComponent* CameraComponent = new VCameraComponent();
 	CameraActor->AddComponent(CameraComponent);
-	CameraComponent->SetProjectionMatrix(glm::perspective(glm::radians(45.0f), Window->GetWidth() / (float)Window->GetHeight(), 0.1f, 1000.0f));
-	CameraComponent->SetLookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+	CameraComponent->SetProjectionMatrix(glm::perspective(glm::radians(90.0f), Window->GetWidth() / (float)Window->GetHeight(), 0.1f, 1000.0f));
+	//CameraComponent->SetLookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+	CameraComponent->Rotate(glm::vec3(0.0f, 1.5f, 0.0f));
+
+	VInputComponent* InputComponent = new VInputComponent();
+	CameraActor->AddComponent(InputComponent);
 
 	VDirectionalLight* DirectionalLight = VAssimpUtils::LoadDirectionalLight(modelPath, "box.fbx");
 	DirectionalLight->SetAmbient(0.1f);
@@ -80,7 +86,7 @@ void Marbler::OnInitialize()
 	PointLight1->SetAttenuation(VAttenuation(0.0f, 0.0f, 0.3f));
 	PointLight1->Scale(glm::vec3(5.0f));
 
-	//MainScene->AddPointLight(PointLight1);
+	MainScene->AddPointLight(PointLight1);
 
 	MainScene->SetActivePlayerActor(CameraActor);
 
