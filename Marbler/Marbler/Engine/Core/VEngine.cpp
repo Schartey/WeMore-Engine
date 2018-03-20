@@ -46,9 +46,6 @@ int VEngine::Initialize(const char* cfgpath)
 
 	VInputManager::Initialize(Window);
 
-	GBuffer = new VGBuffer();
-	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
-
 	ilInit();
 
 	return InitSuccess;
@@ -61,6 +58,9 @@ void VEngine::Setup(VGame* Game)
 	this->Game->SetPhysics(Physics);
 
 	this->Game->OnInitialize();
+
+	GBuffer = new VGBuffer();
+	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
 }
 
 void VEngine::Run()
