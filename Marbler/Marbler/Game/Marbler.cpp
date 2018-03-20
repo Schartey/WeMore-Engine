@@ -21,7 +21,6 @@ void Marbler::OnInitialize()
 	std::string modelPath = "..\\..\\Models\\";
 	std::string texturePath = "..\\..\\Textures\\";
 
-	VShader* BaseShader = new VShader("Engine/Shader/base.vert", "Engine/Shader/base.frag");
 	VScene* MainScene = CreateScene();
 
 	
@@ -46,15 +45,14 @@ void Marbler::OnInitialize()
 	FloorMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
 	FloorMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
 	FloorMeshComponent->GetMaterial()->SetSpecularPower(1);
-	FloorMeshComponent->GetMaterial()->SetShader(BaseShader);
 	
 
 	VActor* BoxTestActor = MainScene->CreateActor();
 	BoxTestActor->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 	BoxTestActor->bPhysics = true;
 
-	/*PxRigidDynamic* RigidDynamic = BoxTestActor->SetRigidDynamic();// SetRigidDynamic();
-	RigidDynamic->setMass(1.0f);*/
+	PxRigidDynamic* RigidDynamic = BoxTestActor->SetRigidDynamic();// SetRigidDynamic();
+	RigidDynamic->setMass(1.0f);
 
 	VMeshComponent* BoxTestMeshComponent = new VMeshComponent(MainScene);
 
@@ -68,7 +66,6 @@ void Marbler::OnInitialize()
 	BoxTestMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
 	BoxTestMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
 	BoxTestMeshComponent->GetMaterial()->SetSpecularPower(1);
-	BoxTestMeshComponent->GetMaterial()->SetShader(BaseShader);
 	
 	/*VMesh* Mesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
 	VTexture* texture = new VTexture();
@@ -84,7 +81,6 @@ void Marbler::OnInitialize()
 	VActor* RandomActor = MainScene->CreateActor();
 
 	RandomActor->AddComponent(MeshComponent);*/
-	
 
 	VActor* CameraActor = MainScene->CreateActor();
 	CameraActor->SetPosition(glm::vec3(0.0f, -5.0f, -10.0f));
@@ -115,6 +111,10 @@ void Marbler::OnInitialize()
 	PointLight1->Translate(glm::vec3(3.0f, -3.0f, -1.0f));
 	PointLight1->SetAttenuation(VAttenuation(0.0f, 0.0f, 0.3f));
 	PointLight1->Scale(glm::vec3(5.0f));
+
+	VShader* BaseShader = new VShader("Engine/Shader/base.vert", "Engine/Shader/base.frag");
+	FloorMeshComponent->GetMaterial()->SetShader(BaseShader);
+	BoxTestMeshComponent->GetMaterial()->SetShader(BaseShader);
 
 	MainScene->AddPointLight(PointLight1);
 
