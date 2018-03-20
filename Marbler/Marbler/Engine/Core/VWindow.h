@@ -15,6 +15,8 @@ public:
 	GLFWwindow* GetGLFWWindow() { return GlfwWindow; }
 	int GetWidth() { return width; }
 	int GetHeight() { return height; }
+	int GetOpenGlMajor() { return openglmajor; }
+	int GetOpenGlMinor() { return openglminor; }
 
 	~VWindow();
 

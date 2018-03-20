@@ -77,7 +77,7 @@ PxRigidStatic* VActor::SetRigidStatic()
 
 void VActor::Update()
 {
-	if (bPhysics)
+	if (this->RigidActor != nullptr && bPhysics)
 	{
 		PhysxUtils::ConvertPxTransformToGVecQuat(this->RigidActor->getGlobalPose(), this->Position, this->Rotation);
 		//std::cout << "Pose: " << this->RigidDynamic->getGlobalPose().p.x << " " << this->RigidDynamic->getGlobalPose().p.y << " " << this->RigidDynamic->getGlobalPose().p.z + '\n';

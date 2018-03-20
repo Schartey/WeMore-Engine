@@ -19,6 +19,29 @@ VMeshComponent::VMeshComponent(VScene* Scene) : VSceneComponent(Scene)
 {
 }
 
+void VMeshComponent::LoadMesh(std::string MeshPath)
+{
+	VAssimpMesh* AssimpMesh = VAssimpUtils::LoadMesh(this->Scene, MeshPath);
+	this->SetMesh(AssimpMesh->GetMesh());
+	this->SetMaterial(AssimpMesh->GetMaterial());
+	/*this->SetPosition(AssimpMesh->GetPosition());
+	this->SetRotation(AssimpMesh->GetRotation());
+	this->SetScale(AssimpMesh->GetScale());
+	*/
+	if (this->Owner->GetRigidActor<PxRigidActor>() != nullptr) {
+		glm::vec3 BoxHalfExtent = (this->Mesh->GetBoundingBox().max - this->Mesh->GetBoundingBox().min);
+		BoxHalfExtent *= Owner->GetScale();
+		BoxHalfExtent *= Scale;
+		BoxHalfExtent /= 2;
+
+		PhysicsMaterial = VPhysics::GetInstance()->GetPxPhysics()->createMaterial(0.5, 0.5, 0.6);
+		this->PhysicsShape = VPhysics::GetInstance()->CreateDefaultPhysicsShape(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)), PhysicsMaterial);
+		this->PhysicsShape->setLocalPose(PhysxUtils::ConvertGVecQuatToPxTransform(this->Position, this->Rotation));
+		this->Owner->GetRigidActor<PxRigidActor>()->attachShape(*this->PhysicsShape);
+		this->SetBPhysics(bPhysics);
+	}
+}
+
 void VMeshComponent::LoadMesh(std::string MeshPath, std::string MeshFileName)
 {
 	VAssimpMesh* AssimpMesh = VAssimpUtils::LoadMesh(this->Scene, MeshPath, MeshFileName);
@@ -81,14 +104,18 @@ void VMeshComponent::SetScale(glm::vec3 Scale)
 {
 	VSceneComponent::SetScale(Scale);
 
-	glm::vec3 BoxHalfExtent = (this->Mesh->GetBoundingBox().max - this->Mesh->GetBoundingBox().min);
-	BoxHalfExtent *= Owner->GetScale();
-	BoxHalfExtent *= Scale;
-	BoxHalfExtent /= 2;
+	if (this->PhysicsShape != nullptr)
+	{
+		glm::vec3 BoxHalfExtent = (this->Mesh->GetBoundingBox().max - this->Mesh->GetBoundingBox().min);
+		BoxHalfExtent *= Owner->GetScale();
+		BoxHalfExtent *= Scale;
+		BoxHalfExtent /= 2;
 
-	this->Owner->GetRigidActor<PxRigidActor>()->detachShape(*this->PhysicsShape);
-	this->PhysicsShape->setGeometry(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)));
-	this->Owner->GetRigidActor<PxRigidActor>()->attachShape(*this->PhysicsShape);
+		this->Owner->GetRigidActor<PxRigidActor>()->detachShape(*this->PhysicsShape);
+		this->PhysicsShape->setGeometry(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)));
+		this->Owner->GetRigidActor<PxRigidActor>()->attachShape(*this->PhysicsShape);
+
+	}
 }
 
 void VMeshComponent::Update()
@@ -124,11 +151,22 @@ void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
 
 void VMeshComponent::Draw(glm::mat4 ParentModelMatrix)
 {
-	VSceneComponent::Draw(ModelMatrix);
+	glm::mat4 CMT = ParentModelMatrix * ModelMatrix;
+
+	VSceneComponent::Draw(CMT);
+
+	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
 
 	if (this->Mesh != nullptr)
 	{
-		Mesh->Draw(ModelMatrix);
+		Material->GetShader()->useShader();
+		Material->ApplyRenderPassInformation(Material->GetShader());
+
+		glUniformMatrix4fv(glGetUniformLocation(Material->GetShader()->programHandle, "cmt"), 1, GL_FALSE, glm::value_ptr(CMT));
+		glUniformMatrix4fv(glGetUniformLocation(Material->GetShader()->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
+		glUniformMatrix4fv(glGetUniformLocation(Material->GetShader()->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
+
+		Mesh->Draw();
 	}
 }
 

@@ -14,6 +14,8 @@ class VMeshComponent : public VSceneComponent
 public:
 	VMeshComponent(VScene* Scene);
 
+	void LoadMesh(std::string MeshPath);
+
 	void LoadMesh(std::string MeshPath, std::string MeshFileName);
 
 	VMesh* GetMesh();

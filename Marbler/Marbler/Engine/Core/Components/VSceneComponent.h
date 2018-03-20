@@ -15,6 +15,7 @@ public:
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3 Position);
 	void SetRotation(glm::vec3 Rotation);
+	void SetRotation(glm::quat Rotation);
 	void SetScale(glm::vec3 Scale);
 
 	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix);

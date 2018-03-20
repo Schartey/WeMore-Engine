@@ -47,12 +47,10 @@ VAttenuation VPointLight::GetAttenuation()
 	return Attenuation;
 }
 
-void VPointLight::Draw(glm::mat4 ParentModelMatrix)
+void VPointLight::Draw()
 {
 	// Draw mesh
-	glBindVertexArray(this->VAO);
-	glDrawElements(GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	VMesh::Draw();
 }
 
 VPointLight::~VPointLight()

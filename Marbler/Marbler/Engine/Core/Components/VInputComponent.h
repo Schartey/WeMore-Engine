@@ -9,7 +9,11 @@ public:
 
 	virtual void OnInitialize();
 	void OnForward();
-	void Turn();
+	void OnBackward();
+	void OnLeft();
+	void OnRight();
+	void OnUp();
+	void OnDown();
 
 	~VInputComponent();
 };

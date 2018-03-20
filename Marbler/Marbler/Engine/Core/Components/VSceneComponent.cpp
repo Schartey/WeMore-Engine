@@ -27,6 +27,11 @@ void VSceneComponent::SetRotation(glm::vec3 Rotation)
 	this->Rotation = glm::quat(Rotation);
 }
 
+void VSceneComponent::SetRotation(glm::quat Rotation)
+{
+	this->Rotation = Rotation;
+}
+
 void VSceneComponent::SetScale(glm::vec3 Scale)
 {
 	this->Scale = Scale;

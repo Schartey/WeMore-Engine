@@ -82,28 +82,34 @@ void VEngine::Run()
 
 
 		if (!bPause && deltaT > 0) {
+
 			StepPhysics(deltaT);
 			Game->Update(deltaT);
-			GBuffer->StartFrame();
-			GBuffer->BeginGeometryPass();
-			Game->RenderPass(GBuffer->GetGeometryShader());
-			GBuffer->EndGeometryPass();
+			if (Window->GetOpenGlMinor() >= 3) {
+				GBuffer->StartFrame();
+				GBuffer->BeginGeometryPass();
+				Game->RenderPass(GBuffer->GetGeometryShader());
+				GBuffer->EndGeometryPass();
 
-			glEnable(GL_STENCIL_TEST);
+				glEnable(GL_STENCIL_TEST);
 
-			for (unsigned int i = 0; i < Game->GetActiveScene()->GetPointLights().size(); i++) {
-				GBuffer->StencilPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
-				GBuffer->PointLightPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
+				for (unsigned int i = 0; i < Game->GetActiveScene()->GetPointLights().size(); i++) {
+					GBuffer->StencilPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
+					GBuffer->PointLightPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
+				}
+				glDisable(GL_STENCIL_TEST);
+
+				if (Game->GetActiveScene()->GetDirectionalLight() != nullptr)
+				{
+					GBuffer->DirectionalLightPass(Game->GetActiveScene());
+				}
+
+				GBuffer->FinalPass();
 			}
-			glDisable(GL_STENCIL_TEST);
-
-			if (Game->GetActiveScene()->GetDirectionalLight() != nullptr)
+			else
 			{
-				GBuffer->DirectionalLightPass(Game->GetActiveScene());
+				Game->Draw();
 			}
-
-			GBuffer->FinalPass();
-			//Game->Draw();
 		}
 
 

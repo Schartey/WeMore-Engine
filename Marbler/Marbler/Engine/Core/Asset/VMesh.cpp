@@ -106,30 +106,12 @@ void VMesh::RenderPass()
 	//Material->Release();
 }
 
-void VMesh::Draw(glm::mat4 ParentModelMatrix)
+void VMesh::Draw()
 {
-	//Use shading, set textures and lighting information
-	/*Material->Use();
-	Material->ApplyInformation();
-
-	VShader* Shader = Material->GetShader();
-	
-	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
-
-	//Set Mesh data in Material
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(TranslationMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "rotation"), 1, GL_FALSE, glm::value_ptr(RotationMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(ScaleMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "pmodel"), 1, GL_FALSE, glm::value_ptr(ParentModelMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
-
-	// Draw mesh
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	Material->Release();*/
 }
 
 VMesh::~VMesh()

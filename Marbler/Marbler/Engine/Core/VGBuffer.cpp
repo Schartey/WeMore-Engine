@@ -12,6 +12,11 @@ VGBuffer::VGBuffer()
 
 bool VGBuffer::Initialize(int Width, int Height)
 {
+	GeometryShader = new VShader("Engine/Shader/gBuffer/geometry_pass.vert", "Engine/Shader/gBuffer/geometry_pass.frag");
+	PointLightShader = new VShader("Engine/Shader/gBuffer/light_pass.vert", "Engine/Shader/gBuffer/pointlight_pass.frag");
+	DirectionalLightShader = new VShader("Engine/Shader/gBuffer/light_pass.vert", "Engine/Shader/gBuffer/directionallight_pass.frag");
+	NullShader = new VShader("Engine/Shader/gBuffer/null.vert", "Engine/Shader/gBuffer/null.frag");
+
 	this->Width = Width;
 	this->Height = Height;
 
@@ -56,10 +61,6 @@ bool VGBuffer::Initialize(int Width, int Height)
 	// restore default FBO
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	GeometryShader = new VShader("Engine/Shader/gBuffer/geometry_pass.vert", "Engine/Shader/gBuffer/geometry_pass.frag");
-	PointLightShader = new VShader("Engine/Shader/gBuffer/light_pass.vert", "Engine/Shader/gBuffer/pointlight_pass.frag");
-	DirectionalLightShader = new VShader("Engine/Shader/gBuffer/light_pass.vert", "Engine/Shader/gBuffer/directionallight_pass.frag");
-	NullShader = new VShader("Engine/Shader/gBuffer/null.vert", "Engine/Shader/gBuffer/null.frag");
 
 	return true;
 }
@@ -124,7 +125,7 @@ void VGBuffer::StencilPass(VScene* Scene, VPointLight* PointLight)
 	glUniformMatrix4fv(glGetUniformLocation(NullShader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(PointLight->GetTranslationMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(NullShader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(PointLight->GetScaleMatrix()));
 
-	PointLight->Draw(glm::mat4());
+	PointLight->Draw();
 }
 
 void VGBuffer::PointLightPass(VScene* Scene, VPointLight* PointLight)
@@ -158,7 +159,6 @@ void VGBuffer::PointLightPass(VScene* Scene, VPointLight* PointLight)
 
 
 	glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
-
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendEquation(GL_FUNC_ADD);
@@ -172,7 +172,7 @@ void VGBuffer::PointLightPass(VScene* Scene, VPointLight* PointLight)
 	//glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(PointLight->GetScaleMatrix()));
 	//m_DSPointLightPassTech.SetPointLight(m_pointLight[PointLightIndex]);
 	
-	PointLight->Draw(glm::mat4());
+	PointLight->Draw();
 
 	glCullFace(GL_BACK);
 
@@ -229,7 +229,7 @@ void VGBuffer::DirectionalLightPass(VScene* Scene)
 	glBlendEquation(GL_FUNC_ADD);
 	glBlendFunc(GL_ONE, GL_ONE);
 
-	Scene->GetDirectionalLight()->Draw(glm::mat4());
+	Scene->GetDirectionalLight()->Draw();
 
 	glDisable(GL_BLEND);
 }

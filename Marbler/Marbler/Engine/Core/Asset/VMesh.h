@@ -44,7 +44,7 @@ public:
 	void Scale(glm::vec3 ScaleVector);
 
 	void RenderPass();
-	virtual void Draw(glm::mat4 ParentModelMatrix);
+	virtual void Draw();
 	
 	~VMesh();
 

@@ -32,6 +32,26 @@ VAssimpScene* VAssimpUtils::LoadScene(VScene* Scene, std::string path, std::stri
 	return AssimpScene;
 }
 
+VAssimpMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string filePath)
+{
+	Assimp::Importer import;
+	const aiScene* iscene = import.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	if (!iscene || iscene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !iscene->mRootNode)
+	{
+		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+		return nullptr;
+	}
+
+	std::string directoryPath = filePath.substr(0, filePath.find_last_of('\\')+1);
+
+	VAssimpScene* AssimpScene = new VAssimpScene();
+
+	ProcessScene(Scene, directoryPath, AssimpScene, iscene);
+
+	return AssimpScene->GetMeshes().size() > 0 ? AssimpScene->GetMeshes().at(0) : nullptr;
+}
+
 VAssimpMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string path, std::string filename)
 {
 	std::string filepath;
@@ -53,6 +73,24 @@ VAssimpMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string path, std::string
 	ProcessScene(Scene, path, AssimpScene, iscene);
 
 	return AssimpScene->GetMeshes().size() > 0 ? AssimpScene->GetMeshes().at(0) : nullptr;
+}
+
+VPointLight* VAssimpUtils::LoadPointLight(std::string filePath)
+{
+	VAssimpMesh* Mesh = LoadMesh(nullptr, filePath);
+	VPointLight* Light = new VPointLight();
+	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
+
+	return Light;
+}
+
+VDirectionalLight* VAssimpUtils::LoadDirectionalLight(std::string filePath)
+{
+	VAssimpMesh* Mesh = LoadMesh(nullptr, filePath);
+	VDirectionalLight* Light = new VDirectionalLight();
+	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
+
+	return Light;
 }
 
 VPointLight* VAssimpUtils::LoadPointLight(std::string path, std::string filename)
@@ -177,12 +215,10 @@ VMaterial* VAssimpUtils::ProcessMaterial(std::string path, aiMaterial* Material)
 		aiString str;
 		Material->GetTexture(aiTextureType_DIFFUSE, i, &str);
 		std::string name = str.C_Str();
-		path = path.substr(0, path.find_last_of('/'));
-		path.append("/Textures");
-		std::string npath = "../" + name;
+		std::string filePath = path.append(str.C_Str());
 
 		VTexture* texture = new VTexture();
-		texture->LoadTextureFromFile(str.C_Str());
+		texture->LoadTextureFromFile(filePath.c_str());
 
 		pMaterial->AddDiffuseTexture(texture);
 	}

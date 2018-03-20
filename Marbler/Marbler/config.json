@@ -1,8 +1,8 @@
 //Engine-Configuration
 {
     "name":  "Marbler",
-    "width": 800,
-    "height": 600,
+    "width": 1920,
+    "height": 1080,
     "fullscreen": 0,
     "refreshrate": 0,
     "openglmajor": 4,

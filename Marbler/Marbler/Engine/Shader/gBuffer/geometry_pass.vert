@@ -15,6 +15,7 @@ out vec3 fragNormal; //worldNormal
 
 void main()
 { 
+
     gl_Position = projection * view * cmt * vec4(position, 1);
 	fragTexCoord = uv;
 	fragNormal = (cmt * vec4(normal,0)).xyz;

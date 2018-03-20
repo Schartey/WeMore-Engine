@@ -1,5 +1,7 @@
 #pragma once
 
+#include "glm/gtx/quaternion.hpp"
+
 #include "../../Engine/Core/Asset/VMesh.h"
 #include "../../Engine/Core/Asset/VMaterial.h"
 
@@ -10,13 +12,17 @@ public:
 
 	VMesh* GetMesh();
 	VMaterial* GetMaterial();
-	glm::mat4 GetTransformation();
+	glm::vec3 GetPosition();
+	glm::quat GetRotation();
+	glm::vec3 GetScale();
 
 	~VAssimpMesh();
 
 private:
 	VMesh * Mesh;
 	VMaterial* Material;
-	glm::mat4 Transformation;
+	glm::vec3 Position;
+	glm::quat Rotation;
+	glm::vec3 Scale;
 };
 

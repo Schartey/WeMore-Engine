@@ -43,4 +43,5 @@ void main(){
 		surfaceColor = surfaceColor*texture(lightmapTexture[i], fragTexCoord);
 	}
 	finalColor = surfaceColor;
+	finalColor = vec4(1.0f);
 }

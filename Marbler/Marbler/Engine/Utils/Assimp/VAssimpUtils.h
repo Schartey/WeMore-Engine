@@ -16,7 +16,10 @@ public:
 	VAssimpUtils();
 
 	static VAssimpScene* LoadScene(VScene* Scene, std::string path, std::string filename);
+	static VAssimpMesh* LoadMesh(VScene* Scene, std::string filePath);
 	static VAssimpMesh* LoadMesh(VScene* Scene, std::string path, std::string filename);
+	static VPointLight* LoadPointLight(std::string filePath);
+	static VDirectionalLight* LoadDirectionalLight(std::string filePath);
 	static VPointLight* LoadPointLight(std::string path, std::string filename);
 	static VDirectionalLight* LoadDirectionalLight(std::string path, std::string filename);
 

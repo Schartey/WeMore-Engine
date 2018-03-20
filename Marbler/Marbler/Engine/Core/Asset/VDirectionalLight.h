@@ -17,7 +17,7 @@ public:
 	void SetDiffuse(float Diffuse);
 	void SetDirection(glm::vec3 Direction);
 
-	virtual void Draw(glm::mat4 ParentModelMatrix) override;
+	virtual void Draw() override;
 
 	~VDirectionalLight();
 
