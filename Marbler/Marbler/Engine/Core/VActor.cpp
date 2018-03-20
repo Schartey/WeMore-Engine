@@ -5,53 +5,82 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include "VScene.h"
+#include "../Utils/PhysxUtils.h"
+
+#include <stdio.h>
 
 VActor::VActor(VScene* Scene)
 {
 	this->Scene = Scene;
 }
 
-void VActor::SetupBasicRigidBody()
+glm::vec3 VActor::GetScale()
 {
-	this->PhysicsActor = new VPhysicsActor();
-	PhysicsActor->CreateRigidBody(this);
-}
-
-void VActor::AddPhysicsShape(VPhysicsShape* PhysicsShape)
-{
-	PhysicsActor->AttachPhysicsShape(PhysicsShape);
-
-	Scene->AddPhysicsActor(PhysicsActor);
-}
-
-void VActor::Translate(glm::vec3 vector)
-{
-	TranslationMatrix = glm::translate(TranslationMatrix, vector);
-
-	ModelMatrix = TranslationMatrix * RotationMatrix*ScaleMatrix;
+	return Scale;
 }
 
 glm::mat4 VActor::GetModelMatrix()
 {
-	return ModelMatrix;
+	return translate(glm::mat4(), this->Position)*glm::toMat4(this->Rotation)*glm::scale(glm::mat4(), this->Scale);
 }
 
-glm::mat4 VActor::GetTransformationMatrix()
+glm::vec3 VActor::GetPosition()
 {
-	return TransformationMatrix;
+	return Position;
 }
-void VActor::SetTransformationMatrix(glm::mat4 TransformationMatrix)
+
+void VActor::SetPosition(glm::vec3 Position)
 {
-	this->TransformationMatrix = TransformationMatrix;
+	this->Position = Position;
+}
+
+void VActor::SetRotation(glm::vec3 Rotation)
+{
+	this->Rotation = glm::quat(Rotation);
+}
+
+void VActor::SetScale(glm::vec3 Scale)
+{
+	this->Scale = Scale;
+}
+
+PxRigidDynamic* VActor::SetRigidDynamic()
+{
+	if (this->RigidActor != nullptr)
+	{
+		this->Scene->GetPhysicsScene()->removeActor(*this->RigidActor);
+	}
+	
+	PxRigidDynamic* DynamicActor = VPhysics::GetInstance()->CreateDefaultRigidDynamic(PhysxUtils::ConvertGVecQuatToPxTransform(Position, Rotation));
+	this->RigidActor = DynamicActor;
+	this->Scene->GetPhysicsScene()->addActor(*this->RigidActor);
+
+	return DynamicActor;
+}
+
+PxRigidStatic* VActor::SetRigidStatic()
+{
+	if (this->RigidActor != nullptr)
+	{
+		this->Scene->GetPhysicsScene()->removeActor(*this->RigidActor);
+	}
+
+	PxRigidStatic* StaticActor = VPhysics::GetInstance()->CreateDefaultRigidStatic(PhysxUtils::ConvertGVecQuatToPxTransform(Position, Rotation));
+	this->RigidActor = StaticActor;
+	this->Scene->GetPhysicsScene()->addActor(*this->RigidActor);
+
+	return StaticActor;
 }
 
 void VActor::Update()
 {
-	if (PhysicsActor != nullptr)
+	if (bPhysics)
 	{
-		this->TransformationMatrix = PhysicsActor->GetTransformation();
+		PhysxUtils::ConvertPxTransformToGVecQuat(this->RigidActor->getGlobalPose(), this->Position, this->Rotation);
+		//std::cout << "Pose: " << this->RigidDynamic->getGlobalPose().p.x << " " << this->RigidDynamic->getGlobalPose().p.y << " " << this->RigidDynamic->getGlobalPose().p.z + '\n';
 	}
 
 	for (VActorComponent* ActorComponent : ActorComponents)
@@ -62,6 +91,7 @@ void VActor::Update()
 	{
 		SceneComponent->Update();
 	}
+	ModelMatrix = GetModelMatrix();
 }
 
 void VActor::RenderPass(VShader* Shader)

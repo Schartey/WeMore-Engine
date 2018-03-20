@@ -6,15 +6,12 @@
 
 #include <vector>
 
-#include "Physics/VPhysicsScene.h"
-#include "Physics/VPhysicsActor.h"
-
-#include "PxScene.h"
+#include "Physics/VPhysics.h"
 
 class VScene
 {
 public:
-	VScene(VPhysicsScene* PhysicsScene);
+	VScene();
 
 	VActor* CreateActor();
 	VPointLight* CreatePointLight();
@@ -26,8 +23,8 @@ public:
 	std::vector<VPointLight*> GetPointLights();
 	VDirectionalLight* GetDirectionalLight();
 
-	void AddPhysicsActor(VPhysicsActor* PhysicsActor); 
-	VPhysicsScene* GetPhysicsScene();
+	//void AddPhysicsActor(VPhysicsActor* PhysicsActor); 
+	PxScene* GetPhysicsScene();
 
 	VActor* GetActivePlayerActor();
 	void SetActivePlayerActor(VActor* Actor);
@@ -45,6 +42,7 @@ private:
 	std::vector<VPointLight*> PointLights;
 	VDirectionalLight* DirectionalLight;
 
-	VPhysicsScene* PhysicsScene;
+	PxScene* PhysicsScene;
+	//VPhysicsScene* PhysicsScene;
 };
 

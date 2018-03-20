@@ -48,17 +48,7 @@ void VGame::SetActiveScene(VScene* Scene)
 
 VScene* VGame::CreateScene()
 {
-	PxSceneDesc sceneDesc(Physics->GetPxPhysics()->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-	PxDefaultCpuDispatcher*	gDispatcher = PxDefaultCpuDispatcherCreate(2);
-	sceneDesc.cpuDispatcher = gDispatcher;
-	sceneDesc.filterShader = PxDefaultSimulationFilterShader;
-	PxScene* PScene = Physics->GetPxPhysics()->createScene(sceneDesc);
-
-	VPhysicsScene* PhysicsScene = new VPhysicsScene(PScene, Physics);
-
-	VScene* Scene = new VScene(PhysicsScene);
-
+	VScene* Scene = new VScene();
 	return Scene;
 }
 

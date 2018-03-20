@@ -59,7 +59,7 @@ VPointLight* VAssimpUtils::LoadPointLight(std::string path, std::string filename
 {
 	VAssimpMesh* Mesh = LoadMesh(nullptr, path, filename);
 	VPointLight* Light = new VPointLight();
-	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetMaterial(), nullptr);
+	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
 
 	return Light;
 }
@@ -68,7 +68,7 @@ VDirectionalLight* VAssimpUtils::LoadDirectionalLight(std::string path, std::str
 {
 	VAssimpMesh* Mesh = LoadMesh(nullptr, path, filename);
 	VDirectionalLight* Light = new VDirectionalLight();
-	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetMaterial(), nullptr);
+	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
 
 	return Light;
 }
@@ -100,6 +100,10 @@ VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpS
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
 
+	BBox BoundingBox;
+	BoundingBox.min.x = BoundingBox.max.x = Mesh->mVertices[0].x;
+	BoundingBox.min.y = BoundingBox.max.y = Mesh->mVertices[0].y;
+	BoundingBox.min.z = BoundingBox.max.z = Mesh->mVertices[0].z;
 
 	for (GLuint i = 0; i < Mesh->mNumVertices; i++)
 	{
@@ -126,6 +130,14 @@ VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpS
 		else
 			vertex.texCoords = glm::vec2(0.0f, 0.0f);
 
+		//Calculate Bounding Box
+		if (Mesh->mVertices[i].x < BoundingBox.min.x) BoundingBox.min.x = Mesh->mVertices[i].x;
+		if (Mesh->mVertices[i].x > BoundingBox.max.x) BoundingBox.max.x = Mesh->mVertices[i].x;
+		if (Mesh->mVertices[i].y < BoundingBox.min.y) BoundingBox.min.y = Mesh->mVertices[i].y;
+		if (Mesh->mVertices[i].y > BoundingBox.max.y) BoundingBox.max.y = Mesh->mVertices[i].y;
+		if (Mesh->mVertices[i].z < BoundingBox.min.z) BoundingBox.min.z = Mesh->mVertices[i].z;
+		if (Mesh->mVertices[i].z > BoundingBox.max.z) BoundingBox.max.z = Mesh->mVertices[i].z;
+
 		vertices.push_back(vertex);
 	}
 
@@ -149,7 +161,7 @@ VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpS
 
 	VMesh* pMesh = new VMesh();
 
-	pMesh->Setup(vertices, indices, pMaterial, Scene);
+	pMesh->Setup(vertices, indices, BoundingBox);
 
 	VAssimpMesh* AssimpMesh = new VAssimpMesh(pMesh, pMaterial, ConvertMat4(Node->mTransformation));
 

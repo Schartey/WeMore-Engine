@@ -5,7 +5,9 @@
 
 #include <vector>
 
-#include "Physics/VPhysicsActor.h"
+#include "Physics/VPhysics.h"
+
+#include "glm/gtc/quaternion.hpp"
 
 class VScene;
 
@@ -13,6 +15,8 @@ class VActor
 {
 public:
 	VActor(VScene* Scene);
+
+	bool bPhysics = false;
 
 	template <typename T>
 	inline T* GetComponentByClass()
@@ -55,16 +59,27 @@ public:
 			ActorComponents.push_back(ActorComponent);
 		}
 	}
-
-	void SetupBasicRigidBody();
-
-	void AddPhysicsShape(VPhysicsShape* PhysicsShape);
-
-	void Translate(glm::vec3 vector);
-
+	
+	glm::vec3 GetScale();
 	glm::mat4 GetModelMatrix();
-	glm::mat4 GetTransformationMatrix();
-	void SetTransformationMatrix(glm::mat4 TransformationMatrix);
+	glm::vec3 GetPosition();
+
+	template <typename T>
+	inline T* GetRigidActor()
+	{
+		T* Actor =  dynamic_cast<T*>(RigidActor);
+
+		if (Actor != nullptr)
+			return Actor;
+		return nullptr;
+
+	}
+
+	void SetPosition(glm::vec3 Position);
+	void SetRotation(glm::vec3 Rotation);
+	void SetScale(glm::vec3 Scale);
+	PxRigidDynamic* SetRigidDynamic();
+	PxRigidStatic* SetRigidStatic();
 
 	virtual void Update();
 	void RenderPass(class VShader* Shader);
@@ -74,16 +89,15 @@ public:
 
 private:
 	VScene* Scene;
-	VPhysicsActor* PhysicsActor;
+	PxRigidActor* RigidActor;
+
+	glm::vec3 Position = glm::vec3(1.0f);
+	glm::quat Rotation = glm::quat();
+	glm::vec3 Scale = glm::vec3(1.0f);
+
+	glm::mat4 ModelMatrix = glm::mat4();
 
 	std::vector<VActorComponent*> ActorComponents;
 	std::vector<VSceneComponent*> SceneComponents;
-
-	glm::mat4 ModelMatrix = glm::mat4();
-	glm::mat4 TranslationMatrix = glm::mat4();
-	glm::mat4 RotationMatrix = glm::mat4();
-	glm::mat4 ScaleMatrix = glm::mat4();
-
-	glm::mat4 TransformationMatrix = glm::mat4();
 };
 

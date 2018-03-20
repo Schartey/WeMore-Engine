@@ -18,6 +18,10 @@ public:
 
 	bool Initialize();
 	PxPhysics* GetPxPhysics();
+	PxScene* CreateDefaultScene();
+	PxRigidDynamic* CreateDefaultRigidDynamic(PxTransform Transform);
+	PxRigidStatic* CreateDefaultRigidStatic(PxTransform Transform);
+	PxShape* CreateDefaultPhysicsShape(PxBoxGeometry Geometry, PxMaterial* Material);
 
 	~VPhysics() { delete instance; }
 

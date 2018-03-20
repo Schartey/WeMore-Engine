@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include "VActorComponent.h"
 
@@ -11,10 +12,10 @@ public:
 
 	glm::mat4 GetModelMatrix();
 
-	void Translate(glm::vec3 vector);
-
-	glm::mat4 GetTransformationMatrix();
-	void SetTransformationMatrix(glm::mat4 TransformationMatrix);
+	glm::vec3 GetPosition();
+	void SetPosition(glm::vec3 Position);
+	void SetRotation(glm::vec3 Rotation);
+	void SetScale(glm::vec3 Scale);
 
 	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix);
 
@@ -24,10 +25,9 @@ public:
 
 protected:
 	glm::mat4 ModelMatrix = glm::mat4();
-	glm::mat4 TranslationMatrix = glm::mat4();
-	glm::mat4 RotationMatrix = glm::mat4();
-	glm::mat4 ScaleMatrix = glm::mat4();
 
-	glm::mat4 TransformationMatrix = glm::mat4();
+	glm::vec3 Position = glm::vec3(1.0f);
+	glm::quat Rotation = glm::quat();
+	glm::vec3 Scale = glm::vec3(1.0f);
 };
 

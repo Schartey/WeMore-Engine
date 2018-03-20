@@ -25,17 +25,19 @@ void Marbler::OnInitialize()
 
 
 	VActor* FloorActor = MainScene->CreateActor();
+	FloorActor->bPhysics = true;
+
+	PxRigidStatic* RigidStatic = FloorActor->SetRigidStatic();
+
+	FloorActor->SetPosition(glm::vec3(0.0f, -5.0f, 0.0f));
 	VMeshComponent* FloorMeshComponent = new VMeshComponent(MainScene);
 
 	FloorActor->AddComponent(FloorMeshComponent);
-	FloorActor->SetupBasicRigidBody();
-
-	PxMaterial* PMaterial = Physics->GetPxPhysics()->createMaterial(0.5f, 0.5f, 0.6f);
-	FloorMeshComponent->AttachBasicPhysicsShape(PxBoxGeometry(PxVec3(10.0f, 10.0f, 10.0f)), PMaterial);
-
+	
 	FloorMeshComponent->LoadMesh(modelPath, "box.fbx");
-	FloorMeshComponent->Scale(glm::vec3(10.0f, 10.0f, 0.1f));
-	FloorMeshComponent->Translate(glm::vec3(0.0f, 0.0f, 0.0f));
+	FloorMeshComponent->SetBPhysics(true);
+
+	FloorMeshComponent->SetScale(glm::vec3(10.0f, 0.1f, 10.0f));
 
 	VTexture* FloorTexture = new VTexture();
 	FloorTexture->LoadTextureFromFile(texturePath + "/Lightmap.png");
@@ -46,14 +48,15 @@ void Marbler::OnInitialize()
 
 
 	VActor* BoxTestActor = MainScene->CreateActor();
-	BoxTestActor->Translate(glm::vec3(0.0f, 0.0f, -5.0f));
+	BoxTestActor->SetPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+	BoxTestActor->bPhysics = true;
+
+	PxRigidDynamic* RigidDynamic = BoxTestActor->SetRigidDynamic();
+	RigidDynamic->setMass(1.0f);
+
 	VMeshComponent* BoxTestMeshComponent = new VMeshComponent(MainScene);
 
 	BoxTestActor->AddComponent(BoxTestMeshComponent);
-	BoxTestActor->SetupBasicRigidBody();
-
-	PxMaterial* BoxTestPMaterial = Physics->GetPxPhysics()->createMaterial(0.5f, 0.5f, 0.6f);
-	BoxTestMeshComponent->AttachBasicPhysicsShape(PxBoxGeometry(PxVec3(10.0f, 10.0f, 10.0f)), BoxTestPMaterial);
 
 	BoxTestMeshComponent->LoadMesh(modelPath, "box.fbx");
 
@@ -81,14 +84,14 @@ void Marbler::OnInitialize()
 	
 
 	VActor* CameraActor = MainScene->CreateActor();
-	CameraActor->Translate(glm::vec3(0.0f, 1.0f, -10.0f));
+	CameraActor->SetPosition(glm::vec3(0.0f, -10.0f, -10.0f));
 	
 	VCameraComponent* CameraComponent = new VCameraComponent(MainScene);
 	CameraActor->AddComponent(CameraComponent);
 	CameraComponent->SetProjectionMatrix(glm::perspective(glm::radians(90.0f), Window->GetWidth() / (float)Window->GetHeight(), 0.1f, 1000.0f));
+	BoxTestActor->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	//CameraComponent->SetLookAt(glm::vec3(0.0f, 0.0f, 0.0f));
-	CameraComponent->Translate(glm::vec3(0.0f, -5.0f, 0.0f));
-	CameraComponent->Rotate(glm::vec3(0.0f, 1.5f, 0.0f));
+	//CameraComponent->Rotate(glm::vec3(0.0f, 1.5f, 0.0f));
 
 	VInputComponent* InputComponent = new VInputComponent(MainScene);
 	CameraActor->AddComponent(InputComponent);

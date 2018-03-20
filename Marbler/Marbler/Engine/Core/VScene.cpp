@@ -1,8 +1,9 @@
 #include "VScene.h"
 
-VScene::VScene(VPhysicsScene* PhysicsScene)
+VScene::VScene()
 {
-	this->PhysicsScene = PhysicsScene;
+	// setup default scene
+	PhysicsScene = VPhysics::GetInstance()->CreateDefaultScene();
 }
 
 VActor* VScene::CreateActor()
@@ -46,12 +47,7 @@ VDirectionalLight* VScene::GetDirectionalLight()
 	return DirectionalLight;
 }
 
-void VScene::AddPhysicsActor(VPhysicsActor* PhysicsActor)
-{
-	PhysicsScene->AddPhysicsActor(PhysicsActor);
-}
-
-VPhysicsScene* VScene::GetPhysicsScene()
+PxScene* VScene::GetPhysicsScene()
 {
 	return PhysicsScene;
 }

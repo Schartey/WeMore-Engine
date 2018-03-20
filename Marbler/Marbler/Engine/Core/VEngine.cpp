@@ -81,7 +81,7 @@ void VEngine::Run()
 		glfwPollEvents();
 
 
-		if (!bPause) {
+		if (!bPause && deltaT > 0) {
 			StepPhysics(deltaT);
 			Game->Update(deltaT);
 			GBuffer->StartFrame();
@@ -132,9 +132,11 @@ VPhysics* VEngine::GetPhysics()
 void VEngine::StepPhysics(float deltaTime)
 {
 	PX_UNUSED(true);
-	Game->GetActiveScene()->GetPhysicsScene()->GetScene()->simulate(1.0f / 60.0f);
-	Game->GetActiveScene()->GetPhysicsScene()->GetScene()->fetchResults(true);
+	Game->GetActiveScene()->GetPhysicsScene()->simulate(deltaTime);
+	Game->GetActiveScene()->GetPhysicsScene()->fetchResults(true);
 }
+
+//TODO StopEngine -> maybe register at delegate in game
 
 VEngine::~VEngine()
 {

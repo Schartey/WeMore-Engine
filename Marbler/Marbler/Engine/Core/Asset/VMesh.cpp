@@ -21,19 +21,18 @@ std::vector<GLuint> VMesh::GetIndices()
 	return Indices;
 }
 
-void VMesh::Setup(std::vector<Vertex> Vertices, std::vector<GLuint> Indices, VMaterial* Material, VScene* Scene)
+void VMesh::Setup(std::vector<Vertex> Vertices, std::vector<GLuint> Indices, BBox BoundingBox)
 {
 	this->Vertices = Vertices;
 	this->Indices = Indices;
-	this->Material = Material;
-	this->Scene = Scene;
+	this->BoundingBox = BoundingBox;
 
 	this->setupMesh();
 }
 
-VMaterial* VMesh::GetMaterial()
+BBox VMesh::GetBoundingBox()
 {
-	return Material;
+	return BoundingBox;
 }
 
 void VMesh::setupMesh()
@@ -99,21 +98,6 @@ void VMesh::Scale(glm::vec3 ScaleVector)
 
 void VMesh::RenderPass()
 {
-	//Don't use local Shader, already set by GBuffer, but add information
-	//Material->ApplyRenderPassInformation(Shader);
-
-	//VShader* Shader = Material->GetShader();
-
-	/*VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
-
-	//Set Mesh data in Material
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(TranslationMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "rotation"), 1, GL_FALSE, glm::value_ptr(RotationMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(ScaleMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "pmodel"), 1, GL_FALSE, glm::value_ptr(ParentModelMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
-	*/
 	// Draw mesh
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, 0);
@@ -125,7 +109,7 @@ void VMesh::RenderPass()
 void VMesh::Draw(glm::mat4 ParentModelMatrix)
 {
 	//Use shading, set textures and lighting information
-	Material->Use();
+	/*Material->Use();
 	Material->ApplyInformation();
 
 	VShader* Shader = Material->GetShader();
@@ -145,7 +129,7 @@ void VMesh::Draw(glm::mat4 ParentModelMatrix)
 	glDrawElements(GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	Material->Release();
+	Material->Release();*/
 }
 
 VMesh::~VMesh()

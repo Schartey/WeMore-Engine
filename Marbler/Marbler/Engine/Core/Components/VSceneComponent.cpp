@@ -12,19 +12,24 @@ glm::mat4 VSceneComponent::GetModelMatrix()
 	return ModelMatrix;
 }
 
-void VSceneComponent::Translate(glm::vec3 vector)
+glm::vec3 VSceneComponent::GetPosition()
 {
-	TranslationMatrix = glm::translate(TranslationMatrix, vector);
+	return this->Position;
 }
 
-glm::mat4 VSceneComponent::GetTransformationMatrix()
+void VSceneComponent::SetPosition(glm::vec3 Position)
 {
-	return TransformationMatrix;
+	this->Position = Position;
 }
 
-void VSceneComponent::SetTransformationMatrix(glm::mat4 TransformationMatrix)
+void VSceneComponent::SetRotation(glm::vec3 Rotation)
 {
-	TransformationMatrix = TransformationMatrix;
+	this->Rotation = glm::quat(Rotation);
+}
+
+void VSceneComponent::SetScale(glm::vec3 Scale)
+{
+	this->Scale = Scale;
 }
 
 void VSceneComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
