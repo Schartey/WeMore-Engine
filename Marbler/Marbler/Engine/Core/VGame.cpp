@@ -13,7 +13,7 @@ void VGame::OnInitialize()
 
 void VGame::Update(double deltaT)
 {
-	ActiveScene->Update();
+	ActiveScene->Update(deltaT);
 }
 
 void VGame::RenderPass(VShader* Shader)

@@ -27,7 +27,7 @@ public:
 protected:
 	glm::mat4 ModelMatrix = glm::mat4();
 
-	glm::vec3 Position = glm::vec3(1.0f);
+	glm::vec3 Position = glm::vec3();
 	glm::quat Rotation = glm::quat();
 	glm::vec3 Scale = glm::vec3(1.0f);
 };

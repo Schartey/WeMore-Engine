@@ -12,8 +12,8 @@
 #include "../../Utils/Assimp/VAssimpUtils.h"
 #include "../../Utils/PhysxUtils.h"
 
-#include "../VScene.h"
-#include "../Components/VCameraComponent.h"
+#include "../Objects/VScene.h"
+#include "VCameraComponent.h"
 
 VMeshComponent::VMeshComponent(VScene* Scene) : VSceneComponent(Scene)
 {
@@ -28,39 +28,7 @@ void VMeshComponent::LoadMesh(std::string MeshPath)
 	this->SetRotation(AssimpMesh->GetRotation());
 	this->SetScale(AssimpMesh->GetScale());
 	*/
-	if (this->Owner->GetRigidActor<PxRigidActor>() != nullptr) {
-		glm::vec3 BoxHalfExtent = (this->Mesh->GetBoundingBox().max - this->Mesh->GetBoundingBox().min);
-		BoxHalfExtent *= Owner->GetScale();
-		BoxHalfExtent *= Scale;
-		BoxHalfExtent /= 2;
-
-		PhysicsMaterial = VPhysics::GetInstance()->GetPxPhysics()->createMaterial(0.5, 0.5, 0.6);
-		this->PhysicsShape = VPhysics::GetInstance()->CreateDefaultPhysicsShape(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)), PhysicsMaterial);
-		this->PhysicsShape->setLocalPose(PhysxUtils::ConvertGVecQuatToPxTransform(this->Position, this->Rotation));
-		this->Owner->GetRigidActor<PxRigidActor>()->attachShape(*this->PhysicsShape);
-		this->SetBPhysics(bPhysics);
-	}
-}
-
-void VMeshComponent::LoadMesh(std::string MeshPath, std::string MeshFileName)
-{
-	VAssimpMesh* AssimpMesh = VAssimpUtils::LoadMesh(this->Scene, MeshPath, MeshFileName);
-	this->SetMesh(AssimpMesh->GetMesh());
-	this->SetMaterial(AssimpMesh->GetMaterial());
-	//this->SetTransformationMatrix(AssimpMesh->GetTransformation());
-
-	if(this->Owner->GetRigidActor<PxRigidActor>() != nullptr) { 
-		glm::vec3 BoxHalfExtent = (this->Mesh->GetBoundingBox().max - this->Mesh->GetBoundingBox().min);
-		BoxHalfExtent *= Owner->GetScale();
-		BoxHalfExtent *= Scale;
-		BoxHalfExtent /= 2;
-
-		PhysicsMaterial = VPhysics::GetInstance()->GetPxPhysics()->createMaterial(0.5, 0.5, 0.6);
-		this->PhysicsShape = VPhysics::GetInstance()->CreateDefaultPhysicsShape(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)), PhysicsMaterial);
-		this->PhysicsShape->setLocalPose(PhysxUtils::ConvertGVecQuatToPxTransform(this->Position, this->Rotation));
-		this->Owner->GetRigidActor<PxRigidActor>()->attachShape(*this->PhysicsShape);
-		this->SetBPhysics(bPhysics);
-	}
+	
 }
 
 VMesh* VMeshComponent::GetMesh()
@@ -83,6 +51,36 @@ void VMeshComponent::SetMaterial(VMaterial* Material)
 	this->Material = Material;
 }
 
+PxShape* VMeshComponent::GeneratePhysicsShape(GeometryType geometryType)
+{
+	if (this->Owner->GetRigidActor() != nullptr) {
+		glm::vec3 BoxHalfExtent = (this->Mesh->GetBoundingBox().max - this->Mesh->GetBoundingBox().min);
+		BoxHalfExtent *= Owner->GetScale();
+		BoxHalfExtent *= Scale;
+		BoxHalfExtent /= 2;
+
+		PhysicsMaterial = VPhysics::GetInstance()->GetPxPhysics()->createMaterial(0.5, 0.5, 0.6);
+
+		switch (geometryType)
+		{
+		case Box:
+
+			this->PhysicsShape = VPhysics::GetInstance()->GetPxPhysics()->createShape(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)), *PhysicsMaterial);
+			this->PhysicsShape->setLocalPose(PhysxUtils::ConvertGVecQuatToPxTransform(this->Position, this->Rotation));
+			this->Owner->GetRigidActor()->attachShape(*this->PhysicsShape);
+			this->SetBPhysics(bPhysics);
+			break;
+		case Sphere:
+			this->PhysicsShape = VPhysics::GetInstance()->GetPxPhysics()->createShape(PxSphereGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent).x), *PhysicsMaterial);
+			this->PhysicsShape->setLocalPose(PhysxUtils::ConvertGVecQuatToPxTransform(this->Position, this->Rotation));
+			this->Owner->GetRigidActor()->attachShape(*this->PhysicsShape);
+			this->SetBPhysics(bPhysics);
+			break;
+		}
+	}
+	return this->PhysicsShape;
+}
+
 PxShape* VMeshComponent::GetPhysicsShape()
 {
 	return this->PhysicsShape;
@@ -91,9 +89,9 @@ PxShape* VMeshComponent::GetPhysicsShape()
 void VMeshComponent::SetBPhysics(bool bPhysics)
 {
 	this->bPhysics = bPhysics;
-	this->Owner->GetRigidActor<PxRigidActor>()->detachShape(*this->PhysicsShape);
+	this->Owner->GetRigidActor()->detachShape(*this->PhysicsShape);
 	this->PhysicsShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, bPhysics);
-	this->Owner->GetRigidActor<PxRigidActor>()->attachShape(*this->PhysicsShape);
+	this->Owner->GetRigidActor()->attachShape(*this->PhysicsShape);
 }
 
 void VMeshComponent::AttachBasicPhysicsShape(PxBoxGeometry Geometry, PxMaterial* Material)
@@ -111,14 +109,14 @@ void VMeshComponent::SetScale(glm::vec3 Scale)
 		BoxHalfExtent *= Scale;
 		BoxHalfExtent /= 2;
 
-		this->Owner->GetRigidActor<PxRigidActor>()->detachShape(*this->PhysicsShape);
+		this->Owner->GetRigidActor()->detachShape(*this->PhysicsShape);
 		this->PhysicsShape->setGeometry(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)));
-		this->Owner->GetRigidActor<PxRigidActor>()->attachShape(*this->PhysicsShape);
+		this->Owner->GetRigidActor()->attachShape(*this->PhysicsShape);
 
 	}
 }
 
-void VMeshComponent::Update()
+void VMeshComponent::Update(double deltaT)
 {
 	if (bPhysics)
 	{

@@ -31,8 +31,7 @@ void VMaterial::ApplyRenderPassInformation(VShader* Shader)
 
 	for (int i = 0; i < DiffuseTextures.size() && DiffuseTextures.size() < 10; i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + texturesInUse);
-		glBindTexture(GL_TEXTURE_2D, this->DiffuseTextures[i]->GetId());
+		this->DiffuseTextures[i]->Bind(GL_TEXTURE0 + texturesInUse);
 
 		GLuint uUniform = glGetUniformLocation(Shader->programHandle, ("diffuseTexture[" + std::to_string(i) + "]").c_str());
 		glUniform1i(uUniform, texturesInUse);
@@ -42,8 +41,7 @@ void VMaterial::ApplyRenderPassInformation(VShader* Shader)
 
 	for (int i = 0; i < LightMapTextures.size() && LightMapTextures.size() < 10; i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + texturesInUse);
-		glBindTexture(GL_TEXTURE_2D, this->LightMapTextures[i]->GetId());
+		this->LightMapTextures[i]->Bind(GL_TEXTURE0 + texturesInUse);
 
 		GLuint uUniform = glGetUniformLocation(Shader->programHandle, ("lightmapTexture[" + std::to_string(i) + "]").c_str());
 		glUniform1i(uUniform, texturesInUse);
@@ -66,8 +64,7 @@ void VMaterial::ApplyInformation()
 
 	for (int i = 0; i < DiffuseTextures.size() && DiffuseTextures.size() < 10; i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + texturesInUse);
-		glBindTexture(GL_TEXTURE_2D, this->DiffuseTextures[i]->GetId());
+		this->DiffuseTextures[i]->Bind(GL_TEXTURE0 + texturesInUse);
 
 		GLuint uUniform = glGetUniformLocation(Shader->programHandle, ("diffuseTexture[" + std::to_string(i) + "]").c_str());
 		glUniform1i(uUniform, texturesInUse);
@@ -77,8 +74,7 @@ void VMaterial::ApplyInformation()
 
 	for (int i = 0; i < LightMapTextures.size() && LightMapTextures.size() < 10; i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + texturesInUse);
-		glBindTexture(GL_TEXTURE_2D, this->LightMapTextures[i]->GetId());
+		this->LightMapTextures[i]->Bind(GL_TEXTURE0 + texturesInUse);
 
 		GLuint uUniform = glGetUniformLocation(Shader->programHandle, ("lightmapTexture[" + std::to_string(i) + "]").c_str());
 		glUniform1i(uUniform, texturesInUse);

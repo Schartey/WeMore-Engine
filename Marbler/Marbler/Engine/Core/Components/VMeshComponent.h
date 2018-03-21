@@ -16,21 +16,21 @@ public:
 
 	void LoadMesh(std::string MeshPath);
 
-	void LoadMesh(std::string MeshPath, std::string MeshFileName);
-
 	VMesh* GetMesh();
 	VMaterial* GetMaterial();
 	PxShape* GetPhysicsShape();
 
 	void SetMesh(VMesh* Mesh);
 	void SetMaterial(VMaterial* Material);
+
+	PxShape* GeneratePhysicsShape(GeometryType geometryType);
 	void SetBPhysics(bool bPhysics);
 
 	void AttachBasicPhysicsShape(PxBoxGeometry Geometry, PxMaterial* Material);
 
 	void SetScale(glm::vec3 ScaleVector);
 
-	virtual void Update() override;
+	virtual void Update(double deltaT) override;
 	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix) override;
 	virtual void Draw(glm::mat4 ParentModelMatrix) override;
 

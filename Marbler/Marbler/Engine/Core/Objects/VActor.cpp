@@ -1,14 +1,9 @@
 #include "VActor.h"
 
-#include "../Utils/Assimp/VAssimpUtils.h"
-#include "Components/VMeshComponent.h"
-
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/quaternion.hpp>
-
 #include "VScene.h"
-#include "../Utils/PhysxUtils.h"
+#include "../../Utils/Assimp/VAssimpUtils.h"
+#include "../Components/VMeshComponent.h"
+#include "../../Utils/PhysxUtils.h"
 
 #include <stdio.h>
 
@@ -75,21 +70,21 @@ PxRigidStatic* VActor::SetRigidStatic()
 	return StaticActor;
 }
 
-void VActor::Update()
+void VActor::Update(double deltaT)
 {
 	if (this->RigidActor != nullptr && bPhysics)
 	{
 		PhysxUtils::ConvertPxTransformToGVecQuat(this->RigidActor->getGlobalPose(), this->Position, this->Rotation);
-		//std::cout << "Pose: " << this->RigidDynamic->getGlobalPose().p.x << " " << this->RigidDynamic->getGlobalPose().p.y << " " << this->RigidDynamic->getGlobalPose().p.z + '\n';
+		//std::cout << "Pose: " << this->RigidActor->getGlobalPose().p.x << " " << this->RigidActor->getGlobalPose().p.y << " " << this->RigidActor->getGlobalPose().p.z + '\n';
 	}
 
 	for (VActorComponent* ActorComponent : ActorComponents)
 	{
-		ActorComponent->Update();
+		ActorComponent->Update(deltaT);
 	}
 	for (VSceneComponent* SceneComponent : SceneComponents)
 	{
-		SceneComponent->Update();
+		SceneComponent->Update(deltaT);
 	}
 	ModelMatrix = GetModelMatrix();
 }

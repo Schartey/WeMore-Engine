@@ -62,11 +62,11 @@ void VScene::SetActivePlayerActor(VActor* Actor)
 	this->ActivePlayerActor = Actor;
 }
 
-void VScene::Update()
+void VScene::Update(double deltaT)
 {
 	for (VActor* Actor : Actors)
 	{
-		Actor->Update();
+		Actor->Update(deltaT);
 	}
 }
 

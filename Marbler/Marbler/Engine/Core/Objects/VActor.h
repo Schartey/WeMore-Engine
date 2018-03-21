@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Components/VActorComponent.h"
-#include "Components/VSceneComponent.h"
+#include "../Components/VActorComponent.h"
+#include "../Components/VSceneComponent.h"
 
 #include <vector>
 
-#include "Physics/VPhysics.h"
+#include "../Physics/VPhysics.h"
 
 #include "glm/gtc/quaternion.hpp"
 
@@ -64,15 +64,9 @@ public:
 	glm::mat4 GetModelMatrix();
 	glm::vec3 GetPosition();
 
-	template <typename T>
-	inline T* GetRigidActor()
+	PxRigidActor* GetRigidActor()
 	{
-		T* Actor =  dynamic_cast<T*>(RigidActor);
-
-		if (Actor != nullptr)
-			return Actor;
-		return nullptr;
-
+		return RigidActor;
 	}
 
 	void SetPosition(glm::vec3 Position);
@@ -81,7 +75,7 @@ public:
 	PxRigidDynamic* SetRigidDynamic();
 	PxRigidStatic* SetRigidStatic();
 
-	virtual void Update();
+	virtual void Update(double deltaT);
 	void RenderPass(class VShader* Shader);
 	void Draw();
 

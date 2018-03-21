@@ -34,11 +34,6 @@ PxScene* VPhysics::CreateDefaultScene()
 	return Physics->createScene(sceneDesc);
 }
 
-PxShape* VPhysics::CreateDefaultPhysicsShape(PxBoxGeometry Geometry, PxMaterial* Material)
-{
-	return Physics->createShape(Geometry, *Material);
-}
-
 PxRigidDynamic* VPhysics::CreateDefaultRigidDynamic(PxTransform Transform)
 {
 	PxRigidDynamic* RigidBody = Physics->createRigidDynamic(Transform);

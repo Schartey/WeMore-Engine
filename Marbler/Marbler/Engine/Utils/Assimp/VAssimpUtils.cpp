@@ -52,29 +52,6 @@ VAssimpMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string filePath)
 	return AssimpScene->GetMeshes().size() > 0 ? AssimpScene->GetMeshes().at(0) : nullptr;
 }
 
-VAssimpMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string path, std::string filename)
-{
-	std::string filepath;
-	filepath.assign(path);
-	filepath.append("/");
-	filepath.append(filename);
-
-	Assimp::Importer import;
-	const aiScene* iscene = import.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-	if (!iscene || iscene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !iscene->mRootNode)
-	{
-		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
-		return nullptr;
-	}
-
-	VAssimpScene* AssimpScene = new VAssimpScene();
-
-	ProcessScene(Scene, path, AssimpScene, iscene);
-
-	return AssimpScene->GetMeshes().size() > 0 ? AssimpScene->GetMeshes().at(0) : nullptr;
-}
-
 VPointLight* VAssimpUtils::LoadPointLight(std::string filePath)
 {
 	VAssimpMesh* Mesh = LoadMesh(nullptr, filePath);
@@ -87,24 +64,6 @@ VPointLight* VAssimpUtils::LoadPointLight(std::string filePath)
 VDirectionalLight* VAssimpUtils::LoadDirectionalLight(std::string filePath)
 {
 	VAssimpMesh* Mesh = LoadMesh(nullptr, filePath);
-	VDirectionalLight* Light = new VDirectionalLight();
-	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
-
-	return Light;
-}
-
-VPointLight* VAssimpUtils::LoadPointLight(std::string path, std::string filename)
-{
-	VAssimpMesh* Mesh = LoadMesh(nullptr, path, filename);
-	VPointLight* Light = new VPointLight();
-	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
-
-	return Light;
-}
-
-VDirectionalLight* VAssimpUtils::LoadDirectionalLight(std::string path, std::string filename)
-{
-	VAssimpMesh* Mesh = LoadMesh(nullptr, path, filename);
 	VDirectionalLight* Light = new VDirectionalLight();
 	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
 
@@ -217,8 +176,8 @@ VMaterial* VAssimpUtils::ProcessMaterial(std::string path, aiMaterial* Material)
 		std::string name = str.C_Str();
 		std::string filePath = path.append(str.C_Str());
 
-		VTexture* texture = new VTexture();
-		texture->LoadTextureFromFile(filePath.c_str());
+		VTexture* texture = new VTexture(filePath.c_str());
+		texture->Load();
 
 		pMaterial->AddDiffuseTexture(texture);
 	}

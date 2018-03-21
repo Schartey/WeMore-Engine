@@ -6,6 +6,11 @@
 
 using namespace physx;
 
+enum GeometryType {
+	Box,
+	Sphere,
+	Dynamic
+};
 class VPhysics
 {
 public:
@@ -21,7 +26,6 @@ public:
 	PxScene* CreateDefaultScene();
 	PxRigidDynamic* CreateDefaultRigidDynamic(PxTransform Transform);
 	PxRigidStatic* CreateDefaultRigidStatic(PxTransform Transform);
-	PxShape* CreateDefaultPhysicsShape(PxBoxGeometry Geometry, PxMaterial* Material);
 
 	~VPhysics() { delete instance; }
 

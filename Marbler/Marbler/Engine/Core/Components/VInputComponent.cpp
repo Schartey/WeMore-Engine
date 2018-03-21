@@ -1,8 +1,10 @@
 #include "VInputComponent.h"
 
 #include "../VInputManager.h"
-#include "../VActor.h"
+#include "../Objects/VActor.h"
 #include "VCameraComponent.h"
+#include "PxRigidActor.h"
+#include "../../Utils/PhysxUtils.h"
 
 
 VInputComponent::VInputComponent(VScene* Scene) : VActorComponent(Scene)
@@ -11,42 +13,79 @@ VInputComponent::VInputComponent(VScene* Scene) : VActorComponent(Scene)
 
 void VInputComponent::OnInitialize()
 {
-	VInputManager::BindAction("Forward", KEY_W, VActionType::Pressed, *this, &VInputComponent::OnForward);
-	VInputManager::BindAction("Back", KEY_S, VActionType::Pressed, *this, &VInputComponent::OnBackward);
-	VInputManager::BindAction("Left", KEY_A, VActionType::Pressed, *this, &VInputComponent::OnLeft);
-	VInputManager::BindAction("Right", KEY_D, VActionType::Pressed, *this, &VInputComponent::OnRight);
-	VInputManager::BindAction("Up", KEY_SPACE, VActionType::Pressed, *this, &VInputComponent::OnUp);
-	VInputManager::BindAction("Down", KEY_LEFT_SHIFT, VActionType::Pressed, *this, &VInputComponent::OnDown);
+	VInputManager::BindAction("Forward", KEY_W, VActionType::Pressed, *this, &VInputComponent::OnForwardPressed);
+	VInputManager::BindAction("Back", KEY_S, VActionType::Pressed, *this, &VInputComponent::OnBackwardPressed);
+	VInputManager::BindAction("Left", KEY_A, VActionType::Pressed, *this, &VInputComponent::OnLeftPressed);
+	VInputManager::BindAction("Right", KEY_D, VActionType::Pressed, *this, &VInputComponent::OnRightPressed);
+	VInputManager::BindAction("Up", KEY_SPACE, VActionType::Pressed, *this, &VInputComponent::OnUpPressed);
+	VInputManager::BindAction("Down", KEY_LEFT_SHIFT, VActionType::Pressed, *this, &VInputComponent::OnDownPressed);
+	VInputManager::BindAction("Forward", KEY_W, VActionType::Released, *this, &VInputComponent::OnForwardReleased);
+	VInputManager::BindAction("Back", KEY_S, VActionType::Released, *this, &VInputComponent::OnBackwardReleased);
+	VInputManager::BindAction("Left", KEY_A, VActionType::Released, *this, &VInputComponent::OnLeftReleased);
+	VInputManager::BindAction("Right", KEY_D, VActionType::Released, *this, &VInputComponent::OnRightReleased);
+	VInputManager::BindAction("Up", KEY_SPACE, VActionType::Released, *this, &VInputComponent::OnUpReleased);
+	VInputManager::BindAction("Down", KEY_LEFT_SHIFT, VActionType::Released, *this, &VInputComponent::OnDownReleased);
 }
 
-void VInputComponent::OnForward()
+void VInputComponent::Update(double deltaT)
 {
-	Owner->SetPosition(Owner->GetPosition()+glm::vec3(0.0f, -0.0f, 0.5f));
+	((PxRigidDynamic*)Owner->GetRigidActor())->addTorque(PhysxUtils::ConvertGVec3ToPxVec3(MovementVector*((float)deltaT)*MovementSpeed));
 }
 
-void VInputComponent::OnBackward()
+void VInputComponent::OnForwardPressed()
 {
-	Owner->SetPosition(Owner->GetPosition() + glm::vec3(0.0f, 0.0f, -0.5f));
+	MovementVector += glm::vec3(-1.0f, 0.0f, 0.0f);
 }
 
-void VInputComponent::OnLeft()
+void VInputComponent::OnBackwardPressed()
 {
-	Owner->SetPosition(Owner->GetPosition() + glm::vec3(0.5f, 0.0f, 0.0f));
+	MovementVector += glm::vec3(1.0f, 0.0f, 0.0f);
 }
 
-void VInputComponent::OnRight()
+void VInputComponent::OnLeftPressed()
 {
-	Owner->SetPosition(Owner->GetPosition() + glm::vec3(-0.5f, 0.0f, 0.0f));
+	MovementVector += glm::vec3(0.0f, 0.0f , 1.0f);
 }
 
-void VInputComponent::OnUp()
+void VInputComponent::OnRightPressed()
 {
-	Owner->SetPosition(Owner->GetPosition() + glm::vec3(0.0f, -0.5f, 0.0f));
+	MovementVector += glm::vec3(0.0f, 0.0f, -1.0f);
 }
 
-void VInputComponent::OnDown()
+void VInputComponent::OnUpPressed()
 {
-	Owner->SetPosition(Owner->GetPosition() + glm::vec3(0.0f, 0.5f, 0.0f));
+}
+
+void VInputComponent::OnDownPressed()
+{
+}
+
+void VInputComponent::OnForwardReleased()
+{
+	MovementVector += glm::vec3(1.0f, 0.0f, 0.0f);
+}
+
+void VInputComponent::OnBackwardReleased()
+{
+	MovementVector += glm::vec3(-1.0f, 0.0f, 0.0f);
+}
+
+void VInputComponent::OnLeftReleased()
+{
+	MovementVector += glm::vec3(0.0f, 0.0f, -1.0f);
+}
+
+void VInputComponent::OnRightReleased()
+{
+	MovementVector += glm::vec3(0.0f, 0.0f, 1.0f);
+}
+
+void VInputComponent::OnUpReleased()
+{
+}
+
+void VInputComponent::OnDownReleased()
+{
 }
 
 VInputComponent::~VInputComponent()

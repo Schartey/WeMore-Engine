@@ -8,16 +8,17 @@
 class VTexture
 {
 public:
-	VTexture();
+	VTexture(std::string name);
 
-	int GetId();
-	GLuint LoadTextureFromFile(std::string name);
+	GLuint GetId();
+	bool Load();
+
+	void Bind(GLenum TextureUnit);
 
 	~VTexture();
 
 private:
-	int Id;
-
-	GLuint LoadImage(const char* path);
+	std::string fileName1;
+	GLuint Id;
 };
 

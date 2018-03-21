@@ -1,6 +1,6 @@
 #include "VActorComponent.h"
 
-#include "../VActor.h"
+#include "../Objects/VActor.h"
 
 VActorComponent::VActorComponent(VScene* Scene)
 {
@@ -11,7 +11,7 @@ void VActorComponent::SetOwner(VActor* Actor) {
 	this->Owner = Actor;
 }
 
-void VActorComponent::Update()
+void VActorComponent::Update(double deltaT)
 {
 
 }

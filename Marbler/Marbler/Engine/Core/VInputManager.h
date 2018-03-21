@@ -40,7 +40,8 @@ public:
 
 private:
 
-	static std::map<VInputKey, VActionMapping> ActionMappings;
+	static std::map<VInputKey, VActionMapping> ActionPressedMappings;
+	static std::map<VInputKey, VActionMapping> ActionReleasedMappings;
 	static std::map <int, VInputKey> inputMap;
 	VInputManager();
 

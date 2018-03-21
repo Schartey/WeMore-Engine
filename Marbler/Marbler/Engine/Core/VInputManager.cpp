@@ -1,7 +1,8 @@
 #include "VInputManager.h"
 
 
-std::map<VInputKey, VActionMapping> VInputManager::ActionMappings;
+std::map<VInputKey, VActionMapping> VInputManager::ActionPressedMappings;
+std::map<VInputKey, VActionMapping> VInputManager::ActionReleasedMappings;
 std::map<int, VInputKey> VInputManager::inputMap;
 
 VInputManager::VInputManager() {
@@ -27,17 +28,32 @@ void VInputManager::Initialize(VWindow* Window)
 
 void VInputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (ActionMappings.count(inputMap[key]) == 1)
+	if (action == GLFW_PRESS)
 	{
-		VActionMapping Mapping = ActionMappings[inputMap[key]];
-		(Mapping.InputComponent->*Mapping.pmemfn)();
+		if (ActionPressedMappings.count(inputMap[key]) == 1)
+		{
+			VActionMapping Mapping = ActionPressedMappings[inputMap[key]];
+			(Mapping.InputComponent->*Mapping.pmemfn)();
+		}
 	}
+	else if(action == GLFW_RELEASE)
+	{
+		if (ActionReleasedMappings.count(inputMap[key]) == 1)
+		{
+			VActionMapping Mapping = ActionReleasedMappings[inputMap[key]];
+			(Mapping.InputComponent->*Mapping.pmemfn)();
+		}
+	}
+	
 }
 
 void VInputManager::BindAction(std::string ActionName, VInputKey InputKey, VActionType ActionType, VInputComponent& InputComponent, void(VInputComponent::*pmemfn)())
 {
 	VActionMapping NewMapping = VActionMapping(ActionName, ActionType, &InputComponent, pmemfn);
-	ActionMappings[InputKey] = NewMapping;
+	if(ActionType == VActionType::Pressed)
+		ActionPressedMappings[InputKey] = NewMapping;
+	else
+		ActionReleasedMappings[InputKey] = NewMapping;
 }
 
 VInputManager::~VInputManager()

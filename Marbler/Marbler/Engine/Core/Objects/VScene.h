@@ -1,12 +1,12 @@
 #pragma once
 
 #include "VActor.h"
-#include "Asset/VPointLight.h"
-#include "Asset/VDirectionalLight.h"
+#include "../Asset/VPointLight.h"
+#include "../Asset/VDirectionalLight.h"
 
 #include <vector>
 
-#include "Physics/VPhysics.h"
+#include "../Physics/VPhysics.h"
 
 class VScene
 {
@@ -29,7 +29,7 @@ public:
 	VActor* GetActivePlayerActor();
 	void SetActivePlayerActor(VActor* Actor);
 
-	virtual void Update();
+	virtual void Update(double deltaT);
 	void RenderPass(class VShader* Shader);
 	void Draw();
 

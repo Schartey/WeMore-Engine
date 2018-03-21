@@ -35,12 +35,13 @@ void Marbler::OnInitialize()
 	FloorActor->AddComponent(FloorMeshComponent);
 	
 	FloorMeshComponent->LoadMesh(modelPath + "box.fbx");
+	FloorMeshComponent->GeneratePhysicsShape(GeometryType::Box);
 	FloorMeshComponent->SetBPhysics(true);
 
 	FloorMeshComponent->SetScale(glm::vec3(10.0f, 0.1f, 10.0f));
 
-	VTexture* FloorTexture = new VTexture();
-	FloorTexture->LoadTextureFromFile(texturePath + "/Lightmap.png");
+	VTexture* FloorTexture = new VTexture(texturePath + "Lightmap.png");
+	FloorTexture->Load();
 	FloorMeshComponent->GetMaterial()->AddLightMapTexture(FloorTexture);
 	FloorMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
 	FloorMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
@@ -51,17 +52,18 @@ void Marbler::OnInitialize()
 	BoxTestActor->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 	BoxTestActor->bPhysics = true;
 
-	PxRigidDynamic* RigidDynamic = BoxTestActor->SetRigidDynamic();// SetRigidDynamic();
-	RigidDynamic->setMass(1.0f);
+	PxRigidDynamic* RigidDynamic = BoxTestActor->SetRigidDynamic();
+	RigidDynamic->setMass(0.1f);
 
 	VMeshComponent* BoxTestMeshComponent = new VMeshComponent(MainScene);
 
 	BoxTestActor->AddComponent(BoxTestMeshComponent);
 
 	BoxTestMeshComponent->LoadMesh(modelPath + "box.fbx");
+	BoxTestMeshComponent->GeneratePhysicsShape(GeometryType::Box);
 
-	VTexture* BoxTestTexture = new VTexture();
-	BoxTestTexture->LoadTextureFromFile(texturePath + "/Lightmap.png");
+	VTexture* BoxTestTexture = new VTexture(texturePath + "Lightmap.png");
+	BoxTestTexture->Load();
 	BoxTestMeshComponent->GetMaterial()->AddLightMapTexture(BoxTestTexture);
 	BoxTestMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
 	BoxTestMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
@@ -82,15 +84,41 @@ void Marbler::OnInitialize()
 
 	RandomActor->AddComponent(MeshComponent);*/
 
+	//VActor* MarbleActor = MainScene->CreateActor();
+	//MarbleActor->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));
+	
+
 	VActor* CameraActor = MainScene->CreateActor();
-	CameraActor->SetPosition(glm::vec3(0.0f, -5.0f, -10.0f));
+	CameraActor->SetPosition(glm::vec3(0.0f, 10.0f, 5.0f));
+	CameraActor->bPhysics = true;
+
 	
 	VCameraComponent* CameraComponent = new VCameraComponent(MainScene);
 	CameraActor->AddComponent(CameraComponent);
 	CameraComponent->SetProjectionMatrix(glm::perspective(glm::radians(90.0f), Window->GetWidth() / (float)Window->GetHeight(), 0.1f, 1000.0f));
-	CameraComponent->SetPosition(glm::vec3(0.0f, 0.0f, -20.0f));
+	CameraComponent->SetPosition(glm::vec3(0.0f, 5.0f, 20.0f));
 	//CameraComponent->SetLookAt(glm::vec3(0.0f, 0.0f, 0.0f));
 	//CameraComponent->Rotate(glm::vec3(0.0f, 1.5f, 0.0f));
+
+
+	PxRigidDynamic* MarbleRigidDynamic = CameraActor->SetRigidDynamic();
+	MarbleRigidDynamic->setMass(1.0f);
+
+	VMeshComponent* MarbleComponent = new VMeshComponent(MainScene);
+
+	CameraActor->AddComponent(MarbleComponent);
+
+	MarbleComponent->LoadMesh(modelPath + "marble.fbx");
+	MarbleComponent->GeneratePhysicsShape(GeometryType::Sphere);
+	//MarbleComponent->SetBPhysics(true);
+
+	//VTexture* MarbleTexture = new VTexture(texturePath + "Lightmap.png");
+	//MarbleTexture->Load();
+	//MarbleComponent->GetMaterial()->AddLightMapTexture(MarbleTexture);
+	MarbleComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
+	MarbleComponent->GetMaterial()->SetSpecularIntensity(1.0f);
+	MarbleComponent->GetMaterial()->SetSpecularPower(1);
+
 
 	VInputComponent* InputComponent = new VInputComponent(MainScene);
 	CameraActor->AddComponent(InputComponent);

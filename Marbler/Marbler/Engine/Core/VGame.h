@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VScene.h"
+#include "Objects/VScene.h"
 #include "VWindow.h"
 #include "Physics/VPhysics.h"
 

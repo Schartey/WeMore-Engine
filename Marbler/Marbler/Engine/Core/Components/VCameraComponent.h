@@ -17,6 +17,8 @@ public:
 	virtual ~VCameraComponent();
 
 private:
+	bool bHasTarget;
+
 	glm::mat4 ViewMatrix = glm::mat4();
 	glm::mat4 ProjectionMatrix = glm::mat4();
 	glm::vec3 LookAt = glm::vec3();

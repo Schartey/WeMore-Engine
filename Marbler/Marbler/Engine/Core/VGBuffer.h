@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "VShader.h"
-#include "VScene.h"
+#include "Objects/VScene.h"
 
 class VGBuffer
 {
