@@ -49,6 +49,129 @@ BBox VMesh::GetBoundingBox()
 
 void VMesh::setupMesh()
 {
+	float width = 64;
+	float height = 32;
+	float depth = 2.0f;
+	positions = {
+		// front
+		glm::vec3(-width / 2.0f, -height / 2.0f,  depth / 2.0f),
+		glm::vec3(width / 2.0f, -height / 2.0f,  depth / 2.0f),
+		glm::vec3(width / 2.0f, height / 2.0f,  depth / 2.0f),
+		glm::vec3(-width / 2.0f, height / 2.0f,  depth / 2.0f),
+		// back
+		glm::vec3(width / 2.0f, -height / 2.0f,  -depth / 2.0f),
+		glm::vec3(-width / 2.0f, -height / 2.0f,  -depth / 2.0f),
+		glm::vec3(-width / 2.0f, height / 2.0f,  -depth / 2.0f),
+		glm::vec3(width / 2.0f, height / 2.0f,  -depth / 2.0f),
+		// right
+		glm::vec3(width / 2.0f, -height / 2.0f,  depth / 2.0f),
+		glm::vec3(width / 2.0f, -height / 2.0f,  -depth / 2.0f),
+		glm::vec3(width / 2.0f, height / 2.0f,  -depth / 2.0f),
+		glm::vec3(width / 2.0f, height / 2.0f,  depth / 2.0f),
+		// left
+		glm::vec3(-width / 2.0f, -height / 2.0f,  -depth / 2.0f),
+		glm::vec3(-width / 2.0f, -height / 2.0f,  depth / 2.0f),
+		glm::vec3(-width / 2.0f, height / 2.0f,  depth / 2.0f),
+		glm::vec3(-width / 2.0f, height / 2.0f,  -depth / 2.0f),
+		// top
+		glm::vec3(-width / 2.0f, height / 2.0f,  -depth / 2.0f),
+		glm::vec3(-width / 2.0f, height / 2.0f,  depth / 2.0f),
+		glm::vec3(width / 2.0f, height / 2.0f,  depth / 2.0f),
+		glm::vec3(width / 2.0f, height / 2.0f,  -depth / 2.0f),
+		// bottom
+		glm::vec3(-width / 2.0f, -height / 2.0f,  -depth / 2.0f),
+		glm::vec3(width / 2.0f, -height / 2.0f,  -depth / 2.0f),
+		glm::vec3(width / 2.0f, -height / 2.0f,  depth / 2.0f),
+		glm::vec3(-width / 2.0f, -height / 2.0f,  depth / 2.0f)
+	};
+
+	normals = {
+		// front
+		glm::vec3(0, 0, 1),
+		glm::vec3(0, 0, 1),
+		glm::vec3(0, 0, 1),
+		glm::vec3(0, 0, 1),
+		// back
+		glm::vec3(0, 0, -1),
+		glm::vec3(0, 0, -1),
+		glm::vec3(0, 0, -1),
+		glm::vec3(0, 0, -1),
+		// right
+		glm::vec3(1, 0, 0),
+		glm::vec3(1, 0, 0),
+		glm::vec3(1, 0, 0),
+		glm::vec3(1, 0, 0),
+		// left
+		glm::vec3(-1, 0, 0),
+		glm::vec3(-1, 0, 0),
+		glm::vec3(-1, 0, 0),
+		glm::vec3(-1, 0, 0),
+		// top
+		glm::vec3(0, 1, 0),
+		glm::vec3(0, 1, 0),
+		glm::vec3(0, 1, 0),
+		glm::vec3(0, 1, 0),
+		// bottom
+		glm::vec3(0, -1, 0),
+		glm::vec3(0, -1, 0),
+		glm::vec3(0, -1, 0),
+		glm::vec3(0, -1, 0)
+	};
+
+	uvs = {
+		// front
+		glm::vec2(0, 0),
+		glm::vec2(1, 0),
+		glm::vec2(1, 1),
+		glm::vec2(0, 1),
+		// back
+		glm::vec2(0, 0),
+		glm::vec2(1, 0),
+		glm::vec2(1, 1),
+		glm::vec2(0, 1),
+		// right
+		glm::vec2(0, 0),
+		glm::vec2(1, 0),
+		glm::vec2(1, 1),
+		glm::vec2(0, 1),
+		// left
+		glm::vec2(0, 0),
+		glm::vec2(1, 0),
+		glm::vec2(1, 1),
+		glm::vec2(0, 1),
+		// top
+		glm::vec2(0, 0),
+		glm::vec2(1, 0),
+		glm::vec2(1, 1),
+		glm::vec2(0, 1),
+		// bottom
+		glm::vec2(0, 0),
+		glm::vec2(1, 0),
+		glm::vec2(1, 1),
+		glm::vec2(0, 1)
+	};
+
+
+	indices = {
+		// front
+		0, 1, 2,
+		2, 3, 0,
+		// back
+		4, 5, 6,
+		6, 7, 4,
+		// right
+		8, 9, 10,
+		10, 11, 8,
+		// left
+		12, 13, 14,
+		14, 15, 12,
+		// top
+		16, 17, 18,
+		18, 19, 16,
+		// bottom
+		20, 21, 22,
+		22, 23, 20
+	};
 	/*glGenVertexArrays(1, &this->VAO);
 	glBindVertexArray(this->VAO);
 
