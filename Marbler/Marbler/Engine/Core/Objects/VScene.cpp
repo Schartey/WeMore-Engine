@@ -1,25 +1,32 @@
 #include "VScene.h"
 
+#include "VActor.h"
+
 VScene::VScene()
 {
 	// setup default scene
 	PhysicsScene = VPhysics::GetInstance()->CreateDefaultScene();
 }
 
-VActor* VScene::CreateActor()
+VActor* VScene::CreateActor(std::string Name)
 {
-	VActor* Actor = new VActor(this);
-
-	Actors.push_back(Actor);
-
+	VActor* Actor = new VActor(this, Name);
+	SceneObjects.push_back(Actor);
 	return Actor;
 }
 
-VPointLight* VScene::CreatePointLight()
+VPointLight2* VScene::CreatePointLight(std::string Name)
+{
+	VPointLight2* PointLight = new VPointLight2(this, Name);
+	SceneObjects.push_back(PointLight);
+	return PointLight;
+}
+
+/*VPointLight* VScene::CreatePointLight()
 {
 	VPointLight* PointLight = new VPointLight();
 	return PointLight;
-}
+}*/
 
 VDirectionalLight* VScene::CreateDirectionalLight()
 {
@@ -27,18 +34,30 @@ VDirectionalLight* VScene::CreateDirectionalLight()
 	return DirectionalLight;
 }
 
-void VScene::AddPointLight(VPointLight* PointLight)
+/*void VScene::AddPointLight(VPointLight* PointLight)
 {
 	PointLights.push_back(PointLight);
-}
+}*/
 
 void VScene::SetDirectionalLight(VDirectionalLight* DirectionalLight)
 {
 	this->DirectionalLight = DirectionalLight;
 }
 
-std::vector<VPointLight*> VScene::GetPointLights()
+std::vector<VSceneObject*> VScene::GetPointLights()
 {
+	//Might be better to just make a vector of pointlights and store there addiontally instead of only sceneobejcts (no querying then)
+	std::vector<VSceneObject*> PointLights;
+
+	for (VSceneObject* SceneObject : SceneObjects)
+	{
+		VLightComponent* Object = SceneObject->GetComponentByClass<VLightComponent>();
+
+		if (Object != nullptr && Object->GetLightType() == LightType::PointLight)
+		{
+			PointLights.push_back(SceneObject);
+		}
+	}
 	return PointLights;
 }
 
@@ -52,19 +71,19 @@ PxScene* VScene::GetPhysicsScene()
 	return PhysicsScene;
 }
 
-VActor* VScene::GetActivePlayerActor()
+VSceneObject* VScene::GetActiveSceneObject()
 {
-	return ActivePlayerActor;
+	return ActiveSceneObject;
 }
 
-void VScene::SetActivePlayerActor(VActor* Actor)
+void VScene::SetActiveSceneObject(VSceneObject* SceneObject)
 {
-	this->ActivePlayerActor = Actor;
+	this->ActiveSceneObject = SceneObject;
 }
 
 void VScene::Update(double deltaT)
 {
-	for (VActor* Actor : Actors)
+	for (VSceneObject* Actor : SceneObjects)
 	{
 		Actor->Update(deltaT);
 	}
@@ -72,7 +91,7 @@ void VScene::Update(double deltaT)
 
 void VScene::RenderPass(VShader* Shader)
 {
-	for (VActor* Actor : Actors)
+	for (VSceneObject* Actor : SceneObjects)
 	{
 		Actor->RenderPass(Shader);
 	}
@@ -80,7 +99,7 @@ void VScene::RenderPass(VShader* Shader)
 
 void VScene::Draw()
 {
-	for (VActor* Actor : Actors)
+	for (VSceneObject* Actor : SceneObjects)
 	{
 		Actor->Draw();
 	}

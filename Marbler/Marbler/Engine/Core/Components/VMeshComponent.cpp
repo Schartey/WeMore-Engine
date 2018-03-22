@@ -15,7 +15,7 @@
 #include "../Objects/VScene.h"
 #include "VCameraComponent.h"
 
-VMeshComponent::VMeshComponent(VScene* Scene) : VSceneComponent(Scene)
+VMeshComponent::VMeshComponent(VScene* Scene, std::string Name) : VSceneComponent(Scene, Name)
 {
 }
 
@@ -53,7 +53,9 @@ void VMeshComponent::SetMaterial(VMaterial* Material)
 
 PxShape* VMeshComponent::GeneratePhysicsShape(GeometryType geometryType)
 {
-	if (this->Owner->GetRigidActor() != nullptr) {
+	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
+
+	if (ActorOwner != nullptr && ActorOwner->GetRigidActor() != nullptr) {
 		glm::vec3 BoxHalfExtent = (this->Mesh->GetBoundingBox().max - this->Mesh->GetBoundingBox().min);
 		BoxHalfExtent *= Owner->GetScale();
 		BoxHalfExtent *= Scale;
@@ -67,13 +69,13 @@ PxShape* VMeshComponent::GeneratePhysicsShape(GeometryType geometryType)
 
 			this->PhysicsShape = VPhysics::GetInstance()->GetPxPhysics()->createShape(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)), *PhysicsMaterial);
 			this->PhysicsShape->setLocalPose(PhysxUtils::ConvertGVecQuatToPxTransform(this->Position, this->Rotation));
-			this->Owner->GetRigidActor()->attachShape(*this->PhysicsShape);
+			ActorOwner->GetRigidActor()->attachShape(*this->PhysicsShape);
 			this->SetBPhysics(bPhysics);
 			break;
 		case Sphere:
 			this->PhysicsShape = VPhysics::GetInstance()->GetPxPhysics()->createShape(PxSphereGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent).x), *PhysicsMaterial);
 			this->PhysicsShape->setLocalPose(PhysxUtils::ConvertGVecQuatToPxTransform(this->Position, this->Rotation));
-			this->Owner->GetRigidActor()->attachShape(*this->PhysicsShape);
+			ActorOwner->GetRigidActor()->attachShape(*this->PhysicsShape);
 			this->SetBPhysics(bPhysics);
 			break;
 		}
@@ -88,10 +90,12 @@ PxShape* VMeshComponent::GetPhysicsShape()
 
 void VMeshComponent::SetBPhysics(bool bPhysics)
 {
+	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
+
 	this->bPhysics = bPhysics;
-	this->Owner->GetRigidActor()->detachShape(*this->PhysicsShape);
+	ActorOwner->GetRigidActor()->detachShape(*this->PhysicsShape);
 	this->PhysicsShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, bPhysics);
-	this->Owner->GetRigidActor()->attachShape(*this->PhysicsShape);
+	ActorOwner->GetRigidActor()->attachShape(*this->PhysicsShape);
 }
 
 void VMeshComponent::AttachBasicPhysicsShape(PxBoxGeometry Geometry, PxMaterial* Material)
@@ -102,6 +106,8 @@ void VMeshComponent::SetScale(glm::vec3 Scale)
 {
 	VSceneComponent::SetScale(Scale);
 
+	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
+
 	if (this->PhysicsShape != nullptr)
 	{
 		glm::vec3 BoxHalfExtent = (this->Mesh->GetBoundingBox().max - this->Mesh->GetBoundingBox().min);
@@ -109,9 +115,9 @@ void VMeshComponent::SetScale(glm::vec3 Scale)
 		BoxHalfExtent *= Scale;
 		BoxHalfExtent /= 2;
 
-		this->Owner->GetRigidActor()->detachShape(*this->PhysicsShape);
+		ActorOwner->GetRigidActor()->detachShape(*this->PhysicsShape);
 		this->PhysicsShape->setGeometry(PxBoxGeometry(PhysxUtils::ConvertGVec3ToPxVec3(BoxHalfExtent)));
-		this->Owner->GetRigidActor()->attachShape(*this->PhysicsShape);
+		ActorOwner->GetRigidActor()->attachShape(*this->PhysicsShape);
 
 	}
 }
@@ -122,7 +128,8 @@ void VMeshComponent::Update(double deltaT)
 	{
 		PhysxUtils::ConvertPxTransformToGVecQuat(this->PhysicsShape->getLocalPose(), this->Position, this->Rotation);
 	}
-	ModelMatrix = translate(glm::mat4(), this->Position)*glm::toMat4(this->Rotation)*glm::scale(glm::scale(glm::mat4(), this->Scale), Owner->GetScale());
+
+	VSceneComponent::Update(deltaT);
 }
 
 void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
@@ -131,7 +138,7 @@ void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
 
 	VSceneComponent::RenderPass(Shader, CMT);
 
-	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
+	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
 	if (this->Mesh != nullptr)
 	{
@@ -153,7 +160,7 @@ void VMeshComponent::Draw(glm::mat4 ParentModelMatrix)
 
 	VSceneComponent::Draw(CMT);
 
-	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
+	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
 	if (this->Mesh != nullptr)
 	{

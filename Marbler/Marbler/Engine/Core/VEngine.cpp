@@ -54,6 +54,7 @@ int VEngine::Initialize(const char* cfgpath)
 void VEngine::Setup(VGame* Game)
 {
 	this->Game = Game;
+	this->Game->OnQuitDelegate = std::bind(&VEngine::OnQuit, this);
 	this->Game->SetWindow(Window);
 	this->Game->SetPhysics(Physics);
 
@@ -91,13 +92,13 @@ void VEngine::Run()
 				Game->RenderPass(GBuffer->GetGeometryShader());
 				GBuffer->EndGeometryPass();
 
-				glEnable(GL_STENCIL_TEST);
+				//glEnable(GL_STENCIL_TEST);
 
 				for (unsigned int i = 0; i < Game->GetActiveScene()->GetPointLights().size(); i++) {
-					GBuffer->StencilPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
+					//GBuffer->StencilPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
 					GBuffer->PointLightPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
 				}
-				glDisable(GL_STENCIL_TEST);
+				//glDisable(GL_STENCIL_TEST);
 
 				if (Game->GetActiveScene()->GetDirectionalLight() != nullptr)
 				{
@@ -118,6 +119,11 @@ void VEngine::Run()
 
 		Window->Draw();
 	}
+}
+
+void VEngine::OnQuit()
+{
+	bRunning = false;
 }
 
 void VEngine::Pause()

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "VActor.h"
-#include "../Asset/VPointLight.h"
+#include "VPointLight2.h"
+//#include "../Asset/VPointLight.h"
 #include "../Asset/VDirectionalLight.h"
 
 #include <vector>
@@ -13,21 +14,20 @@ class VScene
 public:
 	VScene();
 
-	VActor* CreateActor();
-	VPointLight* CreatePointLight();
+	VActor* CreateActor(std::string Name);
+	VPointLight2* CreatePointLight(std::string Name);
 	VDirectionalLight* CreateDirectionalLight();
 	
-	void AddPointLight(VPointLight* PointLight);
+	//void AddPointLight(VPointLight* PointLight);
 	void SetDirectionalLight(VDirectionalLight* DirectionalLight);
 
-	std::vector<VPointLight*> GetPointLights();
+	std::vector<VSceneObject*> GetPointLights();
 	VDirectionalLight* GetDirectionalLight();
 
-	//void AddPhysicsActor(VPhysicsActor* PhysicsActor); 
 	PxScene* GetPhysicsScene();
 
-	VActor* GetActivePlayerActor();
-	void SetActivePlayerActor(VActor* Actor);
+	VSceneObject* GetActiveSceneObject();
+	void SetActiveSceneObject(VSceneObject* Actor);
 
 	virtual void Update(double deltaT);
 	void RenderPass(class VShader* Shader);
@@ -36,13 +36,12 @@ public:
 	~VScene();
 
 private:
-	VActor * ActivePlayerActor;
+	VSceneObject * ActiveSceneObject;
 	
-	std::vector<VActor*> Actors;
-	std::vector<VPointLight*> PointLights;
+	std::vector<VSceneObject*> SceneObjects;
+	//std::vector<VPointLight*> PointLights;
 	VDirectionalLight* DirectionalLight;
 
 	PxScene* PhysicsScene;
-	//VPhysicsScene* PhysicsScene;
 };
 

@@ -12,7 +12,7 @@
 class VMeshComponent : public VSceneComponent
 {
 public:
-	VMeshComponent(VScene* Scene);
+	VMeshComponent(VScene* Scene, std::string Name);
 
 	void LoadMesh(std::string MeshPath);
 
@@ -36,7 +36,7 @@ public:
 
 	virtual ~VMeshComponent();
 
-private:
+protected:
 	bool bPhysics = false;
 
 	VMesh * Mesh;

@@ -71,40 +71,11 @@ void VMesh::setupMesh()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-glm::mat4 VMesh::GetTranslationMatrix()
-{
-	return TranslationMatrix;
-}
-
-glm::mat4 VMesh::GetScaleMatrix()
-{
-	return ScaleMatrix;
-}
-
-void VMesh::SetTranslationMatrix(glm::mat4 TranslationMatrix)
-{
-	this->TranslationMatrix = TranslationMatrix;
-}
-
-void VMesh::Translate(glm::vec3 TranslationVector)
-{
-	TranslationMatrix = glm::translate(TranslationMatrix, TranslationVector);
-}
-
-void VMesh::Scale(glm::vec3 ScaleVector)
-{
-	ScaleMatrix = glm::scale(ScaleMatrix, ScaleVector);
-}
-
 void VMesh::RenderPass()
 {
 	// Draw mesh
 	glBindVertexArray(this->VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
 	glDrawElements(GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 	//Material->Release();
@@ -113,11 +84,7 @@ void VMesh::RenderPass()
 void VMesh::Draw()
 {
 	glBindVertexArray(this->VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
 	glDrawElements(GL_TRIANGLES, this->Indices.size(), GL_UNSIGNED_INT, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 }

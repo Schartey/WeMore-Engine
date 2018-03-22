@@ -3,12 +3,11 @@
 #include <string>
 
 #include "glm/glm.hpp"
-#include "VMesh.h"
 
 struct VAttenuation {
-	float Constant;
-	float Linear;
-	float Exp;
+	float Constant = 0.0f;
+	float Linear = 0.0f;
+	float Exp = 32.0f;
 
 	VAttenuation() { }
 	VAttenuation(float oConstant, float oLinear, float oExp)
@@ -19,30 +18,10 @@ struct VAttenuation {
 	};
 };
 
-class VPointLight : public VMesh
+struct VPointLight
 {
-public:
-
-	VPointLight();
-
-	void SetAmbient(float Ambient);
-	void SetColor(glm::vec3 Color);
-	void SetDiffuse(float Diffuse);
-	void SetAttenuation(VAttenuation Attenuation);
-
-	float GetAmbient();
-	glm::vec3 GetColor();
-	float GetDiffuse();
-	VAttenuation GetAttenuation();
-
-	virtual void Draw() override;
-
-	~VPointLight();
-
-private:
-	glm::vec3 Color;
-	float Ambient;
-	float Diffuse;
-
-	VAttenuation Attenuation;
+	glm::vec3 Color = glm::vec3(1.0f);
+	float Ambient = 0.2f;
+	float Diffuse = 0.5f;
+	VAttenuation Attenuation = VAttenuation();
 };

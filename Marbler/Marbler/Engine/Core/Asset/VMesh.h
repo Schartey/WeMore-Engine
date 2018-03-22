@@ -35,14 +35,6 @@ public:
 	void Setup(std::vector<Vertex> vertices, std::vector<GLuint> indices, BBox BoundingBox);
 	BBox GetBoundingBox();
 
-	glm::mat4 GetTranslationMatrix();
-	glm::mat4 GetScaleMatrix();
-
-	void SetTranslationMatrix(glm::mat4 TranslationMatrix);
-
-	void Translate(glm::vec3 TranslationVector);
-	void Scale(glm::vec3 ScaleVector);
-
 	void RenderPass();
 	virtual void Draw();
 	
@@ -50,9 +42,6 @@ public:
 
 protected:
 	GLuint VAO, VBO, EBO;
-	glm::mat4 TranslationMatrix = glm::mat4();
-	glm::mat4 RotationMatrix = glm::mat4();
-	glm::mat4 ScaleMatrix = glm::mat4();
 
 	BBox BoundingBox;
 

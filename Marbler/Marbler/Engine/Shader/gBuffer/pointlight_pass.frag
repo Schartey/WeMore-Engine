@@ -39,6 +39,7 @@ uniform PointLight gPointLight;
 uniform mat4 view;
 uniform float gSpecularPower;
 uniform float gMatSpecularIntensity;
+uniform float Radius;
 
 layout (location = 0) out vec4 FragColor;
 

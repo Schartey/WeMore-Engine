@@ -3,7 +3,10 @@
 
 std::map<VInputKey, VActionMapping> VInputManager::ActionPressedMappings;
 std::map<VInputKey, VActionMapping> VInputManager::ActionReleasedMappings;
+VMouseMapping VInputManager::MouseMapping;
 std::map<int, VInputKey> VInputManager::inputMap;
+double VInputManager::oldXPos = 0.0;
+double VInputManager::oldYPos = 0.0;
 
 VInputManager::VInputManager() {
 }
@@ -23,7 +26,10 @@ void VInputManager::Initialize(VWindow* Window)
 	inputMap[GLFW_KEY_LEFT_SHIFT] = KEY_LEFT_SHIFT;
 	inputMap[GLFW_KEY_ESCAPE] = KEY_ESC;
 
+	glfwGetCursorPos(Window->GetGLFWWindow(), &oldXPos, &oldYPos);
+
 	glfwSetKeyCallback(Window->GetGLFWWindow(), &VInputManager::KeyCallback);
+	glfwSetCursorPosCallback(Window->GetGLFWWindow(), &VInputManager::MouseCallback);
 }
 
 void VInputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -44,7 +50,13 @@ void VInputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 			(Mapping.InputComponent->*Mapping.pmemfn)();
 		}
 	}
-	
+}
+
+void VInputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos)
+{
+	(MouseMapping.InputComponent->*MouseMapping.pmemfn)(xpos-oldXPos, ypos-oldYPos);
+	oldXPos = xpos;
+	oldYPos = ypos;
 }
 
 void VInputManager::BindAction(std::string ActionName, VInputKey InputKey, VActionType ActionType, VInputComponent& InputComponent, void(VInputComponent::*pmemfn)())
@@ -54,6 +66,13 @@ void VInputManager::BindAction(std::string ActionName, VInputKey InputKey, VActi
 		ActionPressedMappings[InputKey] = NewMapping;
 	else
 		ActionReleasedMappings[InputKey] = NewMapping;
+}
+
+void VInputManager::BindMouse(VInputComponent& InputComponent, void(VInputComponent::*pmemfn)(double, double))
+{
+	MouseMapping = VMouseMapping();
+	MouseMapping.InputComponent = &InputComponent;
+	MouseMapping.pmemfn = pmemfn;
 }
 
 VInputManager::~VInputManager()

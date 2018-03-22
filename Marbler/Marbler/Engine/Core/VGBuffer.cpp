@@ -4,7 +4,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "Components/VCameraComponent.h"
-#include "Asset/VPointLight.h"
+#include "Objects/VPointLight2.h"
 
 VGBuffer::VGBuffer()
 {
@@ -96,7 +96,7 @@ void VGBuffer::EndGeometryPass()
 	glDisable(GL_DEPTH_TEST);
 }
 
-void VGBuffer::StencilPass(VScene* Scene, VPointLight* PointLight)
+void VGBuffer::StencilPass(VScene* Scene, VSceneObject* PointLight)
 {
 	NullShader->useShader();
 
@@ -116,19 +116,19 @@ void VGBuffer::StencilPass(VScene* Scene, VPointLight* PointLight)
 	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
 	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
 
-	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
+	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
+	VLightComponent* LightComponent = PointLight->GetComponentByClass<VLightComponent>();
 
 	glUniformMatrix4fv(glGetUniformLocation(NullShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(NullShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
 
 	//Set Light
-	glUniformMatrix4fv(glGetUniformLocation(NullShader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(PointLight->GetTranslationMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(NullShader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(PointLight->GetScaleMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(NullShader->programHandle, "cmt"), 1, GL_FALSE, glm::value_ptr(LightComponent->GetGlobalModelMatrix()));
 
-	PointLight->Draw();
+	LightComponent->LightRenderPass();
 }
 
-void VGBuffer::PointLightPass(VScene* Scene, VPointLight* PointLight)
+void VGBuffer::PointLightPass(VScene* Scene, VSceneObject* PointLight)
 {
 	BindForLightPass();
 
@@ -140,22 +140,22 @@ void VGBuffer::PointLightPass(VScene* Scene, VPointLight* PointLight)
 	glUniform1i(glGetUniformLocation(PointLightShader->programHandle, "gSpecularMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
 	glUniform2f(glGetUniformLocation(PointLightShader->programHandle, "gScreenSize"), (float)Width, (float)Height);
 
-	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
+	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
+	VLightComponent* LightComponent = PointLight->GetComponentByClass<VLightComponent>();
 
-	glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "cmodel"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetModelMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
 
-	//Set Light
-	glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(PointLight->GetTranslationMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(PointLight->GetScaleMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "cmt"), 1, GL_FALSE, glm::value_ptr(LightComponent->GetGlobalModelMatrix()));
+	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "Radius"), LightComponent->GetGlobalScale().x);
 
-	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Base.Ambient"), PointLight->GetAmbient());
-	glUniform3f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Base.Color"), PointLight->GetColor().x, PointLight->GetColor().y, PointLight->GetColor().z);
-	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Base.Diffuse"), PointLight->GetDiffuse());
-	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Atten.Constant"), PointLight->GetAttenuation().Constant);
-	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Atten.Linear"), PointLight->GetAttenuation().Linear);
-	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Atten.Exp"), PointLight->GetAttenuation().Exp);
+	glUniform3f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Position"), LightComponent->GetGlobalPosition().x, LightComponent->GetGlobalPosition().y, LightComponent->GetGlobalPosition().z);
+	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Base.Ambient"), LightComponent->GetPointLight().Ambient);
+	glUniform3f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Base.Color"), LightComponent->GetPointLight().Color.x, LightComponent->GetPointLight().Color.y, LightComponent->GetPointLight().Color.z);
+	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Base.Diffuse"), LightComponent->GetPointLight().Diffuse);
+	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Atten.Constant"), LightComponent->GetPointLight().Attenuation.Constant);
+	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Atten.Linear"), LightComponent->GetPointLight().Attenuation.Linear);
+	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Atten.Exp"), LightComponent->GetPointLight().Attenuation.Exp);
 
 
 	glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
@@ -172,7 +172,7 @@ void VGBuffer::PointLightPass(VScene* Scene, VPointLight* PointLight)
 	//glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(PointLight->GetScaleMatrix()));
 	//m_DSPointLightPassTech.SetPointLight(m_pointLight[PointLightIndex]);
 	
-	PointLight->Draw();
+	LightComponent->LightRenderPass();
 
 	glCullFace(GL_BACK);
 
@@ -189,12 +189,12 @@ void VGBuffer::BeginLightPass()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-float VGBuffer::CalcPointLightBSphere(VPointLight* Light)
+float VGBuffer::CalcPointLightBSphere(VLightComponent* Light)
 {
-	float MaxChannel = fmax(fmax(Light->GetColor().x, Light->GetColor().y), Light->GetColor().z);
+	float MaxChannel = fmax(fmax(Light->GetPointLight().Color.x, Light->GetPointLight().Color.y), Light->GetPointLight().Color.z);
 
-	float ret = (-Light->GetAttenuation().Linear + sqrtf(Light->GetAttenuation().Linear * Light->GetAttenuation().Linear -
-		4 * Light->GetAttenuation().Exp * (Light->GetAttenuation().Exp - 256 * MaxChannel * Light->GetDiffuse()))) / (2 * Light->GetAttenuation().Exp);
+	float ret = (-Light->GetPointLight().Attenuation.Linear + sqrtf(Light->GetPointLight().Attenuation.Linear * Light->GetPointLight().Attenuation.Linear -
+		4 * Light->GetPointLight().Attenuation.Exp * (Light->GetPointLight().Attenuation.Exp - 256 * MaxChannel * Light->GetPointLight().Diffuse))) / (2 * Light->GetPointLight().Attenuation.Exp);
 	return ret;
 }
 
@@ -210,14 +210,13 @@ void VGBuffer::DirectionalLightPass(VScene* Scene)
 	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gSpecularMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
 	glUniform2f(glGetUniformLocation(DirectionalLightShader->programHandle, "gScreenSize"), (float)Width, (float)Height);
 
-	VCameraComponent* CameraComponent = Scene->GetActivePlayerActor()->GetComponentByClass<VCameraComponent>();
+	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
 	//glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "cmodel"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetModelMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
 	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
 
-	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "translate"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
-	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
+	glUniformMatrix4fv(glGetUniformLocation(DirectionalLightShader->programHandle, "cmt"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
 
 	glUniform3f(glGetUniformLocation(DirectionalLightShader->programHandle, "gDirectionalLight.Direction"), Scene->GetDirectionalLight()->GetDirection().x, Scene->GetDirectionalLight()->GetDirection().y, Scene->GetDirectionalLight()->GetDirection().z);
 	glUniform1f(glGetUniformLocation(DirectionalLightShader->programHandle, "gDirectionalLight.Base.Ambient"), Scene->GetDirectionalLight()->GetAmbient());
@@ -322,7 +321,7 @@ void VGBuffer::BindForFinalPass()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-	glReadBuffer(GL_COLOR_ATTACHMENT4);
+	glReadBuffer(GL_COLOR_ATTACHMENT1);
 }
 
 VGBuffer::~VGBuffer()

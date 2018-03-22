@@ -1,14 +1,16 @@
 #pragma once
 
-class VActor;
+#include <string>
+
+class VSceneObject;
 class VScene;
 
 class VActorComponent
 {
 public:
-	VActorComponent(VScene* Scene);
+	VActorComponent(VScene* Scene, std::string Name);
 
-	virtual void SetOwner(VActor* Actor);
+	virtual void SetOwner(VSceneObject* Actor);
 	virtual void Update(double deltaT);
 
 	virtual void OnInitialize();
@@ -17,6 +19,8 @@ public:
 
 protected:
 	VScene * Scene;
-	VActor* Owner;
+	VSceneObject* Owner;
+
+	std::string Name;
 };
 

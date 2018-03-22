@@ -8,7 +8,7 @@
 #include "VAssimpScene.h"
 #include "../../Core/Asset/VMesh.h"
 #include "../../Core/Asset/VDirectionalLight.h"
-#include "../../Core/Asset/VPointLight.h"
+//#include "../../Core/Asset/VPointLight.h"
 
 class VAssimpUtils
 {
@@ -17,7 +17,7 @@ public:
 
 	static VAssimpScene* LoadScene(VScene* Scene, std::string path, std::string filename);
 	static VAssimpMesh* LoadMesh(VScene* Scene, std::string filePath);
-	static VPointLight* LoadPointLight(std::string filePath);
+	//static VPointLight* LoadPointLight(std::string filePath);
 	static VDirectionalLight* LoadDirectionalLight(std::string filePath);
 
 	~VAssimpUtils();

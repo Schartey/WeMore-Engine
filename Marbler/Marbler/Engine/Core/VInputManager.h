@@ -15,6 +15,11 @@ enum VActionType {
 	Released
 };
 
+struct VMouseMapping {
+	VInputComponent* InputComponent;
+	void(VInputComponent::*pmemfn)(double, double);
+};
+
 struct VActionMapping {
 	std::string ActionName;
 	VActionType ActionType;
@@ -35,14 +40,20 @@ class VInputManager
 public:
 	static void Initialize(VWindow* Window);
 	static void BindAction(std::string ActionName, VInputKey InputKey, VActionType ActionType, VInputComponent& InputComponent, void(VInputComponent::*pmemfn)());
-
+	static void BindMouse(VInputComponent& InputComponent, void(VInputComponent::*pmemfn)(double, double));
 	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
 
 private:
 
 	static std::map<VInputKey, VActionMapping> ActionPressedMappings;
 	static std::map<VInputKey, VActionMapping> ActionReleasedMappings;
+	static VMouseMapping MouseMapping;
 	static std::map <int, VInputKey> inputMap;
+
+	static double oldXPos;
+	static double oldYPos;
+
 	VInputManager();
 
 

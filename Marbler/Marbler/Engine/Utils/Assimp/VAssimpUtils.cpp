@@ -52,14 +52,14 @@ VAssimpMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string filePath)
 	return AssimpScene->GetMeshes().size() > 0 ? AssimpScene->GetMeshes().at(0) : nullptr;
 }
 
-VPointLight* VAssimpUtils::LoadPointLight(std::string filePath)
+/*VPointLight* VAssimpUtils::LoadPointLight(std::string filePath)
 {
 	VAssimpMesh* Mesh = LoadMesh(nullptr, filePath);
 	VPointLight* Light = new VPointLight();
 	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
 
 	return Light;
-}
+}*/
 
 VDirectionalLight* VAssimpUtils::LoadDirectionalLight(std::string filePath)
 {

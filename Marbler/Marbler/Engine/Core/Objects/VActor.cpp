@@ -7,39 +7,8 @@
 
 #include <stdio.h>
 
-VActor::VActor(VScene* Scene)
+VActor::VActor(VScene* Scene, std::string Name) : VSceneObject(Scene, Name)
 {
-	this->Scene = Scene;
-}
-
-glm::vec3 VActor::GetScale()
-{
-	return Scale;
-}
-
-glm::mat4 VActor::GetModelMatrix()
-{
-	return translate(glm::mat4(), this->Position)*glm::toMat4(this->Rotation)*glm::scale(glm::mat4(), this->Scale);
-}
-
-glm::vec3 VActor::GetPosition()
-{
-	return Position;
-}
-
-void VActor::SetPosition(glm::vec3 Position)
-{
-	this->Position = Position;
-}
-
-void VActor::SetRotation(glm::vec3 Rotation)
-{
-	this->Rotation = glm::quat(Rotation);
-}
-
-void VActor::SetScale(glm::vec3 Scale)
-{
-	this->Scale = Scale;
 }
 
 PxRigidDynamic* VActor::SetRigidDynamic()
@@ -75,36 +44,10 @@ void VActor::Update(double deltaT)
 	if (this->RigidActor != nullptr && bPhysics)
 	{
 		PhysxUtils::ConvertPxTransformToGVecQuat(this->RigidActor->getGlobalPose(), this->Position, this->Rotation);
-		//std::cout << "Pose: " << this->RigidActor->getGlobalPose().p.x << " " << this->RigidActor->getGlobalPose().p.y << " " << this->RigidActor->getGlobalPose().p.z + '\n';
 	}
 
-	for (VActorComponent* ActorComponent : ActorComponents)
-	{
-		ActorComponent->Update(deltaT);
-	}
-	for (VSceneComponent* SceneComponent : SceneComponents)
-	{
-		SceneComponent->Update(deltaT);
-	}
-	ModelMatrix = GetModelMatrix();
+	VSceneObject::Update(deltaT);
 }
-
-void VActor::RenderPass(VShader* Shader)
-{
-	for (VSceneComponent* SceneComponent : SceneComponents)
-	{
-		SceneComponent->RenderPass(Shader, ModelMatrix);
-	}
-}
-
-void VActor::Draw()
-{
-	for (VSceneComponent* SceneComponent : SceneComponents)
-	{
-		SceneComponent->Draw(ModelMatrix);
-	}
-}
-
 
 VActor::~VActor()
 {

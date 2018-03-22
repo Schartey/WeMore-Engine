@@ -1,6 +1,7 @@
 #include "VGame.h"
 
 #include "Physics/VPhysicsScene.h"
+#include "VGameStatics.h"
 
 VGame::VGame()
 {
@@ -8,7 +9,7 @@ VGame::VGame()
 
 void VGame::OnInitialize()
 {
-
+	VGameStatics::Initialize(this);
 }
 
 void VGame::Update(double deltaT)
@@ -24,6 +25,11 @@ void VGame::RenderPass(VShader* Shader)
 void VGame::Draw()
 {
 	ActiveScene->Draw();
+}
+
+void VGame::QuitGame()
+{
+	OnQuitDelegate();
 }
 
 void VGame::SetWindow(VWindow* Window)

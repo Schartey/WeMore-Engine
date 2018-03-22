@@ -1,5 +1,7 @@
 #include "Marbler.h"
 
+#include "../Engine/Core/Objects/VActor.h"
+
 #include "../Engine/Core/Components/VCameraComponent.h"
 #include "../Engine/Core/Components/VMeshComponent.h"
 #include "../Engine/Core/Components/VInputComponent.h"
@@ -18,19 +20,21 @@ Marbler::Marbler()
 
 void Marbler::OnInitialize()
 {
+	VGame::OnInitialize();
+
 	std::string modelPath = "..\\..\\Models\\";
 	std::string texturePath = "..\\..\\Textures\\";
 
 	VScene* MainScene = CreateScene();
 
 	
-	VActor* FloorActor = MainScene->CreateActor();
+	VActor* FloorActor = MainScene->CreateActor("FloorActor");
 	FloorActor->bPhysics = true;
 
 	PxRigidStatic* RigidStatic = FloorActor->SetRigidStatic();
 
 	FloorActor->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	VMeshComponent* FloorMeshComponent = new VMeshComponent(MainScene);
+	VMeshComponent* FloorMeshComponent = new VMeshComponent(MainScene, "FloorMeshComponent");
 
 	FloorActor->AddComponent(FloorMeshComponent);
 	
@@ -48,14 +52,14 @@ void Marbler::OnInitialize()
 	FloorMeshComponent->GetMaterial()->SetSpecularPower(1);
 	
 
-	VActor* BoxTestActor = MainScene->CreateActor();
+	VActor* BoxTestActor = MainScene->CreateActor("BoxTestActor");
 	BoxTestActor->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 	BoxTestActor->bPhysics = true;
 
 	PxRigidDynamic* RigidDynamic = BoxTestActor->SetRigidDynamic();
 	RigidDynamic->setMass(0.1f);
 
-	VMeshComponent* BoxTestMeshComponent = new VMeshComponent(MainScene);
+	VMeshComponent* BoxTestMeshComponent = new VMeshComponent(MainScene, "BoxTestMeshComponent");
 
 	BoxTestActor->AddComponent(BoxTestMeshComponent);
 
@@ -88,12 +92,12 @@ void Marbler::OnInitialize()
 	//MarbleActor->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 	
 
-	VActor* CameraActor = MainScene->CreateActor();
+	VActor* CameraActor = MainScene->CreateActor("CameraActor");
 	CameraActor->SetPosition(glm::vec3(0.0f, 10.0f, 5.0f));
 	CameraActor->bPhysics = true;
 
 	
-	VCameraComponent* CameraComponent = new VCameraComponent(MainScene);
+	VCameraComponent* CameraComponent = new VCameraComponent(MainScene, "CameraComponent");
 	CameraActor->AddComponent(CameraComponent);
 	CameraComponent->SetProjectionMatrix(glm::perspective(glm::radians(90.0f), Window->GetWidth() / (float)Window->GetHeight(), 0.1f, 1000.0f));
 	CameraComponent->SetPosition(glm::vec3(0.0f, 5.0f, 20.0f));
@@ -104,7 +108,7 @@ void Marbler::OnInitialize()
 	PxRigidDynamic* MarbleRigidDynamic = CameraActor->SetRigidDynamic();
 	MarbleRigidDynamic->setMass(1.0f);
 
-	VMeshComponent* MarbleComponent = new VMeshComponent(MainScene);
+	VMeshComponent* MarbleComponent = new VMeshComponent(MainScene, "MarbleComponent");
 
 	CameraActor->AddComponent(MarbleComponent);
 
@@ -119,34 +123,35 @@ void Marbler::OnInitialize()
 	MarbleComponent->GetMaterial()->SetSpecularIntensity(1.0f);
 	MarbleComponent->GetMaterial()->SetSpecularPower(1);
 
+	CameraComponent->SetTarget(MarbleComponent);
 
-	VInputComponent* InputComponent = new VInputComponent(MainScene);
+	VInputComponent* InputComponent = new VInputComponent(MainScene, "InputComponent");
 	CameraActor->AddComponent(InputComponent);
 
 	VDirectionalLight* DirectionalLight = VAssimpUtils::LoadDirectionalLight(modelPath + "box.fbx");
 	DirectionalLight->SetAmbient(0.1f);
-	DirectionalLight->SetColor(glm::vec3(1.0f, 1.0f, 0.0f));
+	DirectionalLight->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	DirectionalLight->SetDiffuse(0.5f);
 	DirectionalLight->SetDirection(glm::vec3(0.0f, -1.0f, 0.5f));
 
 	MainScene->SetDirectionalLight(DirectionalLight);
 
-	VPointLight* PointLight1 = VAssimpUtils::LoadPointLight(modelPath + "sphere.obj");
-	PointLight1->SetAmbient(0.5f);
-	PointLight1->SetDiffuse(0.5f);
-	PointLight1->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
-	PointLight1->SetTranslationMatrix(glm::mat4());
-	PointLight1->Translate(glm::vec3(3.0f, -3.0f, -1.0f));
-	PointLight1->SetAttenuation(VAttenuation(0.0f, 0.0f, 0.3f));
-	PointLight1->Scale(glm::vec3(5.0f));
+	VPointLight2* PointLight1 = MainScene->CreatePointLight("Pointlight1");
+	PointLight1->GetLightComponent()->GetPointLight().Ambient = 0.0f;
+	PointLight1->GetLightComponent()->GetPointLight().Diffuse = 0.5f;
+	PointLight1->GetLightComponent()->GetPointLight().Color = glm::vec3(1.0f, 1.0f, 1.0f);
+	PointLight1->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(0.0f, 0.0f, 10.0f);
+
+	PointLight1->SetPosition(glm::vec3(0.0f, 3.0f, 0.0f));
+	PointLight1->SetScale(glm::vec3(1.0f));
 
 	VShader* BaseShader = new VShader("Engine/Shader/base.vert", "Engine/Shader/base.frag");
 	FloorMeshComponent->GetMaterial()->SetShader(BaseShader);
 	BoxTestMeshComponent->GetMaterial()->SetShader(BaseShader);
 
-	MainScene->AddPointLight(PointLight1);
+	//MainScene->AddPointLight(PointLight1);
 
-	MainScene->SetActivePlayerActor(CameraActor);
+	MainScene->SetActiveSceneObject(CameraActor);
 
 	this->SetActiveScene(MainScene);
 }

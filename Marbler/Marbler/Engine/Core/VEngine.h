@@ -18,6 +18,7 @@ public:
 	int Initialize(const char* cfgpath);
 	void Setup(VGame* Game);
 	void Run();
+	void OnQuit();
 
 	void Pause();
 	VWindow* GetWindow();

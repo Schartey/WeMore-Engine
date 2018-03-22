@@ -7,7 +7,7 @@
 class VInputComponent : public VActorComponent
 {
 public:
-	VInputComponent(VScene* Scene);
+	VInputComponent(VScene* Scene, std::string Name);
 
 	virtual void OnInitialize();
 	void OnForwardPressed();
@@ -22,6 +22,10 @@ public:
 	void OnRightReleased();
 	void OnUpReleased();
 	void OnDownReleased();
+
+	void OnQuitPressed();
+
+	void OnMouseMoved(double deltaX, double deltaY);
 
 	virtual void Update(double deltaT) override;
 

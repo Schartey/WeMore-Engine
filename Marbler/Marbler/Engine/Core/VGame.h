@@ -5,6 +5,7 @@
 #include "Physics/VPhysics.h"
 
 #include <vector>
+#include <functional>
 
 class VGame
 {
@@ -15,11 +16,15 @@ public:
 	virtual void Update(double deltaT);
 	void RenderPass(VShader* Shader);
 	void Draw();
+	virtual void QuitGame();
+
 	void SetWindow(VWindow* Window);
 	void SetPhysics(VPhysics* Physics);
 	VScene* GetActiveScene();
 
 	VScene* CreateScene();
+
+	std::function<void()> OnQuitDelegate;
 
 	~VGame();
 

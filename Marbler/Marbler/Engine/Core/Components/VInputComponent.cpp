@@ -5,9 +5,12 @@
 #include "VCameraComponent.h"
 #include "PxRigidActor.h"
 #include "../../Utils/PhysxUtils.h"
+#include "../VGameStatics.h"
+
+#include <iostream>
 
 
-VInputComponent::VInputComponent(VScene* Scene) : VActorComponent(Scene)
+VInputComponent::VInputComponent(VScene* Scene, std::string Name) : VActorComponent(Scene, Name)
 {
 }
 
@@ -25,11 +28,17 @@ void VInputComponent::OnInitialize()
 	VInputManager::BindAction("Right", KEY_D, VActionType::Released, *this, &VInputComponent::OnRightReleased);
 	VInputManager::BindAction("Up", KEY_SPACE, VActionType::Released, *this, &VInputComponent::OnUpReleased);
 	VInputManager::BindAction("Down", KEY_LEFT_SHIFT, VActionType::Released, *this, &VInputComponent::OnDownReleased);
+
+	VInputManager::BindAction("Quit", KEY_ESC, VActionType::Pressed, *this, &VInputComponent::OnQuitPressed);
+
+	VInputManager::BindMouse(*this, &VInputComponent::OnMouseMoved);
 }
 
 void VInputComponent::Update(double deltaT)
 {
-	((PxRigidDynamic*)Owner->GetRigidActor())->addTorque(PhysxUtils::ConvertGVec3ToPxVec3(MovementVector*((float)deltaT)*MovementSpeed));
+	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
+
+	((PxRigidDynamic*)ActorOwner->GetRigidActor())->addTorque(PhysxUtils::ConvertGVec3ToPxVec3(MovementVector*((float)deltaT)*MovementSpeed));
 }
 
 void VInputComponent::OnForwardPressed()
@@ -86,6 +95,21 @@ void VInputComponent::OnUpReleased()
 
 void VInputComponent::OnDownReleased()
 {
+}
+
+void VInputComponent::OnQuitPressed()
+{
+	VGameStatics::QuitGame();
+}
+
+void VInputComponent::OnMouseMoved(double deltaX, double deltaY)
+{
+	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
+
+	VCameraComponent* Camera = ActorOwner->GetComponentByClass<VCameraComponent>();
+	std::cout << "DX: " << deltaX << '\n';
+	Camera->IncreasePhi(deltaX*0.1f);
+	Camera->IncreaseTheta(deltaY*0.1f);
 }
 
 VInputComponent::~VInputComponent()

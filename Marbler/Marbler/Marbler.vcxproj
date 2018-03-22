@@ -140,6 +140,7 @@
     <ClCompile Include="Engine\Core\IEngine.cpp" />
     <ClCompile Include="Engine\Core\VGBuffer.cpp" />
     <ClCompile Include="Engine\Core\Components\VInputComponent.cpp" />
+    <ClCompile Include="Engine\Core\VGameStatics.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine\Core\Objects\VActor.cpp" />
     <ClCompile Include="Engine\Core\Components\VActorComponent.cpp" />
@@ -158,6 +159,9 @@
     <ClCompile Include="Engine\Core\Objects\VSkybox.cpp" />
     <ClCompile Include="Engine\Core\Asset\VTextureCube.cpp" />
     <ClCompile Include="Engine\Core\Asset\VImage.cpp" />
+    <ClCompile Include="Engine\Core\Objects\VSceneObject.cpp" />
+    <ClCompile Include="Engine\Core\Objects\VPointLight2.cpp" />
+    <ClCompile Include="Engine\Core\Components\VLightComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\Asset\VDirectionalLight.h" />
@@ -183,6 +187,7 @@
     <ClInclude Include="Engine\Core\Asset\VMaterial.h" />
     <ClInclude Include="Engine\Core\Asset\VTexture.h" />
     <ClInclude Include="Engine\Utils\Input\VInputKey.h" />
+    <ClInclude Include="Engine\Core\VGameStatics.h" />
     <ClInclude Include="Game\Marbler.h" />
     <ClInclude Include="Engine\Core\VGBuffer.h" />
     <ClInclude Include="Engine\Core\Components\VInputComponent.h" />
@@ -192,6 +197,9 @@
     <ClInclude Include="Engine\Core\Objects\VSkybox.h" />
     <ClInclude Include="Engine\Core\Asset\VTextureCube.h" />
     <ClInclude Include="Engine\Core\Asset\VImage.h" />
+    <ClInclude Include="Engine\Core\Objects\VSceneObject.h" />
+    <ClInclude Include="Engine\Core\Objects\VPointLight2.h" />
+    <ClInclude Include="Engine\Core\Components\VLightComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
