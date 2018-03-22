@@ -29,7 +29,7 @@ void VMaterial::ApplyRenderPassInformation(VShader* Shader)
 	glUniform1i(glGetUniformLocation(Shader->programHandle, "diffuseTextureSize"), this->DiffuseTextures.size());
 	glUniform1i(glGetUniformLocation(Shader->programHandle, "lightmapTextureSize"), this->LightMapTextures.size());
 
-	for (int i = 0; i < DiffuseTextures.size() && DiffuseTextures.size() < 10; i++)
+	for (int i = 0; i < DiffuseTextures.size() && DiffuseTextures.size() < 4; i++)
 	{
 		this->DiffuseTextures[i]->Bind(GL_TEXTURE0 + texturesInUse);
 
@@ -39,7 +39,7 @@ void VMaterial::ApplyRenderPassInformation(VShader* Shader)
 		texturesInUse++;
 	}
 
-	for (int i = 0; i < LightMapTextures.size() && LightMapTextures.size() < 10; i++)
+	for (int i = 0; i < LightMapTextures.size() && LightMapTextures.size() < 4; i++)
 	{
 		this->LightMapTextures[i]->Bind(GL_TEXTURE0 + texturesInUse);
 

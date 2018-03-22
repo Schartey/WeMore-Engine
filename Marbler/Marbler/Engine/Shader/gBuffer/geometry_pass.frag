@@ -14,8 +14,8 @@ uniform struct Material {
 uniform int diffuseTextureSize;
 uniform int lightmapTextureSize;
 
-uniform sampler2D diffuseTexture[10];
-uniform sampler2D lightmapTexture[10];
+uniform sampler2D diffuseTexture[4];
+uniform sampler2D lightmapTexture[4];
 
 layout (location = 0) out vec3 WorldPosOut; 
 layout (location = 1) out vec3 DiffuseOut; 
