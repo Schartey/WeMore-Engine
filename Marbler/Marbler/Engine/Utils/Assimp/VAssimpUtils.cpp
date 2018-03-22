@@ -95,7 +95,14 @@ void VAssimpUtils::ProcessNode(VScene* Scene, std::string path, VAssimpScene* As
 VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpScene* AssimpScene, aiMesh* Mesh, const aiNode* Node, const aiScene* iscene)
 {
 	std::vector<Vertex> vertices;
-	std::vector<GLuint> indices;
+	//std::vector<GLuint> indices;
+
+	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
+	std::vector<unsigned int> indices;
+
+	//std::vector<GLuint> indices;
 
 	BBox BoundingBox;
 	BoundingBox.min.x = BoundingBox.max.x = Mesh->mVertices[0].x;
@@ -111,11 +118,13 @@ VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpS
 		vector.y = Mesh->mVertices[i].y;
 		vector.z = Mesh->mVertices[i].z;
 		vertex.position = vector;
+		positions.push_back(vector);
 
 		vector.x = Mesh->mNormals[i].x;
 		vector.y = Mesh->mNormals[i].y;
 		vector.z = Mesh->mNormals[i].z;
 		vertex.normal = vector;
+		normals.push_back(vector);
 
 		if (Mesh->mTextureCoords[0]) // Does the mesh contain texture coordinates?
 		{
@@ -123,9 +132,10 @@ VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpS
 			vec.x = Mesh->mTextureCoords[0][i].x;
 			vec.y = Mesh->mTextureCoords[0][i].y;
 			vertex.texCoords = vec;
+			uvs.push_back(vec);
 		}
 		else
-			vertex.texCoords = glm::vec2(0.0f, 0.0f);
+			uvs.push_back(glm::vec2(0.0f, 0.0f));
 
 		//Calculate Bounding Box
 		if (Mesh->mVertices[i].x < BoundingBox.min.x) BoundingBox.min.x = Mesh->mVertices[i].x;
@@ -158,7 +168,8 @@ VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpS
 
 	VMesh* pMesh = new VMesh();
 
-	pMesh->Setup(vertices, indices, BoundingBox);
+	//pMesh->Setup(vertices, indices, BoundingBox);
+	pMesh->Setup(positions, normals, uvs, indices, BoundingBox);
 
 	VAssimpMesh* AssimpMesh = new VAssimpMesh(pMesh, pMaterial, ConvertMat4(Node->mTransformation));
 

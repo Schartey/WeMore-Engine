@@ -33,6 +33,7 @@ public:
 	std::vector<GLuint> GetIndices();
 
 	void Setup(std::vector<Vertex> vertices, std::vector<GLuint> indices, BBox BoundingBox);
+	void Setup(std::vector<glm::vec3> positions, std::vector<glm::vec3> normals, std::vector<glm::vec2> uvs, std::vector<unsigned int> indices, BBox BoundingBox);
 	BBox GetBoundingBox();
 
 	void RenderPass();
@@ -42,11 +43,18 @@ public:
 
 protected:
 	GLuint VAO, VBO, EBO;
+	GLuint VBOPositions, VBONormals, VBOUVs, VBOIndices;
 
 	BBox BoundingBox;
 
 	std::vector<Vertex> Vertices;
 	std::vector<GLuint> Indices;
+
+	std::vector<glm::vec3> positions;
+	std::vector<unsigned int> indices;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
+	unsigned int _elements;
 
 	void setupMesh();
 };
