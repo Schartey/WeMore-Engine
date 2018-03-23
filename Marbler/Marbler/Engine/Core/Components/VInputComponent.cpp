@@ -108,8 +108,8 @@ void VInputComponent::OnMouseMoved(double deltaX, double deltaY)
 
 	VCameraComponent* Camera = ActorOwner->GetComponentByClass<VCameraComponent>();
 	std::cout << "DX: " << deltaX << '\n';
-	Camera->IncreasePhi(deltaX*0.1f);
-	Camera->IncreaseTheta(deltaY*0.1f);
+	Camera->IncreaseTheta(deltaX*0.1f);
+	Camera->IncreasePhi(deltaY*0.1f);
 }
 
 VInputComponent::~VInputComponent()

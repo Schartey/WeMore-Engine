@@ -34,5 +34,10 @@ private:
 
 	glm::vec3 up = glm::vec3(0,1,0);
 	glm::vec3 right = glm::vec3(0,0,1);
+
+	glm::mat4 Orientation() const;
+	glm::vec3 Forward() const;
+	glm::vec3 Right() const;
+	glm::vec3 Up() const;
 };
 
