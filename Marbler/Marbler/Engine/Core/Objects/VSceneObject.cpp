@@ -32,6 +32,11 @@ glm::vec3 VSceneObject::GetPosition()
 	return Position;
 }
 
+glm::quat VSceneObject::GetRotation()
+{
+	return Rotation;
+}
+
 void VSceneObject::SetPosition(glm::vec3 Position)
 {
 	this->Position = Position;

@@ -47,6 +47,11 @@ void VActor::Update(double deltaT)
 	}
 
 	VSceneObject::Update(deltaT);
+
+	if (Name._Equal("CameraActor"))
+	{
+		//std::cout << "Actor X: " << this->Rotation.x << " Y: " << this->Rotation.y << " Z: " << this->Rotation.y << '\n';
+	}
 }
 
 VActor::~VActor()

@@ -93,7 +93,7 @@ void Marbler::OnInitialize()
 	
 
 	VActor* CameraActor = MainScene->CreateActor("CameraActor");
-	CameraActor->SetPosition(glm::vec3(0.0f, 10.0f, 5.0f));
+	//CameraActor->SetPosition(glm::vec3(0.0f, 10.0f, 5.0f));
 	CameraActor->bPhysics = true;
 
 	
@@ -109,12 +109,13 @@ void Marbler::OnInitialize()
 	MarbleRigidDynamic->setMass(1.0f);
 
 	VMeshComponent* MarbleComponent = new VMeshComponent(MainScene, "MarbleComponent");
+	//MarbleComponent->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 
 	CameraActor->AddComponent(MarbleComponent);
 
 	MarbleComponent->LoadMesh(modelPath + "marble.fbx");
 	MarbleComponent->GeneratePhysicsShape(GeometryType::Sphere);
-	//MarbleComponent->SetBPhysics(true);
+	MarbleComponent->SetBPhysics(true);
 
 	//VTexture* MarbleTexture = new VTexture(texturePath + "Lightmap.png");
 	//MarbleTexture->Load();

@@ -11,7 +11,7 @@ VSceneComponent::VSceneComponent(VScene* Scene, std::string Name) : VActorCompon
 
 glm::mat4 VSceneComponent::GetGlobalModelMatrix()
 {
-	return translate(glm::mat4(), this->Position + Owner->GetPosition())*glm::toMat4(this->Rotation)*glm::scale(glm::mat4(), this->Scale + Owner->GetScale());
+	return translate(glm::mat4(), this->Position + Owner->GetPosition())*glm::toMat4(this->Rotation)*glm::scale(glm::mat4(), this->Scale * Owner->GetScale());
 }
 
 glm::mat4 VSceneComponent::GetModelMatrix()
@@ -26,6 +26,11 @@ glm::vec3 VSceneComponent::GetPosition()
 glm::vec3 VSceneComponent::GetGlobalPosition()
 {
 	return this->Position + this->Owner->GetPosition();
+}
+
+glm::quat VSceneComponent::GetGlobalRotation()
+{
+	return this->Rotation * this->Owner->GetRotation();
 }
 
 void VSceneComponent::SetPosition(glm::vec3 Position)

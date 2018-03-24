@@ -86,7 +86,7 @@ void VEngine::Run()
 
 			StepPhysics(deltaT);
 			Game->Update(deltaT);
-			if (Window->GetOpenGlMinor() >= 3) {
+			if (Window->GetOpenGlMinor() >= 0) {
 				GBuffer->StartFrame();
 				GBuffer->BeginGeometryPass();
 				Game->RenderPass(GBuffer->GetGeometryShader());

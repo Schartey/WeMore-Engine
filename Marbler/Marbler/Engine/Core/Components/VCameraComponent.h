@@ -18,10 +18,14 @@ public:
 	void SetTarget(VSceneComponent* SceneComponent);
 	void SetProjectionMatrix(glm::mat4 ProjectionMatrix);
 
+	virtual void Update(double deltaT) override;
 	virtual ~VCameraComponent();
 
 private:
 	bool bHasTarget;
+	float LastCameraInteractionTime = 0.0f;
+	float CameraSwitchTime = 3000.0f;
+	float BlendSpeed = 1.0f;
 	VSceneComponent* Target;
 
 	glm::mat4 ViewMatrix = glm::mat4();
@@ -29,6 +33,8 @@ private:
 	glm::vec3 LookAt = glm::vec3();
 
 	float Radius = 0.0f;
+	float PhiDifference;
+	float ThetaDifference;
 	float Phi;
 	float Theta;
 

@@ -162,6 +162,7 @@
     <ClCompile Include="Engine\Core\Objects\VSceneObject.cpp" />
     <ClCompile Include="Engine\Core\Objects\VPointLight2.cpp" />
     <ClCompile Include="Engine\Core\Components\VLightComponent.cpp" />
+    <ClCompile Include="Game\Component\OrbitingMeshComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\Asset\VDirectionalLight.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Engine\Core\Objects\VSceneObject.h" />
     <ClInclude Include="Engine\Core\Objects\VPointLight2.h" />
     <ClInclude Include="Engine\Core\Components\VLightComponent.h" />
+    <ClInclude Include="Game\Component\OrbitingMeshComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

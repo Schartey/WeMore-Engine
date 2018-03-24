@@ -15,6 +15,7 @@ public:
 
 	glm::vec3 GetPosition();
 	glm::vec3 GetGlobalPosition();
+	glm::quat GetGlobalRotation();
 	void SetPosition(glm::vec3 Position);
 	void SetRotation(glm::vec3 Rotation);
 	void SetRotation(glm::quat Rotation);

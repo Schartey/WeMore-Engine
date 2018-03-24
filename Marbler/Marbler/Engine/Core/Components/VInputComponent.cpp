@@ -107,9 +107,8 @@ void VInputComponent::OnMouseMoved(double deltaX, double deltaY)
 	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
 
 	VCameraComponent* Camera = ActorOwner->GetComponentByClass<VCameraComponent>();
-	std::cout << "DX: " << deltaX << '\n';
-	Camera->IncreaseTheta(deltaX*0.1f);
-	Camera->IncreasePhi(deltaY*0.1f);
+	Camera->IncreaseTheta(deltaX*0.01f);
+	Camera->IncreasePhi(deltaY*0.01f);
 }
 
 VInputComponent::~VInputComponent()

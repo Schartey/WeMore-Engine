@@ -127,6 +127,10 @@ void VMeshComponent::Update(double deltaT)
 	if (bPhysics)
 	{
 		PhysxUtils::ConvertPxTransformToGVecQuat(this->PhysicsShape->getLocalPose(), this->Position, this->Rotation);
+		if (this->Name._Equal("MarbleComponent"))
+		{
+			std::cout << "X: " << this->Position.x << " Y: " << this->Position.y << " Z: " << this->Position.z;
+		}
 	}
 
 	VSceneComponent::Update(deltaT);
