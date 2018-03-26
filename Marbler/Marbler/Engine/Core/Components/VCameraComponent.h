@@ -2,6 +2,7 @@
 
 #include "glm/glm.hpp"
 #include "VSceneComponent.h"
+#include "../Asset/VMesh.h"
 
 class VCameraComponent : public VSceneComponent
 {
@@ -13,10 +14,12 @@ public:
 	void IncreasePhi(float Phi);
 	void IncreaseTheta(float Theta);
 
+	bool IsWithinFrustum(BBox Box);
+
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();
 	void SetTarget(VSceneComponent* SceneComponent);
-	void SetProjectionMatrix(glm::mat4 ProjectionMatrix);
+	void SetProjectionMatrix(float Fov, int Width, int Height, float NearPlane, float FarPlane);
 
 	virtual void Update(double deltaT) override;
 	virtual ~VCameraComponent();
@@ -32,18 +35,12 @@ private:
 	glm::mat4 ProjectionMatrix = glm::mat4();
 	glm::vec3 LookAt = glm::vec3();
 
-	float Radius = 0.0f;
-	float PhiDifference;
-	float ThetaDifference;
 	float Phi;
 	float Theta;
 
-	glm::vec3 up = glm::vec3(0,1,0);
-	glm::vec3 right = glm::vec3(0,0,1);
-
-	glm::mat4 Orientation() const;
-	glm::vec3 Forward() const;
-	glm::vec3 Right() const;
-	glm::vec3 Up() const;
+	float Fov;
+	float NearPlane;
+	float FarPlane;
+	float Ratio;
 };
 

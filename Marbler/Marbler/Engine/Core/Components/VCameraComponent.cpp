@@ -1,5 +1,6 @@
 #include "VCameraComponent.h"
 
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/norm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -10,28 +11,6 @@
 VCameraComponent::VCameraComponent(VScene* Scene, std::string Name) : VSceneComponent(Scene, Name)
 {
 
-}
-
-glm::mat4 VCameraComponent::Orientation() const {
-	glm::mat4 orientation;
-	orientation = glm::rotate(orientation, glm::radians(Phi), glm::vec3(1, 0, 0));
-	orientation = glm::rotate(orientation, glm::radians(Theta), glm::vec3(0, 1, 0));
-	return orientation;
-}
-
-glm::vec3 VCameraComponent::Forward() const {
-	glm::vec4 forward = glm::inverse(Orientation()) * glm::vec4(0, 0, -1, 1);
-	return glm::vec3(forward);
-}
-
-glm::vec3 VCameraComponent::Right() const {
-	glm::vec4 right = glm::inverse(Orientation()) * glm::vec4(1, 0, 0, 1);
-	return glm::vec3(right);
-}
-
-glm::vec3 VCameraComponent::Up() const {
-	glm::vec4 up = glm::inverse(Orientation()) * glm::vec4(0, 1, 0, 1);
-	return glm::vec3(up);
 }
 
 float VCameraComponent::GetPhi()
@@ -84,6 +63,8 @@ glm::mat4 VCameraComponent::GetViewMatrix()
 		glm::vec3 quatDirection = glm::cross(Direction, glm::vec3(0, 1, 0));
 		glm::quat QuatPitch = glm::angleAxis(Phi, quatDirection);
 
+		//((VActor*)Owner)->GetMovementVector();
+		//glm::quat QuatParent;// = glm::angleAxis(glm::cross(Owner->GetMovementVector(), glm::vec3(0, 1, 0)), glm::vec3(0, 1, 0));
 
 		glm::vec3 thePosition = glm::toMat4(QuatPitch*QuatYaw) * Translation * glm::vec4(1.0f);
 		thePosition += Target->GetGlobalPosition();
@@ -108,6 +89,24 @@ glm::mat4 VCameraComponent::GetViewMatrix()
 	return ViewMatrix;
 }
 
+bool VCameraComponent::IsWithinFrustum(BBox Box)
+{	
+	//Frustum Culling with Radar Approach onto BoundingBox
+	//Check Z
+	if (!(Box.min.z > NearPlane || Box.min.z < FarPlane || Box.max.z > NearPlane || Box.max.z < FarPlane))
+		return false;
+	//Check Y
+	float FrustumHeight = Box.min.y * 2 * glm::tan(glm::degrees(Fov) / 2);
+	
+	if (!(Box.min.y > -FrustumHeight / 2 || Box.min.y < FrustumHeight / 2 || Box.max.y > -FrustumHeight / 2 || Box.max.y < FrustumHeight))
+		return false;
+	//Check X
+	float FrustumWidth = FrustumHeight * Ratio;
+	if (!(Box.min.x > -FrustumWidth / 2 || Box.min.x < FrustumWidth / 2 || Box.max.x > -FrustumWidth / 2 || Box.max.x < FrustumWidth))
+		return false;
+	return true;
+}
+
 glm::mat4 VCameraComponent::GetProjectionMatrix()
 {
 	return ProjectionMatrix;
@@ -124,9 +123,14 @@ void VCameraComponent::SetTarget(VSceneComponent* SceneComponent)
 	this->bHasTarget = true;
 }
 
-void VCameraComponent::SetProjectionMatrix(glm::mat4 ProjectionMatrix)
+void VCameraComponent::SetProjectionMatrix(float Fov, int Width, int Height, float NearPlane, float FarPlane)
 {
-	this->ProjectionMatrix = ProjectionMatrix;
+	this->Fov = Fov;
+	this->NearPlane = NearPlane;
+	this->FarPlane = FarPlane;
+	this->Ratio = Width / (float)Height;
+
+	this->ProjectionMatrix = glm::perspective(glm::radians(Fov), Width / (float)Height, NearPlane, FarPlane);
 }
 
 

@@ -99,7 +99,7 @@ void Marbler::OnInitialize()
 	
 	VCameraComponent* CameraComponent = new VCameraComponent(MainScene, "CameraComponent");
 	CameraActor->AddComponent(CameraComponent);
-	CameraComponent->SetProjectionMatrix(glm::perspective(glm::radians(90.0f), Window->GetWidth() / (float)Window->GetHeight(), 0.1f, 1000.0f));
+	CameraComponent->SetProjectionMatrix(90.0f, Window->GetWidth(), Window->GetHeight(), 0.1f, 1000.0f);
 	CameraComponent->SetPosition(glm::vec3(0.0f, 5.0f, 20.0f));
 	//CameraComponent->SetLookAt(glm::vec3(0.0f, 0.0f, 0.0f));
 	//CameraComponent->Rotate(glm::vec3(0.0f, 1.5f, 0.0f));

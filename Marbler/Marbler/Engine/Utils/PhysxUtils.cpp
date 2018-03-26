@@ -38,6 +38,10 @@ PxVec3 PhysxUtils::ConvertGVec3ToPxVec3(glm::vec3 Vector)
 	return PxVec3(Vector.x, Vector.y, Vector.z);
 }
 
+glm::vec3 PhysxUtils::ConvertPxVec3ToGVec3(PxVec3 Vector)
+{
+	return glm::vec3(Vector.x, Vector.y, Vector.z);
+}
 
 PhysxUtils::~PhysxUtils()
 {

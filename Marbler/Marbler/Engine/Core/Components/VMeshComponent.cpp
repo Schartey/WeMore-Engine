@@ -127,10 +127,6 @@ void VMeshComponent::Update(double deltaT)
 	if (bPhysics)
 	{
 		PhysxUtils::ConvertPxTransformToGVecQuat(this->PhysicsShape->getLocalPose(), this->Position, this->Rotation);
-		if (this->Name._Equal("MarbleComponent"))
-		{
-			std::cout << "X: " << this->Position.x << " Y: " << this->Position.y << " Z: " << this->Position.z;
-		}
 	}
 
 	VSceneComponent::Update(deltaT);
@@ -138,23 +134,25 @@ void VMeshComponent::Update(double deltaT)
 
 void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
 {
-	glm::mat4 CMT = ParentModelMatrix * ModelMatrix;
-
-	VSceneComponent::RenderPass(Shader, CMT);
-
 	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
-	if (this->Mesh != nullptr)
-	{
-		//Don't use local Shader, already set by GBuffer, but add information
-		Material->ApplyRenderPassInformation(Shader);
+	if (CameraComponent->IsWithinFrustum(this->Mesh->GetBoundingBox())) {
+		glm::mat4 CMT = ParentModelMatrix * ModelMatrix;
 
-		glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "cmt"), 1, GL_FALSE, glm::value_ptr(CMT));
-		glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
-		glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
+		VSceneComponent::RenderPass(Shader, CMT);
 
-		//ModelMatrix = ParentModelMatrix * TranslationMatrix * RotationMatrix*ScaleMatrix;
-		Mesh->RenderPass();
+		if (this->Mesh != nullptr)
+		{
+			//Don't use local Shader, already set by GBuffer, but add information
+			Material->ApplyRenderPassInformation(Shader);
+
+			glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "cmt"), 1, GL_FALSE, glm::value_ptr(CMT));
+			glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
+			glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
+
+			//ModelMatrix = ParentModelMatrix * TranslationMatrix * RotationMatrix*ScaleMatrix;
+			Mesh->RenderPass();
+		}
 	}
 }
 

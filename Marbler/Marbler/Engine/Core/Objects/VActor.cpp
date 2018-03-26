@@ -11,6 +11,14 @@ VActor::VActor(VScene* Scene, std::string Name) : VSceneObject(Scene, Name)
 {
 }
 
+glm::vec3 VActor::GetMovementVector()
+{
+	if (this->RigidActor != nullptr)
+	{
+		return PhysxUtils::ConvertPxVec3ToGVec3(((PxRigidBody*)this->RigidActor)->getLinearVelocity().getNormalized());
+	}
+}
+
 PxRigidDynamic* VActor::SetRigidDynamic()
 {
 	if (this->RigidActor != nullptr)

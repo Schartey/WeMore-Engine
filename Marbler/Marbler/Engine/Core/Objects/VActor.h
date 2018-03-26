@@ -16,6 +16,8 @@ public:
 		return RigidActor;
 	}
 
+	glm::vec3 GetMovementVector();
+
 	PxRigidDynamic* SetRigidDynamic();
 	PxRigidStatic* SetRigidStatic();
 
