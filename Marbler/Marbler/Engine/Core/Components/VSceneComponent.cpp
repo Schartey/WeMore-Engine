@@ -55,7 +55,7 @@ void VSceneComponent::SetScale(glm::vec3 Scale)
 
 void VSceneComponent::Update(double deltaT)
 {
-	ModelMatrix = translate(glm::mat4(), this->Position)*glm::toMat4(this->Rotation)*glm::scale(glm::scale(glm::mat4(), this->Scale), Owner->GetScale());
+	ModelMatrix = translate(glm::mat4(), this->Position)*glm::toMat4(this->Rotation)*glm::scale(glm::mat4(), this->Scale);
 }
 void VSceneComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
 {

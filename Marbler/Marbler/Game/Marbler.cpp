@@ -130,7 +130,7 @@ void Marbler::OnInitialize()
 	CameraActor->AddComponent(InputComponent);
 
 	VDirectionalLight* DirectionalLight = VAssimpUtils::LoadDirectionalLight(modelPath + "box.fbx");
-	DirectionalLight->SetAmbient(0.1f);
+	DirectionalLight->SetAmbient(0.2f);
 	DirectionalLight->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	DirectionalLight->SetDiffuse(0.5f);
 	DirectionalLight->SetDirection(glm::vec3(0.0f, -1.0f, 0.5f));
@@ -141,10 +141,10 @@ void Marbler::OnInitialize()
 	PointLight1->GetLightComponent()->GetPointLight().Ambient = 0.0f;
 	PointLight1->GetLightComponent()->GetPointLight().Diffuse = 0.5f;
 	PointLight1->GetLightComponent()->GetPointLight().Color = glm::vec3(1.0f, 1.0f, 1.0f);
-	PointLight1->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(0.0f, 0.0f, 10.0f);
+	PointLight1->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(0.0f, 0.000001f, 0.1f);
 
-	PointLight1->SetPosition(glm::vec3(0.0f, 3.0f, 0.0f));
-	PointLight1->SetScale(glm::vec3(1.0f));
+	PointLight1->SetScale(glm::vec3(10.0f));
+	PointLight1->SetPosition(glm::vec3(0.0f, 0.1f, 0.0f));
 
 	VShader* BaseShader = new VShader("Engine/Shader/base.vert", "Engine/Shader/base.frag");
 	FloorMeshComponent->GetMaterial()->SetShader(BaseShader);
@@ -160,4 +160,5 @@ void Marbler::OnInitialize()
 
 Marbler::~Marbler()
 {
+
 }

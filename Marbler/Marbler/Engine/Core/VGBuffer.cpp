@@ -321,7 +321,7 @@ void VGBuffer::BindForFinalPass()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-	glReadBuffer(GL_COLOR_ATTACHMENT1);
+	glReadBuffer(GL_COLOR_ATTACHMENT4);
 }
 
 VGBuffer::~VGBuffer()

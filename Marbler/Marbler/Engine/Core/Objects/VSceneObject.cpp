@@ -24,7 +24,7 @@ glm::vec3 VSceneObject::GetScale()
 
 glm::mat4 VSceneObject::GetModelMatrix()
 {
-	return translate(glm::mat4(), this->Position)*glm::toMat4(this->Rotation)*glm::scale(glm::mat4(), this->Scale);
+ 	return translate(glm::mat4(), this->Position)*glm::toMat4(this->Rotation)*glm::scale(glm::mat4(), this->Scale);
 }
 
 glm::vec3 VSceneObject::GetPosition()
