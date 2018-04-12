@@ -113,16 +113,20 @@ void Marbler::OnInitialize()
 
 	CameraActor->AddComponent(MarbleComponent);
 
-	MarbleComponent->LoadMesh(modelPath + "marble.fbx");
+	MarbleComponent->LoadMesh(modelPath + "marble.obj");
 	MarbleComponent->GeneratePhysicsShape(GeometryType::Sphere);
 	MarbleComponent->SetBPhysics(true);
 
 	//VTexture* MarbleTexture = new VTexture(texturePath + "Lightmap.png");
 	//MarbleTexture->Load();
 	//MarbleComponent->GetMaterial()->AddLightMapTexture(MarbleTexture);
+	VTexture* MarbleTexture = new VTexture(texturePath + "marble_2.jpg");
+	MarbleTexture->Load();
+
+	MarbleComponent->GetMaterial()->AddDiffuseTexture(MarbleTexture);
 	MarbleComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
 	MarbleComponent->GetMaterial()->SetSpecularIntensity(1.0f);
-	MarbleComponent->GetMaterial()->SetSpecularPower(1);
+	MarbleComponent->GetMaterial()->SetSpecularPower(32);
 
 	CameraComponent->SetTarget(MarbleComponent);
 
@@ -130,21 +134,21 @@ void Marbler::OnInitialize()
 	CameraActor->AddComponent(InputComponent);
 
 	VDirectionalLight* DirectionalLight = VAssimpUtils::LoadDirectionalLight(modelPath + "box.fbx");
-	DirectionalLight->SetAmbient(0.2f);
+	DirectionalLight->SetAmbient(0.3f);
 	DirectionalLight->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
-	DirectionalLight->SetDiffuse(0.5f);
+	DirectionalLight->SetDiffuse(0.6f);
 	DirectionalLight->SetDirection(glm::vec3(0.0f, -1.0f, 0.5f));
 
 	MainScene->SetDirectionalLight(DirectionalLight);
 
 	VPointLight2* PointLight1 = MainScene->CreatePointLight("Pointlight1");
 	PointLight1->GetLightComponent()->GetPointLight().Ambient = 0.0f;
-	PointLight1->GetLightComponent()->GetPointLight().Diffuse = 0.5f;
+	PointLight1->GetLightComponent()->GetPointLight().Diffuse = 0.8f;
 	PointLight1->GetLightComponent()->GetPointLight().Color = glm::vec3(1.0f, 1.0f, 1.0f);
 	PointLight1->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(0.0f, 0.000001f, 0.1f);
 
-	PointLight1->SetScale(glm::vec3(10.0f));
-	PointLight1->SetPosition(glm::vec3(0.0f, 0.1f, 0.0f));
+	PointLight1->SetScale(glm::vec3(30.0f));
+	PointLight1->SetPosition(glm::vec3(0.0f, 3.0f, 0.0f));
 
 	VShader* BaseShader = new VShader("Engine/Shader/base.vert", "Engine/Shader/base.frag");
 	FloorMeshComponent->GetMaterial()->SetShader(BaseShader);

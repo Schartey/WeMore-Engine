@@ -4,6 +4,8 @@
 #include "assimp/postprocess.h"
 #include "assimp/material.h"
 
+#include "../../Utils/MeshUtils.h"
+
 
 VAssimpUtils::VAssimpUtils()
 {
@@ -63,9 +65,9 @@ VAssimpMesh* VAssimpUtils::LoadMesh(VScene* Scene, std::string filePath)
 
 VDirectionalLight* VAssimpUtils::LoadDirectionalLight(std::string filePath)
 {
-	VAssimpMesh* Mesh = LoadMesh(nullptr, filePath);
+	VMesh* Mesh = MeshUtils::CreateCubeGeometry(1.0f, 1.0f, 1.0f);
 	VDirectionalLight* Light = new VDirectionalLight();
-	Light->Setup(Mesh->GetMesh()->GetVertices(), Mesh->GetMesh()->GetIndices(), Mesh->GetMesh()->GetBoundingBox());
+	Light->Setup(Mesh->GetVertices(), Mesh->GetIndices(), Mesh->GetBoundingBox());
 
 	return Light;
 }
@@ -95,14 +97,14 @@ void VAssimpUtils::ProcessNode(VScene* Scene, std::string path, VAssimpScene* As
 VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpScene* AssimpScene, aiMesh* Mesh, const aiNode* Node, const aiScene* iscene)
 {
 	std::vector<Vertex> vertices;
-	std::vector<GLuint> indices;
+	std::vector<int> indices;
 
 	BBox BoundingBox;
 	BoundingBox.min.x = BoundingBox.max.x = Mesh->mVertices[0].x;
 	BoundingBox.min.y = BoundingBox.max.y = Mesh->mVertices[0].y;
 	BoundingBox.min.z = BoundingBox.max.z = Mesh->mVertices[0].z;
 
-	for (GLuint i = 0; i < Mesh->mNumVertices; i++)
+	for (int i = 0; i < Mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
 		// Process vertex positions, normals and texture coordinates
@@ -139,10 +141,10 @@ VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpS
 	}
 
 	// Process indices
-	for (GLuint i = 0; i < Mesh->mNumFaces; i++)
+	for (int i = 0; i < Mesh->mNumFaces; i++)
 	{
 		aiFace face = Mesh->mFaces[i];
-		for (GLuint j = 0; j < face.mNumIndices; j++)
+		for (int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
 	}
 
@@ -151,6 +153,7 @@ VAssimpMesh* VAssimpUtils::ProcessMesh(VScene* Scene, std::string path, VAssimpS
 	// Process material
 	if (Mesh->mMaterialIndex >= 0)
 	{
+		int i = iscene->mNumTextures;
 		aiMaterial* Material = iscene->mMaterials[Mesh->mMaterialIndex];
 			
 		pMaterial = ProcessMaterial(path, Material);

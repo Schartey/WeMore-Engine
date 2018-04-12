@@ -1,5 +1,7 @@
 #include "VLightComponent.h"
 
+#include "../../Utils/MeshUtils.h"
+
 #include "../Objects/VSceneObject.h"
 
 VLightComponent::VLightComponent(VScene* Scene, std::string Name, LightType lightType) : VMeshComponent(Scene, Name)
@@ -8,8 +10,12 @@ VLightComponent::VLightComponent(VScene* Scene, std::string Name, LightType ligh
 
 	switch (this->lightType)
 	{
+	case LightType::DirectionalLight:
+		//TODO: Support Directional Light in here -> Change engine code to find this light instead of the one in Scene class
+		break;
 	case LightType::PointLight:
-		LoadMesh("..\\..\\Models\\sphere.obj");
+		this->SetMesh(MeshUtils::CreateSphereGeometry(10, 10, 0.5f));
+		this->SetMaterial(new VMaterial());
 	}
 }
 

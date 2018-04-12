@@ -16,12 +16,12 @@ std::vector<Vertex> VMesh::GetVertices()
 	return Vertices;
 }
 
-std::vector<GLuint> VMesh::GetIndices()
+std::vector<int> VMesh::GetIndices()
 {
 	return Indices;
 }
 
-void VMesh::Setup(std::vector<Vertex> Vertices, std::vector<GLuint> Indices, BBox BoundingBox)
+void VMesh::Setup(std::vector<Vertex> Vertices, std::vector<int> Indices, BBox BoundingBox)
 {
 	this->Vertices = Vertices;
 	this->Indices = Indices;

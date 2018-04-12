@@ -123,7 +123,7 @@
     <ClCompile Include="Engine\Core\Components\VLightComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Component\OrbitingMeshComponent.cpp">
+    <ClCompile Include="Engine\Utils\MeshUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -236,7 +236,7 @@
     <ClInclude Include="Engine\Core\Components\VLightComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Component\OrbitingMeshComponent.h">
+    <ClInclude Include="Engine\Utils\MeshUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
