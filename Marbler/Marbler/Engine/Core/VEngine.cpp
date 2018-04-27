@@ -53,15 +53,15 @@ int VEngine::Initialize(const char* cfgpath)
 
 void VEngine::Setup(VGame* Game)
 {
+	GBuffer = new VGBuffer();
+	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
+
 	this->Game = Game;
 	this->Game->OnQuitDelegate = std::bind(&VEngine::OnQuit, this);
 	this->Game->SetWindow(Window);
 	this->Game->SetPhysics(Physics);
 
 	this->Game->OnInitialize();
-
-	GBuffer = new VGBuffer();
-	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
 }
 
 void VEngine::Run()

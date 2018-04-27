@@ -126,6 +126,15 @@
     <ClCompile Include="Engine\Utils\MeshUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\Asset\VParticle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Components\VParticleComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Shader\gBuffer\Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VEngine.h">
@@ -239,6 +248,12 @@
     <ClInclude Include="Engine\Utils\MeshUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\Asset\VParticle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Components\VParticleComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -253,5 +268,9 @@
     <None Include="Engine\Shader\gBuffer\null.frag" />
     <None Include="Engine\Shader\gBuffer\shadow_pass.vert" />
     <None Include="Engine\Shader\gBuffer\shadow_pass.frag" />
+    <None Include="Engine\Shader\gBuffer\particle.vert" />
+    <None Include="Engine\Shader\gBuffer\particle.frag" />
+    <None Include="Engine\Shader\gBuffer\particle.geom" />
+    <None Include="Engine\Shader\gBuffer\particle.comp" />
   </ItemGroup>
 </Project>

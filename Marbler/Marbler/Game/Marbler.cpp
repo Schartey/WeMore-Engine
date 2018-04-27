@@ -5,6 +5,7 @@
 #include "../Engine/Core/Components/VCameraComponent.h"
 #include "../Engine/Core/Components/VMeshComponent.h"
 #include "../Engine/Core/Components/VInputComponent.h"
+#include "../Engine/Core/Components/VParticleComponent.h"
 
 #include "../Engine/Core/Asset/VTexture.h"
 #include "../Engine/Utils/Assimp/VAssimpUtils.h"
@@ -129,6 +130,20 @@ void Marbler::OnInitialize()
 	MarbleComponent->GetMaterial()->SetSpecularPower(32);
 
 	CameraComponent->SetTarget(MarbleComponent);
+
+	VParticleComponent* MarbleParticleComponent = new VParticleComponent(MainScene, "MarbleParticleComponent");
+	VParticleDescriptor* ParticleDescriptor = new VParticleDescriptor();
+	ParticleDescriptor->Count = 100000;
+	ParticleDescriptor->Position = glm::vec3(0, 0, 0);
+	ParticleDescriptor->Spread = 5;
+	ParticleDescriptor->TTL = 500;
+	ParticleDescriptor->Velocity = glm::vec3(0.1f);
+
+	MarbleParticleComponent->SetParticle(ParticleDescriptor);
+	MarbleParticleComponent->SetPosition(glm::vec3(0, 3.0f, 0.0f));
+
+	//Draw it on the floor for now
+	FloorActor->AddComponent(MarbleParticleComponent);
 
 	VInputComponent* InputComponent = new VInputComponent(MainScene, "InputComponent");
 	CameraActor->AddComponent(InputComponent);

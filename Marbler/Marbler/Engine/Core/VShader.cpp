@@ -4,9 +4,25 @@
 #include <fstream>
 #include <memory>
 
+VShader::VShader(const std::string& computeShader) : programHandle(0), programType(ProgramType::Compute)
+{
+	programHandle = glCreateProgram();
+	if (programHandle == 0)
+	{
+		std::cerr << "Failed to create shader program." << std::endl;
+		system("PAUSE");
+		exit(EXIT_FAILURE);
+	}
+
+	loadShader(computeShader, GL_COMPUTE_SHADER, computeHandle);
+
+	link();
+}
+
 VShader::VShader(const std::string& vertexShader, const std::string& fragmentShader) : programHandle(0)
 , vertexHandle(0)
 , fragmentHandle(0)
+, programType(ProgramType::VertexFragment)
 {
 	programHandle = glCreateProgram();
 	if (programHandle == 0)
@@ -17,6 +33,27 @@ VShader::VShader(const std::string& vertexShader, const std::string& fragmentSha
 	}
 
 	loadShader(vertexShader, GL_VERTEX_SHADER, vertexHandle);
+	loadShader(fragmentShader, GL_FRAGMENT_SHADER, fragmentHandle);
+
+	link();
+}
+
+VShader::VShader(const std::string& vertexShader, const std::string& geometryShader, const std::string& fragmentShader) : programHandle(0)
+, vertexHandle(0)
+, geometryHandle(0)
+, fragmentHandle(0)
+, programType(ProgramType::VertexFragment)
+{
+	programHandle = glCreateProgram();
+	if (programHandle == 0)
+	{
+		std::cerr << "Failed to create shader program." << std::endl;
+		system("PAUSE");
+		exit(EXIT_FAILURE);
+	}
+
+	loadShader(vertexShader, GL_VERTEX_SHADER, vertexHandle);
+	loadShader(geometryShader, GL_GEOMETRY_SHADER, geometryHandle);
 	loadShader(fragmentShader, GL_FRAGMENT_SHADER, fragmentHandle);
 
 	link();
@@ -82,11 +119,20 @@ void VShader::loadShader(const std::string& shader, GLenum shaderType, GLuint& h
 
 void VShader::link()
 {
-	glAttachShader(programHandle, vertexHandle);
-	glAttachShader(programHandle, fragmentHandle);
+	if (programType == ProgramType::VertexFragment)
+	{
+		glAttachShader(programHandle, vertexHandle);
+		glAttachShader(programHandle, fragmentHandle);
 
-	glLinkProgram(programHandle);
+		glLinkProgram(programHandle);
 
+	}
+	else
+	{
+		glAttachShader(programHandle, computeHandle);
+
+		glLinkProgram(programHandle);
+	}
 	GLint succeeded;
 
 	glGetProgramiv(programHandle, GL_LINK_STATUS, &succeeded);

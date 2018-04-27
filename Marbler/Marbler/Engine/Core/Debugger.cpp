@@ -38,11 +38,17 @@ void Debugger::initDebugger() {
 }
 
 void APIENTRY Debugger::DebugCallbackAMD(GLuint id, GLenum category, GLenum severity, GLsizei length, const GLchar* message, GLvoid* userParam) {
+	if (id == 131185) {
+		return;
+	}
 	std::string error = FormatDebugOutput(category, category, id, severity, message);
 	std::cout << error << std::endl;
 }
 
 void APIENTRY Debugger::DebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const GLvoid* userParam) {
+	if (id == 131185) {
+		return;
+	}
 	std::string error = FormatDebugOutput(source, type, id, severity, message);
 	std::cout << error << std::endl;
 }

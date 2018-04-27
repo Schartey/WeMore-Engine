@@ -57,7 +57,7 @@ bool VGBuffer::Initialize(int Width, int Height)
 		printf("FB error, status: 0x%x\n", Status);
 		return false;
 	}
-
+	
 	// restore default FBO
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
