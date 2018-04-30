@@ -30,7 +30,7 @@ public:
 	void SetActiveSceneObject(VSceneObject* Actor);
 
 	virtual void Update(double deltaT);
-	void RenderPass(class VShader* Shader);
+	void RenderPass(class VShader* Shader, RenderPassBufferType Type);
 	void Draw();
 
 	~VScene();

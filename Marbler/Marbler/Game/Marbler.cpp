@@ -28,13 +28,12 @@ void Marbler::OnInitialize()
 
 	VScene* MainScene = CreateScene();
 
-	
 	VActor* FloorActor = MainScene->CreateActor("FloorActor");
 	FloorActor->bPhysics = true;
 
 	PxRigidStatic* RigidStatic = FloorActor->SetRigidStatic();
 
-	FloorActor->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	FloorActor->SetPosition(glm::vec3(0.0f, -10.0f, 0.0f));
 	VMeshComponent* FloorMeshComponent = new VMeshComponent(MainScene, "FloorMeshComponent");
 
 	FloorActor->AddComponent(FloorMeshComponent);
@@ -51,7 +50,27 @@ void Marbler::OnInitialize()
 	FloorMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
 	FloorMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
 	FloorMeshComponent->GetMaterial()->SetSpecularPower(1);
-	
+
+	VActor* AnotherFloorActor = MainScene->CreateActor("AnotherFloorActor");
+	AnotherFloorActor->bPhysics = true;
+
+	RigidStatic = AnotherFloorActor->SetRigidStatic();
+
+	AnotherFloorActor->SetPosition(glm::vec3(10.0f, -10.0f, 0.0f));
+	VMeshComponent* AnotherFloorMeshComponent = new VMeshComponent(MainScene, "AnotherFloorMeshComponent");
+
+	AnotherFloorActor->AddComponent(AnotherFloorMeshComponent);
+
+	AnotherFloorMeshComponent->LoadMesh(modelPath + "box.fbx");
+	AnotherFloorMeshComponent->GeneratePhysicsShape(GeometryType::Box);
+	AnotherFloorMeshComponent->SetBPhysics(true);
+
+	AnotherFloorMeshComponent->SetScale(glm::vec3(10.0f, 0.1f, 10.0f));
+
+	AnotherFloorMeshComponent->GetMaterial()->AddLightMapTexture(FloorTexture);
+	AnotherFloorMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
+	AnotherFloorMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
+	AnotherFloorMeshComponent->GetMaterial()->SetSpecularPower(1);
 
 	VActor* BoxTestActor = MainScene->CreateActor("BoxTestActor");
 	BoxTestActor->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));

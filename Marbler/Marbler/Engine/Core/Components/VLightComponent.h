@@ -20,7 +20,7 @@ public:
 	LightType GetLightType();
 	VPointLight& GetPointLight();
 
-	virtual void RenderPass(VShader* Shader, glm::mat4 ParentMatrix) override;
+	virtual void RenderPass(VShader* Shader, glm::mat4 ParentMatrix, RenderPassBufferType Type) override;
 	virtual void LightRenderPass();
 
 private:

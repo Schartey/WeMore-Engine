@@ -4,6 +4,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "VActorComponent.h"
+#include "../../Utils/BufferUtils.h"
 
 class VSceneComponent : public VActorComponent
 {
@@ -22,7 +23,7 @@ public:
 	void SetScale(glm::vec3 Scale);
 
 	virtual void Update(double deltaT);
-	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix);
+	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix, RenderPassBufferType Type);
 
 	virtual void Draw(glm::mat4 ParentModelMatrix);
 

@@ -31,7 +31,7 @@ public:
 	void SetScale(glm::vec3 ScaleVector);
 
 	virtual void Update(double deltaT) override;
-	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix) override;
+	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix, RenderPassBufferType Type) override;
 	virtual void Draw(glm::mat4 ParentModelMatrix) override;
 
 	virtual ~VMeshComponent();

@@ -5,6 +5,7 @@
 #include "VWindow.h"
 #include "Physics/VPhysics.h"
 #include "VGBuffer.h"
+#include "VShadowBuffer.h"
 
 #include <string>
 
@@ -31,6 +32,7 @@ private:
 	VPhysics* Physics;
 	VGame * Game;
 
+	VShadowBuffer* ShadowBuffer;
 	VGBuffer* GBuffer;
 
 	bool bPause = false;

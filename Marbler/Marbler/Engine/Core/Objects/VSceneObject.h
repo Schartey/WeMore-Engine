@@ -69,7 +69,7 @@ public:
 	}
 
 	virtual void Update(double deltaT);
-	virtual void RenderPass(class VShader* Shader);
+	virtual void RenderPass(class VShader* Shader, RenderPassBufferType Type);
 	void Draw();
 
 	~VSceneObject();

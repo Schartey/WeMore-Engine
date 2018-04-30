@@ -24,17 +24,17 @@ bool VGBuffer::Initialize(int Width, int Height)
 	BindForWriting();
 
 	// Create the gbuffer textures
-	glGenTextures(sizeof(Textures), Textures);
+	glGenTextures(16, GBufferTextures);
 	glGenTextures(1, &DepthTexture);
 
-	for (unsigned int i = 0; i < sizeof(Textures) / sizeof(Textures[0]); i++) {
-		glBindTexture(GL_TEXTURE_2D, Textures[i]);
+	for (unsigned int i = 0; i < 4; i++) {
+		glBindTexture(GL_TEXTURE_2D, GBufferTextures[i]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, Width, Height, 0, GL_RGB, GL_FLOAT, NULL);
 
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, Textures[i], 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, GBufferTextures[i], 0);
 	}
 
 	// depth
@@ -61,6 +61,8 @@ bool VGBuffer::Initialize(int Width, int Height)
 	// restore default FBO
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
+	TDebugUtils = new DebugUtils();
+	TDebugUtils->SetupTextureDebug();
 
 	return true;
 }
@@ -72,13 +74,28 @@ void VGBuffer::StartFrame()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void VGBuffer::BeginGeometryPass()
+void VGBuffer::BeginGeometryPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap, glm::mat4 DepthVP)
 {
 	BindForGeomPass();
+	//TDebugUtils->DrawTexture(TestMap);
 	GeometryShader->useShader();
+
+	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
+
+	//glActiveTexture(GL_TEXTURE9);
+	//glBindTexture(GL_TEXTURE_2D, TestMap);
+
+	//glUniform1i(glGetUniformLocation(GeometryShader->programHandle, "gShadowMap"), 9);
+	//glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "depthVP"), 1, GL_FALSE, glm::value_ptr(biasMatrix * DepthVP));
+
+	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
 
 	// Only the geometry pass updates the depth buffer
 	glDepthMask(GL_TRUE);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK); // Cull back-facing triangles -> draw only front-facing triangles
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -264,6 +281,11 @@ void VGBuffer::LightPass()
 	glBlitFramebuffer(0, 0, Width, Height, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
+void VGBuffer::Test(GLuint TextureId)
+{
+	TDebugUtils->DrawTexture(TextureId);
+}
+
 VShader* VGBuffer::GetGeometryShader()
 {
 	return GeometryShader;
@@ -278,9 +300,9 @@ void VGBuffer::BindForReading()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	for (unsigned int i = 0; i < sizeof(Textures) / sizeof(Textures[0]); i++) {
+	for (unsigned int i = 0; i < 4; i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, Textures[GBUFFER_TEXTURE_TYPE_POSITION + i]);
+		glBindTexture(GL_TEXTURE_2D, GBufferTextures[i]);
 	}
 }
 
@@ -311,9 +333,9 @@ void VGBuffer::BindForLightPass()
 {
 	glDrawBuffer(GL_COLOR_ATTACHMENT4);
 
-	for (unsigned int i = 0; i < sizeof(Textures) / sizeof(Textures[0]); i++) {
+	for (unsigned int i = 0; i < 4; i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, Textures[GBUFFER_TEXTURE_TYPE_POSITION + i]);
+		glBindTexture(GL_TEXTURE_2D, GBufferTextures[i]);
 	}
 }
 
@@ -321,7 +343,7 @@ void VGBuffer::BindForFinalPass()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-	glReadBuffer(GL_COLOR_ATTACHMENT4);
+	glReadBuffer(GL_COLOR_ATTACHMENT1);
 }
 
 VGBuffer::~VGBuffer()

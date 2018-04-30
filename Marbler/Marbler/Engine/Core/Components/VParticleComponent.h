@@ -17,7 +17,7 @@ public:
 	void SetParticle(VParticleDescriptor* TParticle);
 
 	virtual void Update(double deltaT) override;
-	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix) override;
+	virtual void RenderPass(class VShader* Shader, glm::mat4 ParentModelMatrix, RenderPassBufferType Type) override;
 
 	~VParticleComponent();
 

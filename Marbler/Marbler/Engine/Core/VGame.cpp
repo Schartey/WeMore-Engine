@@ -17,9 +17,9 @@ void VGame::Update(double deltaT)
 	ActiveScene->Update(deltaT);
 }
 
-void VGame::RenderPass(VShader* Shader)
+void VGame::RenderPass(VShader* Shader, RenderPassBufferType Type)
 {
-	ActiveScene->RenderPass(Shader);
+	ActiveScene->RenderPass(Shader, Type);
 }
 
 void VGame::Draw()

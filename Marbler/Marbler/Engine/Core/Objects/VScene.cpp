@@ -89,11 +89,11 @@ void VScene::Update(double deltaT)
 	}
 }
 
-void VScene::RenderPass(VShader* Shader)
+void VScene::RenderPass(VShader* Shader, RenderPassBufferType Type)
 {
 	for (VSceneObject* Actor : SceneObjects)
 	{
-		Actor->RenderPass(Shader);
+		Actor->RenderPass(Shader, Type);
 	}
 }
 

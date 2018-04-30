@@ -64,6 +64,7 @@ void VSceneObject::SetMaterial(VMaterial* Material)
 
 void VSceneObject::Update(double deltaT)
 {
+	ModelMatrix = GetModelMatrix();
 	for (VActorComponent* ActorComponent : ActorComponents)
 	{
 		ActorComponent->Update(deltaT);
@@ -72,14 +73,13 @@ void VSceneObject::Update(double deltaT)
 	{
 		SceneComponent->Update(deltaT);
 	}
-	ModelMatrix = GetModelMatrix();
 }
 
-void VSceneObject::RenderPass(VShader* Shader)
+void VSceneObject::RenderPass(VShader* Shader, RenderPassBufferType Type)
 {
 	for (VSceneComponent* SceneComponent : SceneComponents)
 	{
-		SceneComponent->RenderPass(Shader, ModelMatrix);
+		SceneComponent->RenderPass(Shader, ModelMatrix, Type);
 	}
 }
 

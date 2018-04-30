@@ -38,7 +38,7 @@ VPointLight& VLightComponent::GetPointLight()
 	return this->PointLight;
 }
 
-void VLightComponent::RenderPass(VShader* Shader, glm::mat4 ParentMatrix)
+void VLightComponent::RenderPass(VShader* Shader, glm::mat4 ParentMatrix, RenderPassBufferType Type)
 {
 	//VMeshComponent::RenderPass(Shader, ParentMatrix);
 	//this->Mesh->RenderPass();

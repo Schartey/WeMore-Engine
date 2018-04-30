@@ -56,6 +56,9 @@ void VEngine::Setup(VGame* Game)
 	GBuffer = new VGBuffer();
 	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
 
+	ShadowBuffer = new VShadowBuffer();
+	ShadowBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
+
 	this->Game = Game;
 	this->Game->OnQuitDelegate = std::bind(&VEngine::OnQuit, this);
 	this->Game->SetWindow(Window);
@@ -87,9 +90,13 @@ void VEngine::Run()
 			StepPhysics(deltaT);
 			Game->Update(deltaT);
 			if (Window->GetOpenGlMinor() >= 0) {
+				ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());
+				Game->RenderPass(ShadowBuffer->GetShadowLightShader(), RenderPassBufferType::ShadowBuffer);
+				
+				//GBuffer->Test(ShadowBuffer->GetTestMap());
 				GBuffer->StartFrame();
-				GBuffer->BeginGeometryPass();
-				Game->RenderPass(GBuffer->GetGeometryShader());
+				GBuffer->BeginGeometryPass(Game->GetActiveScene(), ShadowBuffer->GetTestMap(), ShadowBuffer->GetShadowMap(), ShadowBuffer->GetDepthVP());
+				Game->RenderPass(GBuffer->GetGeometryShader(), RenderPassBufferType::GBuffer);
 				GBuffer->EndGeometryPass();
 
 				glEnable(GL_STENCIL_TEST);

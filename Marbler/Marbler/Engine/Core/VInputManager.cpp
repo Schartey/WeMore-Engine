@@ -54,9 +54,12 @@ void VInputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int a
 
 void VInputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	(MouseMapping.InputComponent->*MouseMapping.pmemfn)(xpos-oldXPos, ypos-oldYPos);
-	oldXPos = xpos;
-	oldYPos = ypos;
+	if (MouseMapping.InputComponent != nullptr)
+	{
+		(MouseMapping.InputComponent->*MouseMapping.pmemfn)(xpos - oldXPos, ypos - oldYPos);
+		oldXPos = xpos;
+		oldYPos = ypos;
+	}
 }
 
 void VInputManager::BindAction(std::string ActionName, VInputKey InputKey, VActionType ActionType, VInputComponent& InputComponent, void(VInputComponent::*pmemfn)())

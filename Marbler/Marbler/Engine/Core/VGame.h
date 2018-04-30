@@ -14,7 +14,7 @@ public:
 
 	virtual void OnInitialize();
 	virtual void Update(double deltaT);
-	void RenderPass(VShader* Shader);
+	void RenderPass(VShader* Shader, RenderPassBufferType Type);
 	void Draw();
 	virtual void QuitGame();
 

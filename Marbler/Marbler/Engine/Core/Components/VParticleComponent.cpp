@@ -109,7 +109,7 @@ void VParticleComponent::Update(double deltaT)
 	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 }
 
-void VParticleComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
+void VParticleComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix, RenderPassBufferType Type)
 {
 	glEnable(GL_BLEND);
 

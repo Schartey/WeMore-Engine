@@ -135,6 +135,15 @@
     <ClCompile Include="Engine\Shader\gBuffer\Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\VShadowBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\BufferUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\DebugUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VEngine.h">
@@ -254,6 +263,15 @@
     <ClInclude Include="Engine\Core\Components\VParticleComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\VShadowBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\BufferUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\DebugUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -272,5 +290,9 @@
     <None Include="Engine\Shader\gBuffer\particle.frag" />
     <None Include="Engine\Shader\gBuffer\particle.geom" />
     <None Include="Engine\Shader\gBuffer\particle.comp" />
+    <None Include="Engine\Shader\gBuffer\shadow_light.vert" />
+    <None Include="Engine\Shader\gBuffer\shadow_light.frag" />
+    <None Include="Engine\Shader\simple_texture.vert" />
+    <None Include="Engine\Shader\simple_texture.frag" />
   </ItemGroup>
 </Project>

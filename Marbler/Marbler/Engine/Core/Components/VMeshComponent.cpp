@@ -124,32 +124,33 @@ void VMeshComponent::SetScale(glm::vec3 Scale)
 
 void VMeshComponent::Update(double deltaT)
 {
+	VSceneComponent::Update(deltaT);
 	if (bPhysics)
 	{
 		PhysxUtils::ConvertPxTransformToGVecQuat(this->PhysicsShape->getLocalPose(), this->Position, this->Rotation);
 	}
 
-	VSceneComponent::Update(deltaT);
 }
 
-void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
+void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix, RenderPassBufferType Type)
 {
 	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
 	if (CameraComponent->IsWithinFrustum(this->Mesh->GetBoundingBox())) {
 		glm::mat4 CMT = ParentModelMatrix * ModelMatrix;
 
-		VSceneComponent::RenderPass(Shader, CMT);
+		VSceneComponent::RenderPass(Shader, CMT, Type);
 
 		if (this->Mesh != nullptr)
 		{
 			//Don't use local Shader, already set by GBuffer, but add information
-			Material->ApplyRenderPassInformation(Shader);
-
+			if (Type != ShadowBuffer)
+			{
+				Material->ApplyRenderPassInformation(Shader);
+			}
+			
 			glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "cmt"), 1, GL_FALSE, glm::value_ptr(CMT));
-			glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
-			glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
-
+			
 			//ModelMatrix = ParentModelMatrix * TranslationMatrix * RotationMatrix*ScaleMatrix;
 			Mesh->RenderPass();
 		}

@@ -57,7 +57,7 @@ void VSceneComponent::Update(double deltaT)
 {
 	ModelMatrix = translate(glm::mat4(), this->Position)*glm::toMat4(this->Rotation)*glm::scale(glm::mat4(), this->Scale);
 }
-void VSceneComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix)
+void VSceneComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix, RenderPassBufferType Type)
 {
 
 }

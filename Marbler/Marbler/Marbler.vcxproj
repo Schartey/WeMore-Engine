@@ -126,6 +126,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Utils\DebugUtils.cpp" />
+    <ClCompile Include="Engine\Utils\BufferUtils.cpp" />
     <ClCompile Include="Engine\Core\Asset\VDirectionalLight.cpp" />
     <ClCompile Include="Engine\Core\Asset\VPointLight.cpp" />
     <ClCompile Include="Engine\Core\Components\VCameraComponent.cpp" />
@@ -166,8 +168,11 @@
     <ClCompile Include="Engine\Utils\MeshUtils.cpp" />
     <ClCompile Include="Engine\Core\Asset\VParticle.cpp" />
     <ClCompile Include="Engine\Core\Components\VParticleComponent.cpp" />
+    <ClCompile Include="Engine\Core\VShadowBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Utils\DebugUtils.h" />
+    <ClInclude Include="Engine\Utils\BufferUtils.h" />
     <ClInclude Include="Engine\Core\Asset\VDirectionalLight.h" />
     <ClInclude Include="Engine\Core\Asset\VPointLight.h" />
     <ClInclude Include="Engine\Core\Components\VCameraComponent.h" />
@@ -207,6 +212,7 @@
     <ClInclude Include="Engine\Utils\MeshUtils.h" />
     <ClInclude Include="Engine\Core\Asset\VParticle.h" />
     <ClInclude Include="Engine\Core\Components\VParticleComponent.h" />
+    <ClInclude Include="Engine\Core\VShadowBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -223,8 +229,12 @@
     <None Include="Engine\Shader\gBuffer\particle.vert" />
     <None Include="Engine\Shader\gBuffer\pointlight_pass.frag" />
     <None Include="Engine\Shader\gBuffer\light_pass.vert" />
+    <None Include="Engine\Shader\gBuffer\shadow_light.frag" />
+    <None Include="Engine\Shader\gBuffer\shadow_light.vert" />
     <None Include="Engine\Shader\gBuffer\shadow_pass.frag" />
     <None Include="Engine\Shader\gBuffer\shadow_pass.vert" />
+    <None Include="Engine\Shader\simple_texture.frag" />
+    <None Include="Engine\Shader\simple_texture.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
