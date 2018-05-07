@@ -42,9 +42,9 @@ void VSceneObject::SetPosition(glm::vec3 Position)
 	this->Position = Position;
 }
 
-void VSceneObject::SetRotation(glm::vec3 Rotation)
+void VSceneObject::SetRotation(glm::quat Rotation)
 {
-	this->Rotation = glm::quat(Rotation);
+	this->Rotation = Rotation;
 }
 
 void VSceneObject::SetScale(glm::vec3 Scale)

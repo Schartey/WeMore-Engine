@@ -34,10 +34,11 @@ void Marbler::OnInitialize()
 	PxRigidStatic* RigidStatic = FloorActor->SetRigidStatic();
 
 	FloorActor->SetPosition(glm::vec3(0.0f, -10.0f, 0.0f));
+	FloorActor->SetRotation(glm::vec3(0.0f, 45.0f, 0.0f));
 	VMeshComponent* FloorMeshComponent = new VMeshComponent(MainScene, "FloorMeshComponent");
 
 	FloorActor->AddComponent(FloorMeshComponent);
-	
+
 	FloorMeshComponent->LoadMesh(modelPath + "box.fbx");
 	FloorMeshComponent->GeneratePhysicsShape(GeometryType::Box);
 	FloorMeshComponent->SetBPhysics(true);
@@ -51,29 +52,94 @@ void Marbler::OnInitialize()
 	FloorMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
 	FloorMeshComponent->GetMaterial()->SetSpecularPower(1);
 
-	VActor* AnotherFloorActor = MainScene->CreateActor("AnotherFloorActor");
-	AnotherFloorActor->bPhysics = true;
+	VActor* RailActor = MainScene->CreateActor("RailActor");
 
-	RigidStatic = AnotherFloorActor->SetRigidStatic();
+	RailActor->bPhysics = true;
 
-	AnotherFloorActor->SetPosition(glm::vec3(10.0f, -10.0f, 0.0f));
-	VMeshComponent* AnotherFloorMeshComponent = new VMeshComponent(MainScene, "AnotherFloorMeshComponent");
+	PxRigidStatic* RailActorRigidStatic = RailActor->SetRigidStatic();
 
-	AnotherFloorActor->AddComponent(AnotherFloorMeshComponent);
+	VMeshComponent* Rail1MeshComponent = new VMeshComponent(MainScene, "Rail1MeshComponent");
+	Rail1MeshComponent->SetPosition(glm::vec3(19.0f, -5.3f, -1.0f));
+	Rail1MeshComponent->SetRotation(glm::vec3(0.0f, 0.0f, 100.0f));
 
-	AnotherFloorMeshComponent->LoadMesh(modelPath + "box.fbx");
-	AnotherFloorMeshComponent->GeneratePhysicsShape(GeometryType::Box);
-	AnotherFloorMeshComponent->SetBPhysics(true);
+	RailActor->AddComponent(Rail1MeshComponent);
 
-	AnotherFloorMeshComponent->SetScale(glm::vec3(10.0f, 0.1f, 10.0f));
+	Rail1MeshComponent->LoadMesh(modelPath + "rail.obj");
+	Rail1MeshComponent->GeneratePhysicsShape(GeometryType::Cylinder);
+	Rail1MeshComponent->SetBPhysics(true);
 
-	AnotherFloorMeshComponent->GetMaterial()->AddLightMapTexture(FloorTexture);
-	AnotherFloorMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
-	AnotherFloorMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
-	AnotherFloorMeshComponent->GetMaterial()->SetSpecularPower(1);
+	VMeshComponent* Rail2MeshComponent = new VMeshComponent(MainScene, "Rail2MeshComponent");
+	Rail2MeshComponent->SetPosition(glm::vec3(19.0f, -5.3f, 1.0f));
+	Rail2MeshComponent->SetRotation(glm::vec3(0.0f, 0.0f, 100.0f));
+
+	RailActor->AddComponent(Rail2MeshComponent);
+
+	Rail2MeshComponent->LoadMesh(modelPath + "rail.obj");
+	Rail2MeshComponent->GeneratePhysicsShape(GeometryType::Cylinder);
+	Rail2MeshComponent->SetBPhysics(true);
+
+	VMeshComponent* Rail3MeshComponent = new VMeshComponent(MainScene, "Rail3MeshComponent");
+	Rail3MeshComponent->SetPosition(glm::vec3(38.0f, -16.6f, -1.0f));
+	Rail3MeshComponent->SetRotation(glm::vec3(0.0f, 0.0f, 100.0f));
+
+	RailActor->AddComponent(Rail3MeshComponent);
+
+	Rail3MeshComponent->LoadMesh(modelPath + "rail.obj");
+	Rail3MeshComponent->GeneratePhysicsShape(GeometryType::Cylinder);
+	Rail3MeshComponent->SetBPhysics(true);
+
+	VMeshComponent* Rail4MeshComponent = new VMeshComponent(MainScene, "Rail4MeshComponent");
+	Rail4MeshComponent->SetPosition(glm::vec3(38.0f, -16.6f, 1.0f));
+	Rail4MeshComponent->SetRotation(glm::vec3(0.0f, 0.0f, 100.0f));
+
+	RailActor->AddComponent(Rail4MeshComponent);
+
+	Rail4MeshComponent->LoadMesh(modelPath + "rail.obj");
+	Rail4MeshComponent->GeneratePhysicsShape(GeometryType::Cylinder);
+	Rail4MeshComponent->SetBPhysics(true);
+
+	VActor* LandingActor = MainScene->CreateActor("LandingActor");
+
+	LandingActor->bPhysics = true;
+
+	PxRigidStatic* LandingActorRigidStatic = LandingActor->SetRigidStatic();
+
+	VMeshComponent* LandingMeshComponent = new VMeshComponent(MainScene, "LandingMeshComponent");
+	LandingMeshComponent->SetPosition(glm::vec3(45.0f, -22.0f, 0.0f));
+	LandingMeshComponent->SetScale(glm::vec3(40.0f, 0.1f, 20.0f));
+
+	LandingActor->AddComponent(LandingMeshComponent);
+
+	LandingMeshComponent->LoadMesh(modelPath + "box.fbx");
+	LandingMeshComponent->GeneratePhysicsShape(GeometryType::Box);
+	LandingMeshComponent->SetBPhysics(true);
+
+	VActor* BoxCrashActor1 = MainScene->CreateActor("BoxCrashActor1");
+	BoxCrashActor1->SetPosition(glm::vec3(53.0f, -15.0f, 1.0f));
+	BoxCrashActor1->bPhysics = true;
+
+	PxRigidDynamic* BoxCrashRigidDynamic = BoxCrashActor1->SetRigidDynamic();
+	BoxCrashRigidDynamic->setMass(0.1f);
+
+	VMeshComponent* BoxCrashMeshComponent1 = new VMeshComponent(MainScene, "BoxCrashMeshComponent1");
+	BoxCrashActor1->AddComponent(BoxCrashMeshComponent1);
+	BoxCrashMeshComponent1->LoadMesh(modelPath + "box.fbx");
+	BoxCrashMeshComponent1->GeneratePhysicsShape(GeometryType::Box);
+
+	VActor* BoxCrashActor2 = MainScene->CreateActor("BoxCrashActor1");
+	BoxCrashActor2->SetPosition(glm::vec3(53.0f, -15.0f, 6.0f));
+	BoxCrashActor2->bPhysics = true;
+
+	BoxCrashRigidDynamic = BoxCrashActor2->SetRigidDynamic();
+	BoxCrashRigidDynamic->setMass(0.1f);
+
+	VMeshComponent* BoxCrashMeshComponent2 = new VMeshComponent(MainScene, "BoxCrashMeshComponent2");
+	BoxCrashActor2->AddComponent(BoxCrashMeshComponent2);
+	BoxCrashMeshComponent2->LoadMesh(modelPath + "box.fbx");
+	BoxCrashMeshComponent2->GeneratePhysicsShape(GeometryType::Box);
 
 	VActor* BoxTestActor = MainScene->CreateActor("BoxTestActor");
-	BoxTestActor->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));
+	BoxTestActor->SetPosition(glm::vec3(0.0f, 10.0f, 4.0f));
 	BoxTestActor->bPhysics = true;
 
 	PxRigidDynamic* RigidDynamic = BoxTestActor->SetRigidDynamic();

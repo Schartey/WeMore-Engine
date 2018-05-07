@@ -9,6 +9,7 @@ using namespace physx;
 enum GeometryType {
 	Box,
 	Sphere,
+	Cylinder,
 	Dynamic
 };
 class VPhysics

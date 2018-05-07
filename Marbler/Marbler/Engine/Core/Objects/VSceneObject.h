@@ -20,7 +20,7 @@ public:
 	glm::quat GetRotation();
 
 	void SetPosition(glm::vec3 Position);
-	void SetRotation(glm::vec3 Rotation);
+	void SetRotation(glm::quat Rotation);
 	void SetScale(glm::vec3 Scale);
 
 	void SetMesh(VMesh* Mesh);

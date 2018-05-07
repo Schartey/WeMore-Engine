@@ -78,6 +78,12 @@ PxShape* VMeshComponent::GeneratePhysicsShape(GeometryType geometryType)
 			ActorOwner->GetRigidActor()->attachShape(*this->PhysicsShape);
 			this->SetBPhysics(bPhysics);
 			break;
+		case Cylinder:
+			this->PhysicsShape = VPhysics::GetInstance()->GetPxPhysics()->createShape(PxCapsuleGeometry(BoxHalfExtent.y/2, BoxHalfExtent.x), *PhysicsMaterial);
+			this->PhysicsShape->setLocalPose(PhysxUtils::ConvertGVecQuatToPxTransform(this->Position, this->Rotation));
+			ActorOwner->GetRigidActor()->attachShape(*this->PhysicsShape);
+			this->SetBPhysics(bPhysics);
+			break;
 		}
 	}
 	return this->PhysicsShape;
