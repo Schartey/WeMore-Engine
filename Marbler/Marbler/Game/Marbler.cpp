@@ -23,8 +23,8 @@ void Marbler::OnInitialize()
 {
 	VGame::OnInitialize();
 
-	std::string modelPath = "..\\..\\Models\\";
-	std::string texturePath = "..\\..\\Textures\\";
+	std::string modelPath = "Models\\";
+	std::string texturePath = "Textures\\";
 
 	VScene* MainScene = CreateScene();
 

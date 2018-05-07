@@ -24,10 +24,10 @@ bool VGBuffer::Initialize(int Width, int Height)
 	BindForWriting();
 
 	// Create the gbuffer textures
-	glGenTextures(16, GBufferTextures);
+	glGenTextures(6, GBufferTextures);
 	glGenTextures(1, &DepthTexture);
 
-	for (unsigned int i = 0; i < 4; i++) {
+	for (unsigned int i = 0; i < 5; i++) {
 		glBindTexture(GL_TEXTURE_2D, GBufferTextures[i]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, Width, Height, 0, GL_RGB, GL_FLOAT, NULL);
 
@@ -343,7 +343,7 @@ void VGBuffer::BindForFinalPass()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-	glReadBuffer(GL_COLOR_ATTACHMENT1);
+	glReadBuffer(GL_COLOR_ATTACHMENT4);
 }
 
 VGBuffer::~VGBuffer()
