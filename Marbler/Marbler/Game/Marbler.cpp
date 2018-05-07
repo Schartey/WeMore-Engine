@@ -234,7 +234,7 @@ void Marbler::OnInitialize()
 	CameraActor->AddComponent(InputComponent);
 
 	VDirectionalLight* DirectionalLight = VAssimpUtils::LoadDirectionalLight(modelPath + "box.fbx");
-	DirectionalLight->SetAmbient(0.3f);
+	DirectionalLight->SetAmbient(config->getValue("brightness", "0.0").asFloat());
 	DirectionalLight->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	DirectionalLight->SetDiffuse(0.6f);
 	DirectionalLight->SetDirection(glm::vec3(0.0f, -1.0f, 0.5f));

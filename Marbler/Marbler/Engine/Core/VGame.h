@@ -3,6 +3,7 @@
 #include "Objects/VScene.h"
 #include "VWindow.h"
 #include "Physics/VPhysics.h"
+#include "../Utils/Configs.h"
 
 #include <vector>
 #include <functional>
@@ -18,6 +19,7 @@ public:
 	void Draw();
 	virtual void QuitGame();
 
+	void SetConfig(Configs* config);
 	void SetWindow(VWindow* Window);
 	void SetPhysics(VPhysics* Physics);
 	VScene* GetActiveScene();
@@ -29,6 +31,7 @@ public:
 	~VGame();
 
 protected:
+	Configs * config;
 	VWindow * Window;
 	VPhysics* Physics;
 

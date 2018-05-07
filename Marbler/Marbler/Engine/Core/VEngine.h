@@ -28,6 +28,7 @@ public:
 	~VEngine();
 
 private:
+	Configs* config;
 	VWindow * Window;
 	VPhysics* Physics;
 	VGame * Game;

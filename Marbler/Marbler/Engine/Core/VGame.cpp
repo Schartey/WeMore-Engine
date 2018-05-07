@@ -32,6 +32,10 @@ void VGame::QuitGame()
 	OnQuitDelegate();
 }
 
+void VGame::SetConfig(Configs* config)
+{
+	this->config = config;
+}
 void VGame::SetWindow(VWindow* Window)
 {
 	this->Window = Window;

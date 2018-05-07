@@ -1,5 +1,4 @@
 #include "VEngine.h"
-#include "../Utils/Configs.h"
 #include "IL/il.h"
 #include "VInputManager.h"
 
@@ -9,7 +8,7 @@ VEngine::VEngine()
 
 int VEngine::Initialize(const char* cfgpath)
 {
-	Configs* config = new Configs();
+	config = new Configs();
 
 	if (!config->readFile(cfgpath)) {
 		std::cout << "Could not read config file" << std::endl;
@@ -61,6 +60,7 @@ void VEngine::Setup(VGame* Game)
 
 	this->Game = Game;
 	this->Game->OnQuitDelegate = std::bind(&VEngine::OnQuit, this);
+	this->Game->SetConfig(config);
 	this->Game->SetWindow(Window);
 	this->Game->SetPhysics(Physics);
 

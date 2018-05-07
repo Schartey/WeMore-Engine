@@ -6,5 +6,6 @@
     "fullscreen": 0,
     "refreshrate": 0,
     "openglmajor": 4,
-    "openglminor": 0
+    "openglminor": 0,
+    "brightness" :  0.1
 }
