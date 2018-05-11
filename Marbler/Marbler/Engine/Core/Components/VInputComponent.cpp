@@ -38,7 +38,7 @@ void VInputComponent::Update(double deltaT)
 {
 	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
 
-	((PxRigidDynamic*)ActorOwner->GetRigidActor())->addTorque(PhysxUtils::ConvertGVec3ToPxVec3(MovementVector*((float)deltaT)*MovementSpeed));
+	((PxRigidDynamic*)ActorOwner->GetRigidActor())->addTorque(PhysxUtils::ConvertGVec3ToPxVec3(MovementVector*MovementSpeed));
 }
 
 void VInputComponent::OnForwardPressed()

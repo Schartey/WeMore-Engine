@@ -144,6 +144,24 @@
     <ClCompile Include="Engine\Utils\DebugUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GUI\VUserWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GUI\VWidgetElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GUI\Widgets\VTextWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GUI\WidgetElements\VTextElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GUI\VGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GUI\VTextEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VEngine.h">
@@ -272,6 +290,24 @@
     <ClInclude Include="Engine\Utils\DebugUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\GUI\VUserWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GUI\VWidgetElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GUI\Widgets\VTextWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GUI\WidgetElements\VTextElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GUI\VGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GUI\VTextEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -294,5 +330,7 @@
     <None Include="Engine\Shader\gBuffer\shadow_light.frag" />
     <None Include="Engine\Shader\simple_texture.vert" />
     <None Include="Engine\Shader\simple_texture.frag" />
+    <None Include="Engine\Shader\texture_freetype.frag" />
+    <None Include="Engine\Shader\texture_freetype.vert" />
   </ItemGroup>
 </Project>

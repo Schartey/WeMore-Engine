@@ -24,10 +24,11 @@ bool VGBuffer::Initialize(int Width, int Height)
 	BindForWriting();
 
 	// Create the gbuffer textures
-	glGenTextures(6, GBufferTextures);
+	glGenTextures(4, GBufferTextures);
 	glGenTextures(1, &DepthTexture);
+	glGenTextures(1, &FinalTexture);
 
-	for (unsigned int i = 0; i < 5; i++) {
+	for (unsigned int i = 0; i < 4; i++) {
 		glBindTexture(GL_TEXTURE_2D, GBufferTextures[i]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, Width, Height, 0, GL_RGB, GL_FLOAT, NULL);
 
@@ -46,6 +47,10 @@ bool VGBuffer::Initialize(int Width, int Height)
 	// final
 	glBindTexture(GL_TEXTURE_2D, FinalTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height, 0, GL_RGB, GL_FLOAT, NULL);
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, FinalTexture, 0);
 
 	GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
@@ -60,9 +65,6 @@ bool VGBuffer::Initialize(int Width, int Height)
 	
 	// restore default FBO
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-	TDebugUtils = new DebugUtils();
-	TDebugUtils->SetupTextureDebug();
 
 	return true;
 }
@@ -183,36 +185,12 @@ void VGBuffer::PointLightPass(VScene* Scene, VSceneObject* PointLight)
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
-
-
-	//Set Light properties
-	//glUniformMatrix4fv(glGetUniformLocation(PointLightShader->programHandle, "scale"), 1, GL_FALSE, glm::value_ptr(PointLight->GetScaleMatrix()));
-	//m_DSPointLightPassTech.SetPointLight(m_pointLight[PointLightIndex]);
 	
 	LightComponent->LightRenderPass();
 
 	glCullFace(GL_BACK);
 
 	glDisable(GL_BLEND);
-}
-
-void VGBuffer::BeginLightPass()
-{
-	glEnable(GL_BLEND);
-	glBlendEquation(GL_FUNC_ADD);
-	glBlendFunc(GL_ONE, GL_ONE);
-
-	BindForReading();
-	glClear(GL_COLOR_BUFFER_BIT);
-}
-
-float VGBuffer::CalcPointLightBSphere(VLightComponent* Light)
-{
-	float MaxChannel = fmax(fmax(Light->GetPointLight().Color.x, Light->GetPointLight().Color.y), Light->GetPointLight().Color.z);
-
-	float ret = (-Light->GetPointLight().Attenuation.Linear + sqrtf(Light->GetPointLight().Attenuation.Linear * Light->GetPointLight().Attenuation.Linear -
-		4 * Light->GetPointLight().Attenuation.Exp * (Light->GetPointLight().Attenuation.Exp - 256 * MaxChannel * Light->GetPointLight().Diffuse))) / (2 * Light->GetPointLight().Attenuation.Exp);
-	return ret;
 }
 
 void VGBuffer::DirectionalLightPass(VScene* Scene)
@@ -257,35 +235,6 @@ void VGBuffer::FinalPass()
 		0, 0, Width, Height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
-void VGBuffer::LightPass()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	BindForReading();
-	
-	GLsizei HalfWidth = (GLsizei)(Width / 2.0f);
-	GLsizei HalfHeight = (GLsizei)(Height / 2.0f);
-
-	SetReadBuffer(GBUFFER_TEXTURE_TYPE_POSITION);
-	glBlitFramebuffer(0, 0, Width, Height, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-	SetReadBuffer(GBUFFER_TEXTURE_TYPE_DIFFUSE);
-	glBlitFramebuffer(0, 0, Width, Height, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-	SetReadBuffer(GBUFFER_TEXTURE_TYPE_NORMAL);
-	glBlitFramebuffer(0, 0, Width, Height, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-	SetReadBuffer(GBUFFER_TEXTURE_TYPE_TEXCOORD);
-	glBlitFramebuffer(0, 0, Width, Height, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-}
-
-void VGBuffer::Test(GLuint TextureId)
-{
-	TDebugUtils->DrawTexture(TextureId);
-}
-
 VShader* VGBuffer::GetGeometryShader()
 {
 	return GeometryShader;
@@ -298,7 +247,7 @@ void VGBuffer::BindForWriting()
 
 void VGBuffer::BindForReading()
 {
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer);
 
 	for (unsigned int i = 0; i < 4; i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
@@ -331,6 +280,7 @@ void VGBuffer::BindForStencilPass()
 
 void VGBuffer::BindForLightPass()
 {
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer);
 	glDrawBuffer(GL_COLOR_ATTACHMENT4);
 
 	for (unsigned int i = 0; i < 4; i++) {

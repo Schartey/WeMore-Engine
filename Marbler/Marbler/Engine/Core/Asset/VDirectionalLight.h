@@ -27,4 +27,8 @@ private:
 	float Ambient;
 	glm::vec3 Color;
 	float Diffuse;
+
+	GLuint quad_VertexArrayID;
+	GLuint quad_vertexbuffer;
+	GLuint size;
 };

@@ -26,11 +26,8 @@ public:
 	void EndGeometryPass();
 	void StencilPass(VScene* Scene, VSceneObject* PointLight);
 	void PointLightPass(VScene* Scene, VSceneObject* PointLight);
-	void BeginLightPass();
 	void DirectionalLightPass(VScene* Scene);
 	void FinalPass();
-	void LightPass();
-	void Test(GLuint TextureId);
 
 	VShader* GetGeometryShader();
 
@@ -56,8 +53,6 @@ private:
 	GLuint GBufferTextures[4];
 	GLuint DepthTexture;
 	GLuint FinalTexture;
-
-	float CalcPointLightBSphere(VLightComponent* Light);
 
 	void BindForWriting();
 	void BindForReading();

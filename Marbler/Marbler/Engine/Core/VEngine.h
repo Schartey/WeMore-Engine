@@ -6,6 +6,7 @@
 #include "Physics/VPhysics.h"
 #include "VGBuffer.h"
 #include "VShadowBuffer.h"
+#include "../GUI/VGUI.h"
 
 #include <string>
 
@@ -31,6 +32,7 @@ private:
 	Configs* config;
 	VWindow * Window;
 	VPhysics* Physics;
+	VGUI* GUI;
 	VGame * Game;
 
 	VShadowBuffer* ShadowBuffer;

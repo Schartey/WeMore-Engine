@@ -93,7 +93,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;assimp-vc140-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;assimp-vc140-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external\PhysX\lib;..\..\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -169,6 +169,12 @@
     <ClCompile Include="Engine\Core\Asset\VParticle.cpp" />
     <ClCompile Include="Engine\Core\Components\VParticleComponent.cpp" />
     <ClCompile Include="Engine\Core\VShadowBuffer.cpp" />
+    <ClCompile Include="Engine\GUI\VGUI.cpp" />
+    <ClCompile Include="Engine\GUI\VUserWidget.cpp" />
+    <ClCompile Include="Engine\GUI\VWidgetElement.cpp" />
+    <ClCompile Include="Engine\GUI\WidgetElements\VTextElement.cpp" />
+    <ClCompile Include="Engine\GUI\Widgets\VTextWidget.cpp" />
+    <ClCompile Include="Engine\GUI\VTextEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\DebugUtils.h" />
@@ -213,6 +219,12 @@
     <ClInclude Include="Engine\Core\Asset\VParticle.h" />
     <ClInclude Include="Engine\Core\Components\VParticleComponent.h" />
     <ClInclude Include="Engine\Core\VShadowBuffer.h" />
+    <ClInclude Include="Engine\GUI\VGUI.h" />
+    <ClInclude Include="Engine\GUI\VUserWidget.h" />
+    <ClInclude Include="Engine\GUI\VWidgetElement.h" />
+    <ClInclude Include="Engine\GUI\WidgetElements\VTextElement.h" />
+    <ClInclude Include="Engine\GUI\Widgets\VTextWidget.h" />
+    <ClInclude Include="Engine\GUI\VTextEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -235,6 +247,8 @@
     <None Include="Engine\Shader\gBuffer\shadow_pass.vert" />
     <None Include="Engine\Shader\simple_texture.frag" />
     <None Include="Engine\Shader\simple_texture.vert" />
+    <None Include="Engine\Shader\texture_freetype.frag" />
+    <None Include="Engine\Shader\texture_freetype.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

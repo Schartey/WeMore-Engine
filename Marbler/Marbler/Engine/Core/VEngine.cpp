@@ -43,6 +43,9 @@ int VEngine::Initialize(const char* cfgpath)
 		return InitPhysicsError;
 	}
 
+	VTextEngine::GetInstance()->Setup();
+	GUI = new VGUI();
+
 	VInputManager::Initialize(Window);
 
 	ilInit();
@@ -63,6 +66,7 @@ void VEngine::Setup(VGame* Game)
 	this->Game->SetConfig(config);
 	this->Game->SetWindow(Window);
 	this->Game->SetPhysics(Physics);
+	this->Game->SetGUI(GUI);
 
 	this->Game->OnInitialize();
 }
@@ -123,7 +127,8 @@ void VEngine::Run()
 
 		//_game->drawGUI();
 		//_gui->draw();
-
+		//TODO: Render onto the right buffer, currently not visible
+		GUI->RenderPass();
 		Window->Draw();
 	}
 }

@@ -46,6 +46,11 @@ void VGame::SetPhysics(VPhysics* Physics)
 	this->Physics = Physics;
 }
 
+void VGame::SetGUI(VGUI* GUI)
+{
+	this->GUI = GUI;
+}
+
 VScene* VGame::GetActiveScene()
 {
 	return ActiveScene;
