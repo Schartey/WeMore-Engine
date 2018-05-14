@@ -43,7 +43,7 @@ int VEngine::Initialize(const char* cfgpath)
 		return InitPhysicsError;
 	}
 
-	VTextEngine::GetInstance()->Setup();
+	VTextEngine::GetInstance()->Setup(width, height);
 	GUI = new VGUI();
 
 	VInputManager::Initialize(Window);
@@ -116,6 +116,8 @@ void VEngine::Run()
 					GBuffer->DirectionalLightPass(Game->GetActiveScene());
 				}
 
+				GUI->RenderPass();
+
 				GBuffer->FinalPass();
 			}
 			else
@@ -128,7 +130,6 @@ void VEngine::Run()
 		//_game->drawGUI();
 		//_gui->draw();
 		//TODO: Render onto the right buffer, currently not visible
-		GUI->RenderPass();
 		Window->Draw();
 	}
 }

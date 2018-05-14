@@ -39,13 +39,18 @@ public:
 		return Instance;
 	}
 
-	bool Setup();
+	bool Setup(int Width, int Height);
 	void DrawText(Text text);
 
 	~VTextEngine();
 
 private:
 	VTextEngine();
+
+	int Width;
+	int Height;
+
+	glm::mat4 projection;
 
 	static VTextEngine* Instance;
 

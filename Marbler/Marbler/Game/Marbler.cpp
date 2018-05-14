@@ -257,9 +257,8 @@ void Marbler::OnInitialize()
 	BoxTestMeshComponent->GetMaterial()->SetShader(BaseShader);
 
 	VTextWidget* TextWidget = new VTextWidget();
-	TextWidget->GetTextElement()->SetText(Text("Hello World", 340.0f, 570.0f, 0.5f, glm::vec3(1,1,1)));
+	TextWidget->GetTextElement()->SetText(Text("Hello World", 0.0f, 0.0f, 0.5f, glm::vec3(1,1,1)));
 	GUI->AddWidget(TextWidget);
-	//MainScene->AddPointLight(PointLight1);
 
 	MainScene->SetActiveSceneObject(CameraActor);
 

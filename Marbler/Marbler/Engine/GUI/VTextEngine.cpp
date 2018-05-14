@@ -10,8 +10,9 @@ VTextEngine::VTextEngine()
 {
 }
 
-bool VTextEngine::Setup()
+bool VTextEngine::Setup(int Width, int Height)
 {
+	projection = glm::ortho(0.0f, (float)Width, 0.0f, (float)Height);;
 	Shader = new VShader("Engine/Shader/texture_freetype.vert", "Engine/Shader/texture_freetype.frag");
 	//set up FreeType
 	FT_Library ft;
@@ -27,7 +28,7 @@ bool VTextEngine::Setup()
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 		return false;
 	}
-
+	
 	// Set size to load glyphs as
 	FT_Set_Pixel_Sizes(face, 0, 48);
 
@@ -97,7 +98,7 @@ void VTextEngine::DrawText(Text text)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
+	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	glUniform3f(glGetUniformLocation(Shader->programHandle, "textColor"), text.color.x, text.color.y, text.color.z);
 	glUniform1i(glGetUniformLocation(Shader->programHandle, "text"), 0);
 
