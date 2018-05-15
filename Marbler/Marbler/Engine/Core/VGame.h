@@ -16,7 +16,7 @@ public:
 
 	virtual void OnInitialize();
 	virtual void Update(double deltaT);
-	void RenderPass(VShader* Shader, RenderPassBufferType Type);
+	virtual void RenderPass(VShader* Shader, RenderPassBufferType Type);
 	void Draw();
 	virtual void QuitGame();
 
@@ -25,6 +25,7 @@ public:
 	void SetPhysics(VPhysics* Physics);
 	void SetGUI(VGUI* GUI);
 
+	VWindow* GetWindow() { return Window; }
 	VScene* GetActiveScene();
 
 	VScene* CreateScene();

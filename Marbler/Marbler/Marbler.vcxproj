@@ -175,6 +175,9 @@
     <ClCompile Include="Engine\GUI\WidgetElements\VTextElement.cpp" />
     <ClCompile Include="Engine\GUI\Widgets\VTextWidget.cpp" />
     <ClCompile Include="Engine\GUI\VTextEngine.cpp" />
+    <ClCompile Include="Engine\GUI\WidgetElements\VImageElement.cpp" />
+    <ClCompile Include="Engine\GUI\Widgets\VImageWidget.cpp" />
+    <ClCompile Include="Engine\Core\VDebugStatics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\DebugUtils.h" />
@@ -225,6 +228,9 @@
     <ClInclude Include="Engine\GUI\WidgetElements\VTextElement.h" />
     <ClInclude Include="Engine\GUI\Widgets\VTextWidget.h" />
     <ClInclude Include="Engine\GUI\VTextEngine.h" />
+    <ClInclude Include="Engine\GUI\WidgetElements\VImageElement.h" />
+    <ClInclude Include="Engine\GUI\Widgets\VImageWidget.h" />
+    <ClInclude Include="Engine\Core\VDebugStatics.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -245,10 +251,12 @@
     <None Include="Engine\Shader\gBuffer\shadow_light.vert" />
     <None Include="Engine\Shader\gBuffer\shadow_pass.frag" />
     <None Include="Engine\Shader\gBuffer\shadow_pass.vert" />
+    <None Include="Engine\Shader\gui\image_element.frag" />
+    <None Include="Engine\Shader\gui\image_element.vert" />
     <None Include="Engine\Shader\simple_texture.frag" />
     <None Include="Engine\Shader\simple_texture.vert" />
-    <None Include="Engine\Shader\texture_freetype.frag" />
-    <None Include="Engine\Shader\texture_freetype.vert" />
+    <None Include="Engine\Shader\gui\texture_freetype.frag" />
+    <None Include="Engine\Shader\gui\texture_freetype.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

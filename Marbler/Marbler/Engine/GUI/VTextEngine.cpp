@@ -13,7 +13,7 @@ VTextEngine::VTextEngine()
 bool VTextEngine::Setup(int Width, int Height)
 {
 	projection = glm::ortho(0.0f, (float)Width, 0.0f, (float)Height);;
-	Shader = new VShader("Engine/Shader/texture_freetype.vert", "Engine/Shader/texture_freetype.frag");
+	Shader = new VShader("Engine/Shader/gui/texture_freetype.vert", "Engine/Shader/gui/texture_freetype.frag");
 	//set up FreeType
 	FT_Library ft;
 	if (FT_Init_FreeType(&ft))

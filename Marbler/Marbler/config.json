@@ -1,11 +1,12 @@
 //Engine-Configuration
 {
     "name":  "Marbler",
-    "width": 1920,
-    "height": 1080,
-    "fullscreen": 0,
+    "width": 2560,
+    "height": 1440,
+    "fullscreen": 1,
     "refreshrate": 0,
     "openglmajor": 4,
-    "openglminor": 0,
-    "brightness" :  0.1
+    "openglminor": 3,
+    "brightness": 0.1,
+    "msaa":  4
 }

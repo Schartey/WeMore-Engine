@@ -6,6 +6,7 @@
 #include "PxRigidActor.h"
 #include "../../Utils/PhysxUtils.h"
 #include "../VGameStatics.h"
+#include "../VGame.h"
 
 #include <iostream>
 
@@ -99,7 +100,7 @@ void VInputComponent::OnDownReleased()
 
 void VInputComponent::OnQuitPressed()
 {
-	VGameStatics::QuitGame();
+	VGameStatics::GetGame()->QuitGame();
 }
 
 void VInputComponent::OnMouseMoved(double deltaX, double deltaY)

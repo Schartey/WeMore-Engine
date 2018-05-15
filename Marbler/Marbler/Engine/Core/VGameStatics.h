@@ -12,7 +12,7 @@ public:
 		return instance;
 	}
 
-	static void QuitGame();
+	static VGame* GetGame();
 
 	~VGameStatics() { delete instance; };
 

@@ -8,6 +8,7 @@ class VTextElement : public VWidgetElement
 public:
 	VTextElement();
 
+	Text* GetText();
 	void SetText(Text text);
 	void RenderPass() override;
 

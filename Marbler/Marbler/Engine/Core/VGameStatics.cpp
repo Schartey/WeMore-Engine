@@ -5,7 +5,7 @@
 VGameStatics* VGameStatics::instance = 0;
 VGame* VGameStatics::Game = 0;
 
-void VGameStatics::QuitGame()
+VGame* VGameStatics::GetGame()
 {
-	Game->QuitGame();
+	return Game;
 }

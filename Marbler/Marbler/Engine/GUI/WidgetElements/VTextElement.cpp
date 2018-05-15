@@ -7,6 +7,11 @@ VTextElement::VTextElement()
 
 }
 
+Text* VTextElement::GetText()
+{
+	return &text;
+}
+
 void VTextElement::SetText(Text text)
 {
 	this->text = text;

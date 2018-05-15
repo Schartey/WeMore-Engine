@@ -10,7 +10,7 @@ VGBuffer::VGBuffer()
 {
 }
 
-bool VGBuffer::Initialize(int Width, int Height)
+bool VGBuffer::Initialize(int Width, int Height, int MSAASamples)
 {
 	GeometryShader = new VShader("Engine/Shader/gBuffer/geometry_pass.vert", "Engine/Shader/gBuffer/geometry_pass.frag");
 	PointLightShader = new VShader("Engine/Shader/gBuffer/light_pass.vert", "Engine/Shader/gBuffer/pointlight_pass.frag");
@@ -21,6 +21,7 @@ bool VGBuffer::Initialize(int Width, int Height)
 	this->Height = Height;
 
 	glGenFramebuffers(1, &gBuffer);
+	glGenFramebuffers(1, &multisampleBuffer);
 	BindForWriting();
 
 	// Create the gbuffer textures
@@ -53,6 +54,8 @@ bool VGBuffer::Initialize(int Width, int Height)
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, FinalTexture, 0);
 
+	glEnable(GL_MULTISAMPLE);
+
 	GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 	glDrawBuffers(sizeof(DrawBuffers) / sizeof(DrawBuffers[0]), DrawBuffers);
 
@@ -62,6 +65,14 @@ bool VGBuffer::Initialize(int Width, int Height)
 		printf("FB error, status: 0x%x\n", Status);
 		return false;
 	}
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, multisampleBuffer);
+
+	//multisample
+	glGenTextures(1, &MultiSampleTexture);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, MultiSampleTexture);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, MSAASamples, GL_RGB32F, Width, Height, false);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, MultiSampleTexture, 0);
 	
 	// restore default FBO
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -230,6 +241,15 @@ void VGBuffer::DirectionalLightPass(VScene* Scene)
 
 void VGBuffer::FinalPass()
 {
+	//Multisample
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, multisampleBuffer);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
+	glReadBuffer(GL_COLOR_ATTACHMENT4);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glBlitFramebuffer(0, 0, Width, Height,
+		0, 0, Width, Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+	//Render to screen
 	BindForFinalPass();
 	glBlitFramebuffer(0, 0, Width, Height,
 		0, 0, Width, Height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
@@ -292,8 +312,8 @@ void VGBuffer::BindForLightPass()
 void VGBuffer::BindForFinalPass()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-	glReadBuffer(GL_COLOR_ATTACHMENT4);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampleBuffer);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
 }
 
 VGBuffer::~VGBuffer()

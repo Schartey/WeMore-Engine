@@ -9,8 +9,9 @@
 
 #include "../Engine/Core/Asset/VTexture.h"
 #include "../Engine/Utils/Assimp/VAssimpUtils.h"
+#include "../Engine/Core/VDebugStatics.h"
 
-#include "../Engine/GUI/Widgets/VTextWidget.h"
+#include "../Engine/GUI/Widgets/VImageWidget.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -256,15 +257,29 @@ void Marbler::OnInitialize()
 	FloorMeshComponent->GetMaterial()->SetShader(BaseShader);
 	BoxTestMeshComponent->GetMaterial()->SetShader(BaseShader);
 
-	VTextWidget* TextWidget = new VTextWidget();
-	TextWidget->GetTextElement()->SetText(Text("Hello World", 0.0f, 0.0f, 0.5f, glm::vec3(1,1,1)));
-	GUI->AddWidget(TextWidget);
+	FPSWidget = new VTextWidget();
+	FPSWidget->GetTextElement()->SetText(Text("Hello World", 0.0f, 0.0f, 0.5f, glm::vec3(1, 1, 1)));
+	GUI->AddWidget(FPSWidget);
+
+	VTexture* BoostWidgetTexture = new VTexture(texturePath + "Widget/boost.png");
+	BoostWidgetTexture->Load();
+
+	VImageWidget* ImageWidget = new VImageWidget();
+	ImageWidget->GetImageElement()->SetImage(BoostWidgetTexture);
+	ImageWidget->GetImageElement()->SetSize(glm::vec2(50.0f, 50.0f));
+	ImageWidget->GetImageElement()->SetPosition(glm::vec2(500.0f, 0.0f));
+	GUI->AddWidget(ImageWidget);
 
 	MainScene->SetActiveSceneObject(CameraActor);
 
 	this->SetActiveScene(MainScene);
 }
 
+void Marbler::RenderPass(VShader* Shader, RenderPassBufferType Type)
+{
+	VGame::RenderPass(Shader, Type);
+	FPSWidget->GetTextElement()->GetText()->text = std::to_string(VDebugStatics::GetFPS());
+}
 
 Marbler::~Marbler()
 {

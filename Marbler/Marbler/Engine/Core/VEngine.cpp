@@ -1,6 +1,7 @@
 #include "VEngine.h"
 #include "IL/il.h"
 #include "VInputManager.h"
+#include "VDebugStatics.h"
 
 VEngine::VEngine()
 {
@@ -56,7 +57,7 @@ int VEngine::Initialize(const char* cfgpath)
 void VEngine::Setup(VGame* Game)
 {
 	GBuffer = new VGBuffer();
-	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
+	GBuffer->Initialize(Window->GetWidth(), Window->GetHeight(), config->getValue("msaa", "1").asInt());
 
 	ShadowBuffer = new VShadowBuffer();
 	ShadowBuffer->Initialize(Window->GetWidth(), Window->GetHeight());
@@ -83,6 +84,8 @@ void VEngine::Run()
 		auto time = glfwGetTime();
 		deltaT = (float)(time - lastTime);
 		lastTime = time;
+
+		VDebugStatics::Update((int)(deltaT*10000));
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		

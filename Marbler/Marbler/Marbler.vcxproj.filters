@@ -162,6 +162,15 @@
     <ClCompile Include="Engine\GUI\VTextEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GUI\Widgets\VImageWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GUI\WidgetElements\VImageElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\VDebugStatics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VEngine.h">
@@ -308,6 +317,15 @@
     <ClInclude Include="Engine\GUI\VTextEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\GUI\Widgets\VImageWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GUI\WidgetElements\VImageElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\VDebugStatics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -330,7 +348,9 @@
     <None Include="Engine\Shader\gBuffer\shadow_light.frag" />
     <None Include="Engine\Shader\simple_texture.vert" />
     <None Include="Engine\Shader\simple_texture.frag" />
-    <None Include="Engine\Shader\texture_freetype.frag" />
-    <None Include="Engine\Shader\texture_freetype.vert" />
+    <None Include="Engine\Shader\gui\texture_freetype.frag" />
+    <None Include="Engine\Shader\gui\texture_freetype.vert" />
+    <None Include="Engine\Shader\gui\image_element.vert" />
+    <None Include="Engine\Shader\gui\image_element.frag" />
   </ItemGroup>
 </Project>

@@ -20,7 +20,7 @@ public:
 
 	VGBuffer();
 
-	bool Initialize(int Width, int Height);
+	bool Initialize(int Width, int Height, int MSAASamples);
 	void StartFrame();
 	void BeginGeometryPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap, glm::mat4 DepthVP);
 	void EndGeometryPass();
@@ -49,9 +49,10 @@ private:
 	VShader* NullShader;
 
 	unsigned int gBuffer;
-	GLuint Textures[GBUFFER_NUM_TEXTURES];
+	unsigned int multisampleBuffer;
 	GLuint GBufferTextures[4];
 	GLuint DepthTexture;
+	GLuint MultiSampleTexture;
 	GLuint FinalTexture;
 
 	void BindForWriting();
