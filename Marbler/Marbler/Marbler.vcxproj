@@ -93,7 +93,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;assimp-vc140-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;assimp-vc140-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;squirrel.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external\PhysX\lib;..\..\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -178,6 +178,7 @@
     <ClCompile Include="Engine\GUI\WidgetElements\VImageElement.cpp" />
     <ClCompile Include="Engine\GUI\Widgets\VImageWidget.cpp" />
     <ClCompile Include="Engine\Core\VDebugStatics.cpp" />
+    <ClCompile Include="Engine\Scripting\VSquirrelEmbedder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\DebugUtils.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Engine\GUI\WidgetElements\VImageElement.h" />
     <ClInclude Include="Engine\GUI\Widgets\VImageWidget.h" />
     <ClInclude Include="Engine\Core\VDebugStatics.h" />
+    <ClInclude Include="Engine\Scripting\VSquirrelEmbedder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

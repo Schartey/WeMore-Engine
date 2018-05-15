@@ -7,6 +7,7 @@
 #include "VGBuffer.h"
 #include "VShadowBuffer.h"
 #include "../GUI/VGUI.h"
+#include "../Scripting/VSquirrelEmbedder.h"
 
 #include <string>
 
@@ -34,6 +35,7 @@ private:
 	VPhysics* Physics;
 	VGUI* GUI;
 	VGame * Game;
+	VSquirrelEmbedder* SquirrelEmbedder;
 
 	VShadowBuffer* ShadowBuffer;
 	VGBuffer* GBuffer;

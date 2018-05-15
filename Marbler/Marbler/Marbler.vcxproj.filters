@@ -171,6 +171,9 @@
     <ClCompile Include="Engine\Core\VDebugStatics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Scripting\VSquirrelEmbedder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VEngine.h">
@@ -324,6 +327,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\VDebugStatics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scripting\VSquirrelEmbedder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -47,6 +47,8 @@ int VEngine::Initialize(const char* cfgpath)
 	VTextEngine::GetInstance()->Setup(width, height);
 	GUI = new VGUI();
 
+	SquirrelEmbedder = new VSquirrelEmbedder();
+
 	VInputManager::Initialize(Window);
 
 	ilInit();
@@ -70,6 +72,8 @@ void VEngine::Setup(VGame* Game)
 	this->Game->SetGUI(GUI);
 
 	this->Game->OnInitialize();
+
+	SquirrelEmbedder->Setup(this->Game);
 }
 
 void VEngine::Run()
@@ -128,7 +132,6 @@ void VEngine::Run()
 				Game->Draw();
 			}
 		}
-
 
 		//_game->drawGUI();
 		//_gui->draw();
