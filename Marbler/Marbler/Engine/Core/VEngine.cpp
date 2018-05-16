@@ -71,9 +71,8 @@ void VEngine::Setup(VGame* Game)
 	this->Game->SetPhysics(Physics);
 	this->Game->SetGUI(GUI);
 
-	this->Game->OnInitialize();
-
-	SquirrelEmbedder->Setup(this->Game);
+	SquirrelGame = SquirrelEmbedder->Setup(this->Game);
+	SquirrelGame->OnInitialize();
 }
 
 void VEngine::Run()
@@ -142,6 +141,7 @@ void VEngine::Run()
 
 void VEngine::OnQuit()
 {
+	SquirrelEmbedder->Close();
 	bRunning = false;
 }
 

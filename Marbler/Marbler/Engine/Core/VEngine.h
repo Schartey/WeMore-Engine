@@ -36,6 +36,7 @@ private:
 	VGUI* GUI;
 	VGame * Game;
 	VSquirrelEmbedder* SquirrelEmbedder;
+	VSquirrelGame* SquirrelGame;
 
 	VShadowBuffer* ShadowBuffer;
 	VGBuffer* GBuffer;

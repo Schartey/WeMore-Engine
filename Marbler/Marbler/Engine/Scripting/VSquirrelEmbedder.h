@@ -1,14 +1,19 @@
 #pragma once
 
-#include "../Core/VGame.h"
+#include "VSquirrelGame.h"
 
 class VSquirrelEmbedder
 {
 public:
 	VSquirrelEmbedder();
 
-	void Setup(VGame* Game);
+	VSquirrelGame* Setup(VGame* Game);
+	void Close();
 
 	~VSquirrelEmbedder();
+
+private:
+	HSQUIRRELVM v;
+	
 };
 

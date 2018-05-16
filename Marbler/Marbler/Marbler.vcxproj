@@ -91,9 +91,11 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\external\PhysX\include;..\..\external\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>
+      </LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;assimp-vc140-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;squirrel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;glfw3.lib;jsoncpp.lib;PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;PxTaskDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;assimp-vc140-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;squirrel.lib;sqstdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\external\PhysX\lib;..\..\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -179,6 +181,8 @@
     <ClCompile Include="Engine\GUI\Widgets\VImageWidget.cpp" />
     <ClCompile Include="Engine\Core\VDebugStatics.cpp" />
     <ClCompile Include="Engine\Scripting\VSquirrelEmbedder.cpp" />
+    <ClCompile Include="Engine\Scripting\VSquirrelCompiler.cpp" />
+    <ClCompile Include="Engine\Scripting\VSquirrelGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\DebugUtils.h" />
@@ -233,6 +237,8 @@
     <ClInclude Include="Engine\GUI\Widgets\VImageWidget.h" />
     <ClInclude Include="Engine\Core\VDebugStatics.h" />
     <ClInclude Include="Engine\Scripting\VSquirrelEmbedder.h" />
+    <ClInclude Include="Engine\Scripting\VSquirrelCompiler.h" />
+    <ClInclude Include="Engine\Scripting\VSquirrelGame.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -259,6 +265,7 @@
     <None Include="Engine\Shader\simple_texture.vert" />
     <None Include="Engine\Shader\gui\texture_freetype.frag" />
     <None Include="Engine\Shader\gui\texture_freetype.vert" />
+    <None Include="Scripts\Main.nut" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

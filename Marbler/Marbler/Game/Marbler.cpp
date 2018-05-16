@@ -231,7 +231,7 @@ void Marbler::OnInitialize()
 	MarbleParticleComponent->SetPosition(glm::vec3(0, 3.0f, 0.0f));
 
 	//Draw it on the floor for now
-	FloorActor->AddComponent(MarbleParticleComponent);
+	//FloorActor->AddComponent(MarbleParticleComponent);
 
 	VInputComponent* InputComponent = new VInputComponent(MainScene, "InputComponent");
 	CameraActor->AddComponent(InputComponent);
