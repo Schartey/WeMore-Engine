@@ -5,6 +5,7 @@
 
 VGame::VGame()
 {
+	ObjectPool = new VObjectPool();
 }
 
 void VGame::OnInitialize()
@@ -30,6 +31,16 @@ void VGame::Draw()
 void VGame::QuitGame()
 {
 	OnQuitDelegate();
+}
+
+std::string VGame::GetTexturePath()
+{
+	return this->config->getValue("textures", "Textures\\").asString();
+}
+
+std::string VGame::GetModelPath()
+{
+	return this->config->getValue("models", "Models\\").asString();
 }
 
 void VGame::SetConfig(Configs* config)
@@ -61,9 +72,9 @@ void VGame::SetActiveScene(VScene* Scene)
 	ActiveScene = Scene;
 }
 
-VScene* VGame::CreateScene()
+VScene* VGame::CreateScene(std::string Name)
 {
-	VScene* Scene = new VScene();
+	VScene* Scene = new VScene(Name);
 	return Scene;
 }
 

@@ -3,6 +3,8 @@
 #include "Objects/VScene.h"
 #include "VWindow.h"
 #include "Physics/VPhysics.h"
+#include "VObjectPool.h"
+
 #include "../GUI/VGUI.h"
 #include "../Utils/Configs.h"
 
@@ -20,15 +22,27 @@ public:
 	void Draw();
 	virtual void QuitGame();
 
+	std::string GetTexturePath()
+	{
+
+	}
+
+	std::string GetModelPath()
+	{
+
+	}
+
 	void SetConfig(Configs* config);
 	void SetWindow(VWindow* Window);
 	void SetPhysics(VPhysics* Physics);
 	void SetGUI(VGUI* GUI);
 
+	VObjectPool* GetObjectPool() { return ObjectPool; }
 	VWindow* GetWindow() { return Window; }
 	VScene* GetActiveScene();
+	void SetActiveScene(VScene* Scene);
 
-	VScene* CreateScene();
+	VScene* CreateScene(std::string Name);
 
 	std::function<void()> OnQuitDelegate;
 
@@ -39,8 +53,8 @@ protected:
 	VWindow * Window;
 	VPhysics* Physics;
 	VGUI* GUI;
+	VObjectPool* ObjectPool;
 
-	void SetActiveScene(VScene* Scene);
 
 private:
 	VScene * ActiveScene;

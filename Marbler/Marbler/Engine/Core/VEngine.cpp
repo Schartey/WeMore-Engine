@@ -100,8 +100,8 @@ void VEngine::Run()
 			StepPhysics(deltaT);
 			Game->Update(deltaT);
 			if (Window->GetOpenGlMinor() >= 0) {
-				ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());
-				Game->RenderPass(ShadowBuffer->GetShadowLightShader(), RenderPassBufferType::ShadowBuffer);
+				//ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());
+				//Game->RenderPass(ShadowBuffer->GetShadowLightShader(), RenderPassBufferType::ShadowBuffer);
 				
 				//GBuffer->Test(ShadowBuffer->GetTestMap());
 				GBuffer->StartFrame();

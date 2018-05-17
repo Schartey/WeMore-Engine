@@ -12,7 +12,7 @@
 class VScene
 {
 public:
-	VScene();
+	VScene(std::string Name);
 
 	VActor* CreateActor(std::string Name);
 	VPointLight2* CreatePointLight(std::string Name);
@@ -26,6 +26,7 @@ public:
 
 	PxScene* GetPhysicsScene();
 
+	std::string GetName();
 	VSceneObject* GetActiveSceneObject();
 	void SetActiveSceneObject(VSceneObject* Actor);
 
@@ -36,6 +37,7 @@ public:
 	~VScene();
 
 private:
+	std::string Name;
 	VSceneObject * ActiveSceneObject;
 	
 	std::vector<VSceneObject*> SceneObjects;

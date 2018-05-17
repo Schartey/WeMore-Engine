@@ -10,6 +10,8 @@ class VActorComponent
 public:
 	VActorComponent(VScene* Scene, std::string Name);
 
+	std::string GetName();
+
 	virtual void SetOwner(VSceneObject* Actor);
 	virtual void Update(double deltaT);
 

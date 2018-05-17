@@ -8,5 +8,7 @@
     "openglmajor": 4,
     "openglminor": 3,
     "brightness": 0.1,
-    "msaa":  4
+    "msaa": 4,
+    "models": "Models\\",
+    "textures":  "Textures\\"
 }

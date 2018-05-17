@@ -1,10 +1,466 @@
 #include "VSquirrelGame.h"
 
+#include <string>
 
+#include "../Core/Components/VCameraComponent.h"
+
+VGame* VSquirrelGame::Game = 0;
+
+SQInteger func_createScene(HSQUIRRELVM v)
+{
+	SQInteger nargs = sq_gettop(v);
+	int id = -1;
+	if (sq_gettype(v, 2) == OT_STRING)
+	{
+		const SQChar* name = "";
+
+		if (sq_getstring(v, 2, &name) == 0)
+		{
+			id = VSquirrelGame::Game->GetObjectPool()->CreateScene(std::string(name));
+			printf("Created Scene %i", id);
+			printf("\n");
+		}
+	}
+	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setActiveScene(HSQUIRRELVM v)
+{
+	SQInteger nargs = sq_gettop(v);
+
+	bool success = false;
+
+	if (sq_gettype(v, 2) == OT_INTEGER)
+	{
+		SQInteger id = -1;
+
+		if (sq_getinteger(v, 2, &id) == 0)
+		{
+			VSquirrelGame::Game->SetActiveScene(VSquirrelGame::Game->GetObjectPool()->GetSceneById(id));
+			std::string name = VSquirrelGame::Game->GetActiveScene()->GetName();
+			printf("Active Scene: %s", name.c_str());
+			printf("\n");
+
+			bool success = true;
+		}
+	}
+
+	sq_pushbool(v, success);
+	return 1; //1 because 1 value is returned
+}
 
 SQInteger func_createActor(HSQUIRRELVM v)
 {
+	SQInteger nargs = sq_gettop(v);
+	int id = -1;
+	const SQChar* name = "";
+	SQBool physics = false;
+	SQBool rigidStatic = false;
+	//Keep it simple for now, make tables later
+	SQFloat posX = 0;
+	SQFloat posY = 0;
+	SQFloat posZ = 0;
+	SQFloat rotX = 0;
+	SQFloat rotY = 0;
+	SQFloat rotZ = 0;
+
+	bool success = true;
+
+	if (sq_gettype(v, 2) == OT_STRING && sq_getstring(v, 2, &name) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_BOOL && sq_getbool(v, 3, &physics) == 0)
+		{
+			if (sq_gettype(v, 4) == OT_BOOL && sq_getbool(v, 4, &rigidStatic) == 0)
+			{
+				if (sq_gettype(v, 5) == OT_FLOAT && sq_getfloat(v, 5, &posX) == 0)
+				{
+					if (sq_gettype(v, 6) == OT_FLOAT && sq_getfloat(v, 6, &posY) == 0)
+					{
+						if (sq_gettype(v, 7) == OT_FLOAT && sq_getfloat(v, 7, &posZ) == 0)
+						{
+							if (sq_gettype(v, 8) == OT_FLOAT && sq_getfloat(v, 8, &rotX) == 0)
+							{
+								if (sq_gettype(v, 9) == OT_FLOAT && sq_getfloat(v, 9, &rotY) == 0)
+								{
+									if (sq_gettype(v, 10) == OT_FLOAT && sq_getfloat(v, 10, &rotZ) == 0)
+									{
+										VActor* Actor = VSquirrelGame::Game->GetActiveScene()->CreateActor(name);
+										Actor->bPhysics = physics;
+
+										if (physics)
+										{
+											if (rigidStatic)
+												Actor->SetRigidStatic();
+											else
+												Actor->SetRigidDynamic();
+										}
+
+										Actor->SetPosition(glm::vec3(posX, posY, posZ));
+										Actor->SetRotation(glm::vec3(rotX, rotY, rotZ));
+
+										id = VSquirrelGame::Game->GetObjectPool()->AddActor(Actor);
+										printf("Created Actor: %s", Actor->GetName().c_str());
+										printf("\n");
+
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_loadTexture(HSQUIRRELVM v)
+{
+	int id = -1;
+	const SQChar* name = "";
+
+	if (sq_gettype(v, 2) == OT_STRING && sq_getstring(v, 2, &name) == 0)
+	{
+		VTexture* Texture = new VTexture(VSquirrelGame::Game->GetTexturePath() + name);
+		Texture->Load();
+
+		id = VSquirrelGame::Game->GetObjectPool()->AddTexture(Texture);
+		printf("Created Texture: %s", name);
+		printf("\n");
+	}
+
+	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setMeshMaterial(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat specularR = 0;
+	SQFloat specularG = 0;
+	SQFloat specularB = 0;
+	SQFloat specularIntensity = 0;
+	SQFloat specularPower = 0;
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VMeshComponent* MeshComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VMeshComponent>(id);
+		if (MeshComponent != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &specularR) == 0)
+			{
+				if (sq_gettype(v, 4) == OT_FLOAT && sq_getfloat(v, 4, &specularG) == 0)
+				{
+					if (sq_gettype(v, 5) == OT_FLOAT && sq_getfloat(v, 5, &specularB) == 0)
+					{
+						if (sq_gettype(v, 6) == OT_FLOAT && sq_getfloat(v, 6, &specularIntensity) == 0)
+						{
+							if (sq_gettype(v, 7) == OT_FLOAT && sq_getfloat(v, 7, &specularPower) == 0)
+							{
+								MeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(specularR, specularG, specularB));
+								MeshComponent->GetMaterial()->SetSpecularIntensity(specularIntensity);
+								MeshComponent->GetMaterial()->SetSpecularPower(specularPower);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+SQInteger func_setMeshTexture(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQInteger textureId = -1;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VMeshComponent* MeshComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VMeshComponent>(id);
+		if (MeshComponent != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_INTEGER && sq_getinteger(v, 3, &textureId) == 0)
+			{
+				VTexture* Texture = VSquirrelGame::Game->GetObjectPool()->GetTexture(id);
+
+				if (Texture != nullptr)
+				{
+					MeshComponent->GetMaterial()->AddDiffuseTexture(Texture);
+				}
+
+			}
+		}
+	}
+}
+
+SQInteger func_setMeshLightTexture(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQInteger textureId = -1;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VMeshComponent* MeshComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VMeshComponent>(id);
+		if (MeshComponent != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_INTEGER && sq_getinteger(v, 3, &textureId) == 0)
+			{
+				VTexture* Texture = VSquirrelGame::Game->GetObjectPool()->GetTexture(id);
+
+				if (Texture != nullptr)
+				{
+					MeshComponent->GetMaterial()->AddLightMapTexture(Texture);
+				}
+
+			}
+		}
+	}
+}
+
+SQInteger func_setActorMass(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat mass = 0;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VActor* Actor = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VActor>(id);
+		if (Actor != nullptr)
+		{
+			if (sq_gettype(v, 2) == OT_FLOAT && sq_getfloat(v, 3, &mass) == 0)
+			{
+				PxRigidDynamic* RigidDynamic = dynamic_cast<PxRigidDynamic*>(Actor->GetRigidActor());
+				RigidDynamic->setMass(mass);
+			}
+		}
+	}
+}
+SQInteger func_attachComponentToSceneObject(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQInteger sceneComponentId = -1;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VSceneComponent* SceneComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VSceneComponent>(id);
+		if (SceneComponent != nullptr)
+		{
+			if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 3, &sceneComponentId) == 0)
+			{
+				VSceneObject* SceneObject = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VSceneObject>(sceneComponentId);
+
+				if (SceneObject != nullptr)
+				{
+					SceneObject->AddComponent(SceneComponent);
+				}
+			}
+		}
+	}
+}
+
+SQInteger func_createCameraComponent(HSQUIRRELVM v)
+{
+	SQInteger nargs = sq_gettop(v);
+	int id = -1;
+	const SQChar* name = "";
+	//Keep it simple for now, make tables later
+	SQFloat posX = 0;
+	SQFloat posY = 0;
+	SQFloat posZ = 0;
+	SQFloat rotX = 0;
+	SQFloat rotY = 0;
+	SQFloat rotZ = 0;
+
+	bool success = true;
+
+	if (sq_gettype(v, 2) == OT_STRING && sq_getstring(v, 2, &name) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &posX) == 0)
+		{
+			if (sq_gettype(v, 4) == OT_FLOAT && sq_getfloat(v, 4, &posY) == 0)
+			{
+				if (sq_gettype(v, 5) == OT_FLOAT && sq_getfloat(v, 5, &posZ) == 0)
+				{
+					if (sq_gettype(v, 6) == OT_FLOAT && sq_getfloat(v, 6, &rotX) == 0)
+					{
+						if (sq_gettype(v, 7) == OT_FLOAT && sq_getfloat(v, 7, &rotY) == 0)
+						{
+							if (sq_gettype(v, 8) == OT_FLOAT && sq_getfloat(v, 8, &rotZ) == 0)
+							{
+								VCameraComponent* CameraComponent = new VCameraComponent(VSquirrelGame::Game->GetActiveScene(), name);
+								CameraComponent->SetProjectionMatrix(90.0f, VSquirrelGame::Game->GetWindow()->GetWidth(), VSquirrelGame::Game->GetWindow()->GetHeight(), 0.1f, 1000.0f);
+								CameraComponent->SetPosition(glm::vec3(posX, posY, posZ));
+								CameraComponent->SetRotation(glm::vec3(rotX, rotY, rotZ));
+
+								id = VSquirrelGame::Game->GetObjectPool()->AddComponent(CameraComponent);
+								printf("Created CameraComponent: %s", CameraComponent->GetName().c_str());
+								printf("\n");
+
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+	//Create CameraComponent
+}
+
+SQInteger func_setCameraTarget(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQInteger sceneComponentId = -1;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VCameraComponent* CameraComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VCameraComponent>(id);
+		if (CameraComponent != nullptr)
+		{
+			if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 3, &sceneComponentId) == 0)
+			{
+				VSceneComponent* SceneComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VSceneComponent>(sceneComponentId);
+
+				if (SceneComponent != nullptr)
+				{
+					CameraComponent->SetTarget(SceneComponent);
+				}
+			}
+		}
+	}
+}
+
+SQInteger func_createParticleComponent(HSQUIRRELVM v)
+{
+	//Create ParticleComponent
+}
+
+SQInteger func_setDirectionalLight(HSQUIRRELVM v)
+{
+	//Set DirectionalLight, cannot be accessed later, just overriden...because too much work
+}
+
+SQInteger func_createPointLight(HSQUIRRELVM v)
+{
+	//This has to be stored in the Object stuff
+}
+
+SQInteger func_createTextWidget(HSQUIRRELVM v)
+{
+	//Store this
+}
+
+SQInteger func_createImageWidget(HSQUIRRELVM v)
+{
+	//Store this
+}
+
+SQInteger func_createMeshComponent(HSQUIRRELVM v)
+{
+	SQInteger nargs = sq_gettop(v);
+	int id = -1;
+	const SQChar* name = "";
+	const SQChar* mesh = "";
+	const SQChar* physicsShape = "";
+	SQBool physics = false;
+	//Keep it simple for now, make tables later
+	SQFloat posX = 0;
+	SQFloat posY = 0;
+	SQFloat posZ = 0;
+	SQFloat rotX = 0;
+	SQFloat rotY = 0;
+	SQFloat rotZ = 0;
+	SQFloat scaleX = 0;
+	SQFloat scaleY = 0;
+	SQFloat scaleZ = 0;
+
+	bool success = true;
+
+	if (sq_gettype(v, 2) == OT_STRING && sq_getstring(v, 2, &name) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_STRING && sq_getstring(v, 3, &mesh) == 0)
+		{
+			if (sq_gettype(v, 4) == OT_STRING && sq_getstring(v, 4, &physicsShape) == 0)
+			{
+				if (sq_gettype(v, 5) == OT_BOOL && sq_getbool(v, 5, &physics) == 0)
+				{
+					if (sq_gettype(v, 6) == OT_FLOAT && sq_getfloat(v, 6, &posX) == 0)
+					{
+						if (sq_gettype(v, 7) == OT_FLOAT && sq_getfloat(v, 7, &posY) == 0)
+						{
+							if (sq_gettype(v, 8) == OT_FLOAT && sq_getfloat(v, 8, &posZ) == 0)
+							{
+								if (sq_gettype(v, 9) == OT_FLOAT && sq_getfloat(v, 9, &rotX) == 0)
+								{
+									if (sq_gettype(v, 10) == OT_FLOAT && sq_getfloat(v, 10, &rotY) == 0)
+									{
+										if (sq_gettype(v, 11) == OT_FLOAT && sq_getfloat(v, 11, &rotZ) == 0)
+										{
+											if (sq_gettype(v, 12) == OT_FLOAT && sq_getfloat(v, 12, &scaleX) == 0)
+											{
+												if (sq_gettype(v, 13) == OT_FLOAT && sq_getfloat(v, 9, &scaleY) == 13)
+												{
+													if (sq_gettype(v, 14) == OT_FLOAT && sq_getfloat(v, 14, &scaleZ) == 0)
+													{
+														VMeshComponent* MeshComponent = new VMeshComponent(VSquirrelGame::Game->GetActiveScene(), "FloorMeshComponent");
+														MeshComponent->SetBPhysics(physics);
+
+														if (strcmp(physicsShape, "Sphere"))
+														{
+															MeshComponent->GeneratePhysicsShape(GeometryType::Sphere);
+														}
+														else if (strcmp(physicsShape, "Box"))
+														{
+															MeshComponent->GeneratePhysicsShape(GeometryType::Box);
+														}
+														else if (strcmp(physicsShape, "Cylinder"))
+														{
+															MeshComponent->GeneratePhysicsShape(GeometryType::Cylinder);
+														}
+
+														MeshComponent->SetPosition(glm::vec3(posX, posY, posZ));
+														MeshComponent->SetRotation(glm::vec3(rotX, rotY, rotZ));
+
+														id = VSquirrelGame::Game->GetObjectPool()->AddComponent(MeshComponent);
+														printf("Created MeshComponent: %s", MeshComponent->GetName().c_str());
+														printf("\n");
+
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_test_parameters(HSQUIRRELVM v)
+{
 	SQInteger nargs = sq_gettop(v); //number of arguments
+	
+	if (sq_gettype(v, 2) == OT_STRING)
+	{
+		const SQChar* name = "";
+
+		if (sq_getstring(v, 2, &name) == 0)
+		{
+			VSquirrelGame::Game->GetActiveScene()->CreateActor(std::string(name));
+		}
+	}
+	
 	for (SQInteger n = 1; n <= nargs; n++)
 	{
 		printf("arg %d is ", n);
@@ -79,7 +535,19 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 	this->v = v;
 	this->Game = Game;
 
+	register_global_func(this->v, func_createScene, "createScene");
+	register_global_func(this->v, func_setActiveScene, "setActiveScene");
 	register_global_func(this->v, func_createActor, "createActor");
+	register_global_func(this->v, func_createMeshComponent, "createMeshComponent");
+	register_global_func(this->v, func_loadTexture, "loadTexture");
+	register_global_func(this->v, func_setMeshMaterial, "setMeshMaterial");
+	register_global_func(this->v, func_setMeshTexture, "setMeshTexture");
+	register_global_func(this->v, func_setMeshLightTexture, "setMeshLightTexture");
+	register_global_func(this->v, func_createCameraComponent, "createCameraComponent");
+	register_global_func(this->v, func_attachComponentToSceneObject, "attachComponentToSceneObject");
+	register_global_func(this->v, func_setCameraTarget, "setCameraTarget");
+	register_global_func(this->v, func_setActorMass, "setActorMass");
+	register_global_func(this->v, func_test_parameters, "testParameters");
 }
 
 void VSquirrelGame::OnInitialize()

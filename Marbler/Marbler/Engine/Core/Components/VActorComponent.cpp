@@ -8,6 +8,11 @@ VActorComponent::VActorComponent(VScene* Scene, std::string Name)
 	this->Name = Name;
 }
 
+std::string VActorComponent::GetName()
+{
+	return Name;
+}
+
 void VActorComponent::SetOwner(VSceneObject* SceneObject) {
 	this->Owner = SceneObject;
 }

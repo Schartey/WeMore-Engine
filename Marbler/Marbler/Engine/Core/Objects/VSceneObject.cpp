@@ -37,6 +37,11 @@ glm::quat VSceneObject::GetRotation()
 	return Rotation;
 }
 
+std::string VSceneObject::GetName()
+{
+	return Name;
+}
+
 void VSceneObject::SetPosition(glm::vec3 Position)
 {
 	this->Position = Position;

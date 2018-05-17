@@ -18,6 +18,7 @@ public:
 	glm::mat4 GetModelMatrix();
 	glm::vec3 GetPosition();
 	glm::quat GetRotation();
+	std::string GetName();
 
 	void SetPosition(glm::vec3 Position);
 	void SetRotation(glm::quat Rotation);

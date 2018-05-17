@@ -26,10 +26,10 @@ void Marbler::OnInitialize()
 {
 	VGame::OnInitialize();
 
-	std::string modelPath = "Models\\";
+	/*std::string modelPath = "Models\\";
 	std::string texturePath = "Textures\\";
 
-	VScene* MainScene = CreateScene();
+	VScene* MainScene = CreateScene("MainScene");
 
 	VActor* FloorActor = MainScene->CreateActor("FloorActor");
 	FloorActor->bPhysics = true;
@@ -37,8 +37,8 @@ void Marbler::OnInitialize()
 	PxRigidStatic* RigidStatic = FloorActor->SetRigidStatic();
 
 	FloorActor->SetPosition(glm::vec3(0.0f, -10.0f, 0.0f));
-	FloorActor->SetRotation(glm::vec3(0.0f, 45.0f, 0.0f));
-	VMeshComponent* FloorMeshComponent = new VMeshComponent(MainScene, "FloorMeshComponent");
+	FloorActor->SetRotation(glm::vec3(0.0f, 45.0f, 0.0f));*/
+	/*VMeshComponent* FloorMeshComponent = new VMeshComponent(MainScene, "FloorMeshComponent");
 
 	FloorActor->AddComponent(FloorMeshComponent);
 
@@ -160,7 +160,7 @@ void Marbler::OnInitialize()
 	BoxTestMeshComponent->GetMaterial()->AddLightMapTexture(BoxTestTexture);
 	BoxTestMeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(1.0f));
 	BoxTestMeshComponent->GetMaterial()->SetSpecularIntensity(1.0f);
-	BoxTestMeshComponent->GetMaterial()->SetSpecularPower(1);
+	BoxTestMeshComponent->GetMaterial()->SetSpecularPower(1);*/
 	
 	/*VMesh* Mesh = VAssimpUtils::LoadMesh(MainScene, modelPath, "box.fbx");
 	VTexture* texture = new VTexture();
@@ -181,7 +181,7 @@ void Marbler::OnInitialize()
 	//MarbleActor->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 	
 
-	VActor* CameraActor = MainScene->CreateActor("CameraActor");
+	/*VActor* CameraActor = MainScene->CreateActor("CameraActor");
 	//CameraActor->SetPosition(glm::vec3(0.0f, 10.0f, 5.0f));
 	CameraActor->bPhysics = true;
 
@@ -272,7 +272,8 @@ void Marbler::OnInitialize()
 
 	MainScene->SetActiveSceneObject(CameraActor);
 
-	this->SetActiveScene(MainScene);
+	this->SetActiveScene(MainScene);*/
+	
 }
 
 void Marbler::RenderPass(VShader* Shader, RenderPassBufferType Type)

@@ -183,6 +183,7 @@
     <ClCompile Include="Engine\Scripting\VSquirrelEmbedder.cpp" />
     <ClCompile Include="Engine\Scripting\VSquirrelCompiler.cpp" />
     <ClCompile Include="Engine\Scripting\VSquirrelGame.cpp" />
+    <ClCompile Include="Engine\Core\VObjectPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\DebugUtils.h" />
@@ -239,6 +240,7 @@
     <ClInclude Include="Engine\Scripting\VSquirrelEmbedder.h" />
     <ClInclude Include="Engine\Scripting\VSquirrelCompiler.h" />
     <ClInclude Include="Engine\Scripting\VSquirrelGame.h" />
+    <ClInclude Include="Engine\Core\VObjectPool.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

@@ -2,9 +2,10 @@
 
 #include "VActor.h"
 
-VScene::VScene()
+VScene::VScene(std::string Name)
 {
 	// setup default scene
+	this->Name = Name;
 	PhysicsScene = VPhysics::GetInstance()->CreateDefaultScene();
 }
 
@@ -69,6 +70,11 @@ VDirectionalLight* VScene::GetDirectionalLight()
 PxScene* VScene::GetPhysicsScene()
 {
 	return PhysicsScene;
+}
+
+std::string VScene::GetName()
+{
+	return this->Name;
 }
 
 VSceneObject* VScene::GetActiveSceneObject()

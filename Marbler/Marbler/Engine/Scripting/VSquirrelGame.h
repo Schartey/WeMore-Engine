@@ -12,8 +12,9 @@ public:
 
 	~VSquirrelGame();
 
+	static VGame * Game;
+
 private:
 	HSQUIRRELVM v;
-	VGame * Game;
 };
 
