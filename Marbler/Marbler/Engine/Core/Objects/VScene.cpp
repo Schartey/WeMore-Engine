@@ -1,6 +1,7 @@
 #include "VScene.h"
 
 #include "VActor.h"
+#include "../../Utils/Assimp/VAssimpUtils.h"
 
 VScene::VScene(std::string Name)
 {
@@ -29,8 +30,15 @@ VPointLight2* VScene::CreatePointLight(std::string Name)
 	return PointLight;
 }*/
 
-VDirectionalLight* VScene::CreateDirectionalLight()
+VDirectionalLight* VScene::CreateDirectionalLight(float brightness)
 {
+	std::string modelPath = "Models\\";
+	VDirectionalLight* DirectionalLight = VAssimpUtils::LoadDirectionalLight(modelPath + "box.fbx");
+	DirectionalLight->SetAmbient(brightness); //config->getValue("brightness", "0.0").asFloat()
+	DirectionalLight->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
+	DirectionalLight->SetDiffuse(0.6f);
+	DirectionalLight->SetDirection(glm::vec3(0.0f, -1.0f, 0.5f));
+
 	VDirectionalLight* DirectionalLight = new VDirectionalLight();
 	return DirectionalLight;
 }

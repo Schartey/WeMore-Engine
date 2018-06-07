@@ -22,15 +22,10 @@ public:
 	void Draw();
 	virtual void QuitGame();
 
-	std::string GetTexturePath()
-	{
+	std::string GetTexturePath();
 
-	}
-
-	std::string GetModelPath()
-	{
-
-	}
+	std::string GetModelPath();
+	Configs* GetConfig();
 
 	void SetConfig(Configs* config);
 	void SetWindow(VWindow* Window);

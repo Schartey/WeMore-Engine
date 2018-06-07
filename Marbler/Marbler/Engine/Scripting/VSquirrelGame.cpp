@@ -162,6 +162,9 @@ SQInteger func_setMeshMaterial(HSQUIRRELVM v)
 								MeshComponent->GetMaterial()->SetSpecularColor(glm::vec3(specularR, specularG, specularB));
 								MeshComponent->GetMaterial()->SetSpecularIntensity(specularIntensity);
 								MeshComponent->GetMaterial()->SetSpecularPower(specularPower);
+
+								sq_pushbool(v, SQTrue); //push the number of arguments as return value
+								return 1; //1 because 1 value is returned
 							}
 						}
 					}
@@ -169,6 +172,8 @@ SQInteger func_setMeshMaterial(HSQUIRRELVM v)
 			}
 		}
 	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
 }
 
 SQInteger func_setMeshTexture(HSQUIRRELVM v)
@@ -188,11 +193,15 @@ SQInteger func_setMeshTexture(HSQUIRRELVM v)
 				if (Texture != nullptr)
 				{
 					MeshComponent->GetMaterial()->AddDiffuseTexture(Texture);
+					sq_pushbool(v, SQTrue); //push the number of arguments as return value
+					return 1; //1 because 1 value is returned
 				}
 
 			}
 		}
 	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
 }
 
 SQInteger func_setMeshLightTexture(HSQUIRRELVM v)
@@ -212,11 +221,15 @@ SQInteger func_setMeshLightTexture(HSQUIRRELVM v)
 				if (Texture != nullptr)
 				{
 					MeshComponent->GetMaterial()->AddLightMapTexture(Texture);
+					sq_pushbool(v, SQTrue); //push the number of arguments as return value
+					return 1; //1 because 1 value is returned
 				}
 
 			}
 		}
 	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
 }
 
 SQInteger func_setActorMass(HSQUIRRELVM v)
@@ -233,9 +246,13 @@ SQInteger func_setActorMass(HSQUIRRELVM v)
 			{
 				PxRigidDynamic* RigidDynamic = dynamic_cast<PxRigidDynamic*>(Actor->GetRigidActor());
 				RigidDynamic->setMass(mass);
+				sq_pushbool(v, SQTrue); //push the number of arguments as return value
+				return 1; //1 because 1 value is returned
 			}
 		}
 	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
 }
 SQInteger func_attachComponentToSceneObject(HSQUIRRELVM v)
 {
@@ -254,10 +271,14 @@ SQInteger func_attachComponentToSceneObject(HSQUIRRELVM v)
 				if (SceneObject != nullptr)
 				{
 					SceneObject->AddComponent(SceneComponent);
+					sq_pushbool(v, SQTrue); //push the number of arguments as return value
+					return 1; //1 because 1 value is returned
 				}
 			}
 		}
 	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
 }
 
 SQInteger func_createCameraComponent(HSQUIRRELVM v)
@@ -298,6 +319,8 @@ SQInteger func_createCameraComponent(HSQUIRRELVM v)
 								printf("Created CameraComponent: %s", CameraComponent->GetName().c_str());
 								printf("\n");
 
+								sq_pushbool(v, SQTrue); //push the number of arguments as return value
+								return 1; //1 because 1 value is returned
 							}
 						}
 					}
@@ -328,20 +351,29 @@ SQInteger func_setCameraTarget(HSQUIRRELVM v)
 				if (SceneComponent != nullptr)
 				{
 					CameraComponent->SetTarget(SceneComponent);
+
+					sq_pushbool(v, SQTrue); //push the number of arguments as return value
+					return 1; //1 because 1 value is returned
 				}
 			}
 		}
 	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
 }
 
-SQInteger func_createParticleComponent(HSQUIRRELVM v)
+/*SQInteger func_createParticleComponent(HSQUIRRELVM v)
 {
 	//Create ParticleComponent
-}
+}*/
 
 SQInteger func_setDirectionalLight(HSQUIRRELVM v)
 {
-	//Set DirectionalLight, cannot be accessed later, just overriden...because too much work
+	//Set DirectionalLight, cannot be accessed later, just overriden...because too much work that has to be redone anways, directionallight is a mess right now
+	VDirectionalLight* DirectionalLight = VSquirrelGame::Game->GetActiveScene()->CreateDirectionalLight(VSquirrelGame::Game->GetConfig()->getValue("brightness", "0.2f").asFloat());
+
+	sq_pushbool(v, SQTrue); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
 }
 
 SQInteger func_createPointLight(HSQUIRRELVM v)

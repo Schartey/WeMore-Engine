@@ -44,6 +44,7 @@ VScene* VObjectPool::GetSceneById(int id)
 {
 	return Scenes.at(id);
 }
+
 VObjectPool::~VObjectPool()
 {
 }

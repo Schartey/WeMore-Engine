@@ -16,7 +16,7 @@ public:
 
 	VActor* CreateActor(std::string Name);
 	VPointLight2* CreatePointLight(std::string Name);
-	VDirectionalLight* CreateDirectionalLight();
+	VDirectionalLight* CreateDirectionalLight(float brightness);
 	
 	//void AddPointLight(VPointLight* PointLight);
 	void SetDirectionalLight(VDirectionalLight* DirectionalLight);

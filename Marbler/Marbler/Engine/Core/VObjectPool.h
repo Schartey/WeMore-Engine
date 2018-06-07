@@ -40,6 +40,8 @@ public:
 	VTexture* GetTexture(int id);
 	VScene* GetSceneById(int id);
 
+	void SetDirectionalLight(VDirectionalLight* DirectionalLight);
+
 	~VObjectPool();
 
 private:
@@ -51,7 +53,5 @@ private:
 	std::map<int, VSceneObject*> SceneObjects;
 	int ActorComponentCount;
 	std::map<int, VActorComponent*> ActorComponents;
-	int TextureCount;
-	std::map<int, VTexture*> Textures;
 };
 

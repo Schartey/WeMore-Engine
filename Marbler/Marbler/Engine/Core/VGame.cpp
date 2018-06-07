@@ -43,6 +43,11 @@ std::string VGame::GetModelPath()
 	return this->config->getValue("models", "Models\\").asString();
 }
 
+Configs* VGame::GetConfig()
+{
+	return this->config;
+}
+
 void VGame::SetConfig(Configs* config)
 {
 	this->config = config;
