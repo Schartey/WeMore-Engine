@@ -48,6 +48,11 @@ Configs* VGame::GetConfig()
 	return this->config;
 }
 
+VGUI* VGame::GetGUI()
+{
+	return GUI;
+}
+
 void VGame::SetConfig(Configs* config)
 {
 	this->config = config;

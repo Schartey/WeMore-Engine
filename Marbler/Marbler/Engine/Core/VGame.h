@@ -26,6 +26,7 @@ public:
 
 	std::string GetModelPath();
 	Configs* GetConfig();
+	VGUI* GetGUI();
 
 	void SetConfig(Configs* config);
 	void SetWindow(VWindow* Window);

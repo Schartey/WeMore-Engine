@@ -279,7 +279,7 @@ void Marbler::OnInitialize()
 void Marbler::RenderPass(VShader* Shader, RenderPassBufferType Type)
 {
 	VGame::RenderPass(Shader, Type);
-	FPSWidget->GetTextElement()->GetText()->text = std::to_string(VDebugStatics::GetFPS());
+	//FPSWidget->GetTextElement()->GetText()->text = std::to_string(VDebugStatics::GetFPS());
 }
 
 Marbler::~Marbler()

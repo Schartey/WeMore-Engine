@@ -11,6 +11,15 @@ VActor::VActor(VScene* Scene, std::string Name) : VSceneObject(Scene, Name)
 {
 }
 
+void VActor::SetPosition(glm::vec3 Position)
+{
+	VSceneObject::SetPosition(Position);
+
+	if (this->RigidActor != nullptr)
+	{
+		this->RigidActor->setGlobalPose(PxTransform(PhysxUtils::ConvertGVec3ToPxVec3(this->Position)));
+	}
+}
 glm::vec3 VActor::GetMovementVector()
 {
 	if (this->RigidActor != nullptr)

@@ -4,6 +4,7 @@
 
 #include "Objects/VSceneObject.h"
 #include "Objects/VScene.h"
+#include "../GUI/VUserWidget.h"
 
 class VObjectPool
 {
@@ -12,7 +13,7 @@ public:
 
 	int CreateScene(std::string name);
 	int AddTexture(VTexture* Texture);
-	int AddActor(VActor* Actor);
+	int AddSceneObject(VSceneObject* SceneObject);
 	int AddComponent(VActorComponent* Component);
 
 	template <typename T>

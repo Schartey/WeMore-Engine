@@ -4,9 +4,11 @@ VGUI::VGUI()
 {
 }
 
-void VGUI::AddWidget(VUserWidget* UserWidget)
+int VGUI::AddWidget(VUserWidget* UserWidget)
 {
-	Widgets.push_back(UserWidget);
+	Widgets.insert(std::pair<int, VUserWidget*>(++WidgetCount, UserWidget));
+
+	return WidgetCount;
 }
 
 void VGUI::RenderPass()
@@ -14,9 +16,9 @@ void VGUI::RenderPass()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	for (VUserWidget* UserWidget : Widgets)
+	for (std::map<int, VUserWidget*>::iterator it = Widgets.begin(); it != Widgets.end(); ++it)
 	{
-		UserWidget->RenderPass();
+		it->second->RenderPass();
 	}
 }
 

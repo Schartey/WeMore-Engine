@@ -21,9 +21,9 @@ int VObjectPool::CreateScene(std::string name)
 	return SceneCount;
 }
 
-int VObjectPool::AddActor(VActor* Actor)
+int VObjectPool::AddSceneObject(VSceneObject* SceneObject)
 {
-	SceneObjects.insert(std::pair<int, VActor*>(++SceneObjectCount, Actor));
+	SceneObjects.insert(std::pair<int, VSceneObject*>(++SceneObjectCount, SceneObject));
 
 	return SceneObjectCount;
 }

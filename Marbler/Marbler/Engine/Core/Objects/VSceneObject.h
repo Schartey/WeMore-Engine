@@ -20,7 +20,7 @@ public:
 	glm::quat GetRotation();
 	std::string GetName();
 
-	void SetPosition(glm::vec3 Position);
+	virtual void SetPosition(glm::vec3 Position);
 	void SetRotation(glm::quat Rotation);
 	void SetScale(glm::vec3 Scale);
 

@@ -134,7 +134,6 @@ void VEngine::Run()
 
 		//_game->drawGUI();
 		//_gui->draw();
-		//TODO: Render onto the right buffer, currently not visible
 		Window->Draw();
 	}
 }

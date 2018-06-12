@@ -39,7 +39,8 @@ VDirectionalLight* VScene::CreateDirectionalLight(float brightness)
 	DirectionalLight->SetDiffuse(0.6f);
 	DirectionalLight->SetDirection(glm::vec3(0.0f, -1.0f, 0.5f));
 
-	VDirectionalLight* DirectionalLight = new VDirectionalLight();
+	this->SetDirectionalLight(DirectionalLight);
+
 	return DirectionalLight;
 }
 

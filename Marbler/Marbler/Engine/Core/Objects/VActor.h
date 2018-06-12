@@ -11,6 +11,8 @@ public:
 
 	bool bPhysics = false;
 
+	virtual void SetPosition(glm::vec3 Position) override;
+
 	PxRigidActor* GetRigidActor()
 	{
 		return RigidActor;

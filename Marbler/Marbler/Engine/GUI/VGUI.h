@@ -12,13 +12,14 @@ public:
 	VGUI();
 
 	//TODO: Make this callable like VUserWidget* CreateWidget<WidgetType : VUserWidget>()
-	void AddWidget(VUserWidget* UserWidget);
+	int AddWidget(VUserWidget* UserWidget);
 
 	void RenderPass();
 
 	~VGUI();
 
 private:
-	std::vector<VUserWidget*> Widgets;
+	int WidgetCount = 0;
+	std::map<int, VUserWidget*> Widgets;
 };
 
