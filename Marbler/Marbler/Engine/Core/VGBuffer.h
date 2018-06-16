@@ -22,7 +22,7 @@ public:
 
 	bool Initialize(int Width, int Height, int MSAASamples);
 	void StartFrame();
-	void BeginGeometryPass(VScene* Scene);
+	void BeginGeometryPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap, glm::mat4 DepthVP);
 	void EndGeometryPass();
 	void StencilPass(VScene* Scene, VSceneObject* PointLight);
 	void PointLightPass(VScene* Scene, VSceneObject* PointLight);

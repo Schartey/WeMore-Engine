@@ -6,14 +6,13 @@ uniform mat4 cmt;
 
 uniform mat4 view;
 uniform mat4 projection;
-uniform mat4 depthVP;
+//uniform mat4 depthBiasVP;
 
-out vec4 ShadowCoord; //shadowmap coords*
+//out vec4 ShadowCoord; //shadowmap coords*
 
 void main()
 { 
-	mat4 DepthBiasMVP = depthVP*cmt;
-	ShadowCoord = DepthBiasMVP * vec4(position,1);
+	//ShadowCoord = depthBiasVP * vec4(position,1);
 
-   	gl_Position = projection * view * cmt * vec4(position, 1);
+   	gl_Position = projection * view * vec4(position, 1);
 } 

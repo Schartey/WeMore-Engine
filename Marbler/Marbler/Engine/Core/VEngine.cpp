@@ -106,7 +106,7 @@ void VEngine::Run()
 				//ShadowBuffer->Test();
 				//Game->GetActiveScene()->GetSkybox()->RenderPass();
 				GBuffer->StartFrame();
-				GBuffer->BeginGeometryPass(Game->GetActiveScene());
+				GBuffer->BeginGeometryPass(Game->GetActiveScene(), ShadowBuffer->GetTestMap(), ShadowBuffer->GetShadowMap(), ShadowBuffer->GetDepthVP());
 				Game->RenderPass(GBuffer->GetGeometryShader(), RenderPassBufferType::GBuffer);
 				GBuffer->EndGeometryPass();
 

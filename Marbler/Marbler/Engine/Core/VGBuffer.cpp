@@ -87,14 +87,20 @@ void VGBuffer::StartFrame()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void VGBuffer::BeginGeometryPass(VScene* Scene)
+void VGBuffer::BeginGeometryPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap, glm::mat4 DepthVP)
 {
 	BindForGeomPass();
+
+	glActiveTexture(GL_TEXTURE9);
+	glBindTexture(GL_TEXTURE_2D, ShadowMap);
+
 	//TDebugUtils->DrawTexture(TestMap);
 	GeometryShader->useShader();
 
 	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
+	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gShadowMap"), 9);
+	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "depthVP"), 1, GL_FALSE, glm::value_ptr(biasMatrix * DepthVP));
 	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
 
@@ -204,19 +210,17 @@ void VGBuffer::DirectionalLightPass(VScene* Scene, GLuint TestMap, GLuint Shadow
 
 	DirectionalLightShader->useShader();
 
-	glActiveTexture(GL_TEXTURE7);
-	glBindTexture(GL_TEXTURE_2D, ShadowMap);
+	//glActiveTexture(GL_TEXTURE7);
+	//glBindTexture(GL_TEXTURE_2D, ShadowMap);
 
 	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gPositionMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
 	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gColorMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
 	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gNormalMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
 	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gSpecularMap"), VGBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
-	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gShadowMap"), 7);
+	//glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gShadowMap"), 7);
 
-	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "depthVP"), 1, GL_FALSE, glm::value_ptr(biasMatrix * DepthVP));
+	//glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "depthVP"), 1, GL_FALSE, glm::value_ptr(biasMatrix * DepthVP));
 	glUniform2f(glGetUniformLocation(DirectionalLightShader->programHandle, "gScreenSize"), (float)Width, (float)Height);
-
-
 
 	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
@@ -246,7 +250,7 @@ void VGBuffer::FinalPass()
 	//Multisample
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, multisampleBuffer);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-	glReadBuffer(GL_COLOR_ATTACHMENT4);
+	glReadBuffer(GL_COLOR_ATTACHMENT1);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glBlitFramebuffer(0, 0, Width, Height,
 		0, 0, Width, Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);

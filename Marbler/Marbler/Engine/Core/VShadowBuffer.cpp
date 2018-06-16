@@ -73,8 +73,7 @@ void VShadowBuffer::RenderDirectionalLightDepth(VDirectionalLight* DirectionalLi
 	glm::mat4 DepthViewMatrix = glm::lookAt(glm::vec3(0,0,0), DirectionalLight->GetDirection(), glm::vec3(0,1,0));
 	DepthVP = DepthProjection * DepthViewMatrix;
 
-	glUniformMatrix4fv(glGetUniformLocation(ShadowLightShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(DepthViewMatrix));
-	glUniformMatrix4fv(glGetUniformLocation(ShadowLightShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(DepthProjection));
+	glUniformMatrix4fv(glGetUniformLocation(ShadowLightShader->programHandle, "depthVP"), 1, GL_FALSE, glm::value_ptr(DepthVP));
 
 }
 
