@@ -24,6 +24,16 @@ VPointLight2* VScene::CreatePointLight(std::string Name)
 	return PointLight;
 }
 
+VSkybox* VScene::CreateSkybox(std::string Name, VTextureCube* TextureCube)
+{
+	this->Skybox = new VSkybox(this, Name, TextureCube);
+	return Skybox;
+}
+
+VSkybox* VScene::GetSkybox()
+{
+	return this->Skybox;
+}
 /*VPointLight* VScene::CreatePointLight()
 {
 	VPointLight* PointLight = new VPointLight();

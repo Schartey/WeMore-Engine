@@ -46,7 +46,7 @@ bool VTextureCube::Load()
 		{
 			return false;
 		}
-		glTexImage2D(TextureCubeTypes[i], 0, Images[i]->GetFormat(), Images[i]->GetWidth(), Images[i]->GetHeight(), 0, Images[i]->GetFormat(), Images[i]->GetType(), Images[i]->GetData());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, 0, GL_RGB, Images[i]->GetWidth(), Images[i]->GetHeight(), 0, GL_RGB, Images[i]->GetType(), Images[i]->GetData());
 
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -62,8 +62,8 @@ bool VTextureCube::Load()
 
 void VTextureCube::Bind(GLenum TextureUnit)
 {
-	glActiveTexture(TextureUnit);
-	glBindTexture(GL_TEXTURE_2D, this->GetId());
+	//glActiveTexture(TextureUnit);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, this->GetId());
 }
 
 VTextureCube::~VTextureCube()

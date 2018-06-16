@@ -27,7 +27,11 @@ function onInitialize()
 	local cameraComponentId = createCameraComponent("CameraComponent", 0.0, 5.0, 20.0, 0.0, 0.0, 0.0, cameraActorId);
 	//attachComponentToSceneObject(cameraComponendId, cameraActorId);
 	setCameraTarget(cameraComponentId, marbleMeshComponentId);
+	local inputComponentId = createInputComponent("InputComponent", cameraActorId);
+	//local particleComponentId = createParticleComponent("ParticleComponent", floorActorId);
 	
+	//local skyboxId = createSkybox();
+
 	setDirectionalLight();
 	local pointLightId = createPointLight();
 	local textWidgetId = createTextWidget();

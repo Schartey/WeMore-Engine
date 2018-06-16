@@ -377,5 +377,7 @@
     <None Include="Engine\Shader\gui\image_element.vert" />
     <None Include="Engine\Shader\gui\image_element.frag" />
     <None Include="Scripts\Main.nut" />
+    <None Include="Engine\Shader\gBuffer\skybox.vert" />
+    <None Include="Engine\Shader\gBuffer\skybox.frag" />
   </ItemGroup>
 </Project>

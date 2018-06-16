@@ -17,11 +17,15 @@ uniform sampler2D gPositionMap;
 uniform sampler2D gColorMap;
 uniform sampler2D gNormalMap;
 uniform sampler2D gSpecularMap;
+uniform sampler2DShadow gShadowMap;
+
 uniform vec2 gScreenSize;
 uniform DirectionalLight gDirectionalLight;
 uniform mat4 view;
 uniform float gSpecularPower;
 uniform float gMatSpecularIntensity;
+
+in vec4 ShadowCoord;
 
 layout (location = 0) out vec4 FragColor;
 
@@ -76,5 +80,8 @@ void main()
 	vec2 Specular = texture(gSpecularMap, TexCoord).xy;
    	Normal = normalize(Normal);
 
-   	FragColor = vec4(Color, 1.0) * CalcDirectionalLight(WorldPos, Normal, Specular);
+	float bias = 0.005;
+	float visibility = texture( gShadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z)/ShadowCoord.w) );
+
+   	FragColor = visibility * vec4(Color, 1.0) * CalcDirectionalLight(WorldPos, Normal, Specular);
 }

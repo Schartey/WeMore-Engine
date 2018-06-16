@@ -23,6 +23,7 @@ public:
 
 private:
 	GLuint VAOs[2];
+	GLuint VBO;
 	GLuint SSBO_pos[2];
 	GLuint SSBO_vel[2];
 	GLuint AtomicCounter;

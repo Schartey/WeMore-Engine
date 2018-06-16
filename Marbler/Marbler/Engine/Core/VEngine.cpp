@@ -100,12 +100,13 @@ void VEngine::Run()
 			StepPhysics(deltaT);
 			Game->Update(deltaT);
 			if (Window->GetOpenGlMinor() >= 0) {
-				//ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());
-				//Game->RenderPass(ShadowBuffer->GetShadowLightShader(), RenderPassBufferType::ShadowBuffer);
+				ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());
+				Game->RenderPass(ShadowBuffer->GetShadowLightShader(), RenderPassBufferType::ShadowBuffer);
 				
-				//GBuffer->Test(ShadowBuffer->GetTestMap());
+				//ShadowBuffer->Test();
+				//Game->GetActiveScene()->GetSkybox()->RenderPass();
 				GBuffer->StartFrame();
-				GBuffer->BeginGeometryPass(Game->GetActiveScene(), ShadowBuffer->GetTestMap(), ShadowBuffer->GetShadowMap(), ShadowBuffer->GetDepthVP());
+				GBuffer->BeginGeometryPass(Game->GetActiveScene());
 				Game->RenderPass(GBuffer->GetGeometryShader(), RenderPassBufferType::GBuffer);
 				GBuffer->EndGeometryPass();
 
@@ -119,7 +120,7 @@ void VEngine::Run()
 
 				if (Game->GetActiveScene()->GetDirectionalLight() != nullptr)
 				{
-					GBuffer->DirectionalLightPass(Game->GetActiveScene());
+					GBuffer->DirectionalLightPass(Game->GetActiveScene(), ShadowBuffer->GetTestMap(), ShadowBuffer->GetShadowMap(), ShadowBuffer->GetDepthVP());
 				}
 
 				GUI->RenderPass();

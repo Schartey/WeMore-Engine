@@ -38,7 +38,7 @@ void main(){
 
 	// update pos, speed, ...
 	float TTL = Position_In[idx].w - deltaT;
-	//if (TTL > 0) { // particle‘s still alive - pos = Position_In[idx]?
+	if (TTL > 0) { // particle‘s still alive - pos = Position_In[idx]?
 		addParticleToOutputList(Position_In[idx].xyz, Velocity_In[idx].xyz, TTL);
-	//}
+	}
 }

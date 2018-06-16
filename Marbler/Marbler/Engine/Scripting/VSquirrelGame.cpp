@@ -2,6 +2,9 @@
 
 #include <string>
 
+#include "../Core/Asset/VTextureCube.h"
+#include "../Core/Components/VParticleComponent.h"
+#include "../Core/Components/VInputComponent.h"
 #include "../Core/Components/VCameraComponent.h"
 #include "../GUI/Widgets/VTextWidget.h"
 #include "../GUI/Widgets/VImageWidget.h"
@@ -379,11 +382,6 @@ SQInteger func_setCameraTarget(HSQUIRRELVM v)
 	return 1; //1 because 1 value is returned
 }
 
-/*SQInteger func_createParticleComponent(HSQUIRRELVM v)
-{
-	//Create ParticleComponent
-}*/
-
 SQInteger func_setDirectionalLight(HSQUIRRELVM v)
 {
 	//Set DirectionalLight, cannot be accessed later, just overriden...because too much work that has to be redone anways, directionallight is a mess right now
@@ -485,7 +483,7 @@ SQInteger func_createMeshComponent(HSQUIRRELVM v)
 													{
 														if (sq_gettype(v, 15) == OT_INTEGER && sq_getinteger(v, 15, &parentId) == 0)
 														{
-															VMeshComponent* MeshComponent = new VMeshComponent(VSquirrelGame::Game->GetActiveScene(), "FloorMeshComponent");
+															VMeshComponent* MeshComponent = new VMeshComponent(VSquirrelGame::Game->GetActiveScene(), name);
 
 															VSceneObject* SceneObject = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VSceneObject>(parentId);
 
@@ -493,15 +491,15 @@ SQInteger func_createMeshComponent(HSQUIRRELVM v)
 
 															MeshComponent->LoadMesh(VSquirrelGame::Game->GetModelPath() + mesh);
 
-															if (strcmp(physicsShape, "Sphere"))
+															if (strcmp(physicsShape, "Sphere") == 0)
 															{
 																MeshComponent->GeneratePhysicsShape(GeometryType::Sphere);
 															}
-															else if (strcmp(physicsShape, "Box"))
+															else if (strcmp(physicsShape, "Box") == 0)
 															{
 																MeshComponent->GeneratePhysicsShape(GeometryType::Box);
 															}
-															else if (strcmp(physicsShape, "Cylinder"))
+															else if (strcmp(physicsShape, "Cylinder") == 0)
 															{
 																MeshComponent->GeneratePhysicsShape(GeometryType::Cylinder);
 															}
@@ -528,6 +526,75 @@ SQInteger func_createMeshComponent(HSQUIRRELVM v)
 					}
 				}
 			}
+		}
+	}
+
+	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_createSkybox(HSQUIRRELVM v)
+{
+	//This has to be stored in the Object stuff
+	int id = 0;
+	std::string path = VSquirrelGame::Game->GetTexturePath();
+	VTextureCube* TextureCube = new VTextureCube(path + "5dim/5dim_bk.tga", path + "5dim/5dim_dn.tga", path + "5dim/5dim_ft.tga", path + "5dim/5dim_lf.tga", path + "5dim/5dim_rt.tga", path + "5dim/5dim_up.tga");
+	TextureCube->Load();
+	VSkybox* Skybox = VSquirrelGame::Game->GetActiveScene()->CreateSkybox("Skybox", TextureCube);
+
+	id = VSquirrelGame::Game->GetObjectPool()->AddSceneObject(Skybox);
+
+	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_createInputComponent(HSQUIRRELVM v)
+{
+	int id = 0;
+	const SQChar* name = "";
+	SQInteger parentId = 0;
+
+	if (sq_gettype(v, 2) == OT_STRING && sq_getstring(v, 2, &name) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_INTEGER && sq_getinteger(v, 3, &parentId) == 0)
+		{
+			VInputComponent* InputComponent = new VInputComponent(VSquirrelGame::Game->GetActiveScene(), name);
+			VSceneObject* SceneObject = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VSceneObject>(parentId);
+			SceneObject->AddComponent(InputComponent);
+
+			id = VSquirrelGame::Game->GetObjectPool()->AddComponent(InputComponent);
+		}
+	}
+
+	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_createParticleComponent(HSQUIRRELVM v)
+{
+	int id = 0;
+	const SQChar* name = "";
+	SQInteger parentId = 0;
+
+	if (sq_gettype(v, 2) == OT_STRING && sq_getstring(v, 2, &name) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_INTEGER && sq_getinteger(v, 3, &parentId) == 0)
+		{
+			VParticleComponent* ParticleComponent = new VParticleComponent(VSquirrelGame::Game->GetActiveScene(), name);
+			VParticleDescriptor* ParticleDescriptor = new VParticleDescriptor();
+			ParticleDescriptor->Count = 1000;
+			ParticleDescriptor->Position = glm::vec3(0, 0, 0);
+			ParticleDescriptor->Spread = 5;
+			ParticleDescriptor->TTL = 500;
+			ParticleDescriptor->Velocity = glm::vec3(0.1f);
+
+			ParticleComponent->SetParticle(ParticleDescriptor);
+			ParticleComponent->SetPosition(glm::vec3(0, 3.0f, 0.0f));
+
+			VSceneObject* SceneObject = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VSceneObject>(parentId);
+			SceneObject->AddComponent(ParticleComponent);
+
+			id = VSquirrelGame::Game->GetObjectPool()->AddComponent(ParticleComponent);
 		}
 	}
 
@@ -627,6 +694,9 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 	register_global_func(this->v, func_setActiveScene, "setActiveScene");
 	register_global_func(this->v, func_createActor, "createActor");
 	register_global_func(this->v, func_createMeshComponent, "createMeshComponent");
+	register_global_func(this->v, func_createInputComponent, "createInputComponent");
+	register_global_func(this->v, func_createParticleComponent, "createParticleComponent");
+	register_global_func(this->v, func_createSkybox, "createSkybox");
 	register_global_func(this->v, func_loadTexture, "loadTexture");
 	register_global_func(this->v, func_setMeshMaterial, "setMeshMaterial");
 	register_global_func(this->v, func_setMeshTexture, "setMeshTexture");

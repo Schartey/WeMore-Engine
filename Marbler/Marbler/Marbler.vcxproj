@@ -261,6 +261,8 @@
     <None Include="Engine\Shader\gBuffer\shadow_light.vert" />
     <None Include="Engine\Shader\gBuffer\shadow_pass.frag" />
     <None Include="Engine\Shader\gBuffer\shadow_pass.vert" />
+    <None Include="Engine\Shader\gBuffer\skybox.frag" />
+    <None Include="Engine\Shader\gBuffer\skybox.vert" />
     <None Include="Engine\Shader\gui\image_element.frag" />
     <None Include="Engine\Shader\gui\image_element.vert" />
     <None Include="Engine\Shader\simple_texture.frag" />

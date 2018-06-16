@@ -3,7 +3,6 @@
 in vec2 fragTexCoord;
 in vec3 fragNormal;
 in vec3 fragVert;
-in vec4 ShadowCoord;
 
 uniform struct Material {
 	vec3 diffuse;
@@ -17,7 +16,6 @@ uniform int lightmapTextureSize;
 
 uniform sampler2D diffuseTexture[4];
 uniform sampler2D lightmapTexture[4];
-uniform sampler2D gShadowMap;
 
 layout (location = 0) out vec3 WorldPosOut; 
 layout (location = 1) out vec3 DiffuseOut; 
@@ -43,7 +41,6 @@ void main()
 		surfaceColor = surfaceColor*texture(lightmapTexture[i], fragTexCoord);
 	}
 
-	//float visibility = texture( gShadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z)/ShadowCoord.w) );
 	
     //float depthValue = texture(gShadowMap, fragTexCoord).r;
     DiffuseOut = vec3(surfaceColor);//vec3(depthValue);

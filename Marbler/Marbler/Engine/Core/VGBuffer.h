@@ -22,11 +22,11 @@ public:
 
 	bool Initialize(int Width, int Height, int MSAASamples);
 	void StartFrame();
-	void BeginGeometryPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap, glm::mat4 DepthVP);
+	void BeginGeometryPass(VScene* Scene);
 	void EndGeometryPass();
 	void StencilPass(VScene* Scene, VSceneObject* PointLight);
 	void PointLightPass(VScene* Scene, VSceneObject* PointLight);
-	void DirectionalLightPass(VScene* Scene);
+	void DirectionalLightPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap, glm::mat4 DepthVP);
 	void FinalPass();
 
 	VShader* GetGeometryShader();

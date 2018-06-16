@@ -13,6 +13,6 @@ out vData
 } vertex;
 void main()
 {
-	gl_Position = projection * view * vec4(Position.xyz, 1.0f);
+	gl_Position = view * cmt * vec4(Position.xyz, 1.0f);
 	vertex.TTL1 = Position.w;
 }

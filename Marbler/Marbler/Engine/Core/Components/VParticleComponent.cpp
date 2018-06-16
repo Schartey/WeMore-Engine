@@ -40,7 +40,6 @@ VParticleComponent::VParticleComponent(VScene* Scene, std::string Name) : VScene
 	glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
 
 	const GLuint position_layout = 0;
-	const GLuint velocity_layout = 1;
 	glGenVertexArrays(2, VAOs);
 
 	for (int i = 0; i < 2; i++)
@@ -60,7 +59,8 @@ void VParticleComponent::SetParticle(VParticleDescriptor* TParticle)
 	{
 		//Particles.push_back(Particle(glm::vec3(GenerateFloat(TParticle->Spread), GenerateFloat(TParticle->Spread), GenerateFloat(TParticle->Spread)), glm::vec3(GenerateFloat(TParticle->Spread), GenerateFloat(TParticle->Spread), GenerateFloat(TParticle->Spread)), 0));
 		Positions.push_back(glm::vec4(GenerateFloat(TParticle->Spread), GenerateFloat(TParticle->Spread), GenerateFloat(TParticle->Spread), TParticle->TTL));
-		Velocities.push_back(glm::vec4(GenerateFloat(TParticle->Spread / 100), GenerateFloat(TParticle->Spread / 100), GenerateFloat(TParticle->Spread / 100), 0));
+		//Velocities.push_back(glm::vec4(GenerateFloat(TParticle->Spread / 100), GenerateFloat(TParticle->Spread / 100), GenerateFloat(TParticle->Spread / 100), 0));
+		Velocities.push_back(glm::vec4(0, 0, 0, 0));
 	}
 
 	ParticleCount = Positions.size();
@@ -81,7 +81,7 @@ void VParticleComponent::Update(double deltaT)
 {
 	VSceneComponent::Update(deltaT);
 
-	ParticleCount = Positions.size();
+	/*ParticleCount = Positions.size();
 
 	ComputeParticleShader->useShader();
 
@@ -90,30 +90,41 @@ void VParticleComponent::Update(double deltaT)
 	glUniform1ui(glGetUniformLocation(ComputeParticleShader->programHandle, "maxParticles"), 1000000);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, SSBO_pos[index]);
-	index = !index;
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, SSBO_vel[index]);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, SSBO_pos[!index]);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, SSBO_vel[!index]);
 
 	GLuint groups = (ParticleCount / (16 * 16)) + 1;
 	glDispatchCompute(groups, 1, 1);
 
-	glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
 	// Read atomic counter
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, AtomicCounter);
+	glBindBuffer(GL_COPY_WRITE_BUFFER, Temp_Buffer);
+
+	glCopyBufferSubData(GL_ATOMIC_COUNTER_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0,
+		sizeof(GLuint));
 
 	GLuint *counterValue = (GLuint*)glMapBufferRange(
-		GL_ATOMIC_COUNTER_BUFFER,
+		GL_COPY_WRITE_BUFFER,
 		0, sizeof(GLuint), GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
 	ParticleCount = counterValue[0];
 	counterValue[0] = 0; // reset atomic counter
-	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER); // stop writing to buffer
+	glUnmapBuffer(GL_COPY_WRITE_BUFFER); // stop writing to buffer
+										 // copy temp buffer to atomic counter:
+	glCopyBufferSubData(GL_COPY_WRITE_BUFFER, GL_ATOMIC_COUNTER_BUFFER, 0, 0,
+		sizeof(GLuint));
 											 // Make sure everything from Compute-Shader is written
-	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);*/
 }
 
 void VParticleComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix, RenderPassBufferType Type)
 {
-	glEnable(GL_BLEND);
-
+	glEnable(GL_BLEND); // activate blending
+	glDepthMask(GL_FALSE); // disable writing to depth buffer
+	glBlendFunc(GL_SRC_COLOR, GL_SRC_COLOR);
+	glBlendEquation(GL_MAX);
 	ParticleShader->useShader();
+
 
 	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
@@ -124,12 +135,14 @@ void VParticleComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix
 	glUniformMatrix4fv(glGetUniformLocation(ParticleShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
 
 	glBindVertexArray(VAOs[index]);
+	index = !index;
 
 	glDrawArrays(GL_POINTS, 0, ParticleCount);
 
 	glBindVertexArray(0);
-	Shader->useShader();
 	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
+	Shader->useShader();
 }
 
 VParticleComponent::~VParticleComponent()
