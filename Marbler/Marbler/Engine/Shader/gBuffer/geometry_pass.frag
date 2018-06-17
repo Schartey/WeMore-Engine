@@ -31,7 +31,7 @@ float ShadowCalculation(vec4 pos)
 	projCoords = projCoords * 0.5 + 0.5;
 	float closestDepth = texture(gShadowMap, projCoords.xy).r;
 	float currentDepth = projCoords.z;
-	float shadow = currentDepth > closestDepth ? 1.0 : 0.5;
+	float shadow = currentDepth < closestDepth ? 1.0 : 0.5;
 
 	return shadow;
 }
