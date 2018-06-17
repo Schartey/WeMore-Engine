@@ -91,16 +91,15 @@ void VGBuffer::BeginGeometryPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap
 {
 	BindForGeomPass();
 
-	glActiveTexture(GL_TEXTURE9);
-	glBindTexture(GL_TEXTURE_2D, ShadowMap);
-
-	//TDebugUtils->DrawTexture(TestMap);
 	GeometryShader->useShader();
+
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_2D, ShadowMap);
 
 	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
-	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gShadowMap"), 9);
-	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "depthVP"), 1, GL_FALSE, glm::value_ptr(biasMatrix * DepthVP));
+	glUniform1i(glGetUniformLocation(DirectionalLightShader->programHandle, "gShadowMap"), 10);
+	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "directionalLightVP"), 1, GL_FALSE, glm::value_ptr(DepthVP));
 	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(GeometryShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
 
