@@ -186,8 +186,8 @@ VMaterial* VAssimpUtils::ProcessMaterial(std::string path, aiMaterial* Material)
 	}
 
 	glm::vec3 color;
-	Material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-	pMaterial->SetDiffuse(color);
+	//Material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+	//pMaterial->SetDiffuse(color);
 	Material->Get(AI_MATKEY_COLOR_SPECULAR, color);
 	pMaterial->SetSpecularColor(color);
 	float SpecularIntensity;

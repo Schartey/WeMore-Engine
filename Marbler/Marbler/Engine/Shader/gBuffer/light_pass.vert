@@ -14,5 +14,5 @@ void main()
 { 
 	//ShadowCoord = depthBiasVP * vec4(position,1);
 
-   	gl_Position = projection * view * vec4(position, 1);
+   	gl_Position = projection * view * cmt * vec4(position, 1);
 } 

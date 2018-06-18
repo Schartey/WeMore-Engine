@@ -398,7 +398,10 @@ SQInteger func_createPointLight(HSQUIRRELVM v)
 	PointLight1->GetLightComponent()->GetPointLight().Ambient = 0.0f;
 	PointLight1->GetLightComponent()->GetPointLight().Diffuse = 0.8f;
 	PointLight1->GetLightComponent()->GetPointLight().Color = glm::vec3(1.0f, 1.0f, 1.0f);
-	PointLight1->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(0.0f, 0.000001f, 0.1f);
+	PointLight1->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(1.0, 0.09, 0.032);
+
+	PointLight1->SetScale(glm::vec3(50.0f));
+	PointLight1->SetPosition(glm::vec3(0.0f, 3.0f, 0.0f));
 
 	int id = VSquirrelGame::Game->GetObjectPool()->AddSceneObject(PointLight1);
 

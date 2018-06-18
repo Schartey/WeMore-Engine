@@ -5,6 +5,7 @@
 VMaterial::VMaterial()
 {
 	Shader = new VShader("Engine/Shader/base.vert", "Engine/Shader/base.frag");
+	Diffuse = glm::vec3(1.0f);
 }
 
 VShader* VMaterial::GetShader()
@@ -49,7 +50,7 @@ void VMaterial::ApplyRenderPassInformation(VShader* Shader)
 		texturesInUse++;
 	}
 
-	glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.diffuse"), 1, glm::value_ptr(Diffuse));
+	glUniform3f(glGetUniformLocation(Shader->programHandle, "material.diffuse"), Diffuse.x, Diffuse.y, Diffuse.z);
 	//glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.specularColor"), 1, glm::value_ptr(SpecularColor));
 	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.specularIntensity"), SpecularIntensity);
 	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.specularPower"), SpecularPower);
@@ -82,7 +83,7 @@ void VMaterial::ApplyInformation()
 		texturesInUse++;
 	}
 
-	glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.diffuse"), 1, glm::value_ptr(Diffuse));
+	glUniform3f(glGetUniformLocation(Shader->programHandle, "material.diffuse"), Diffuse.x, Diffuse.y, Diffuse.z);
 	//glUniform3fv(glGetUniformLocation(Shader->programHandle, "material.specularColor"), 1, glm::value_ptr(SpecularColor));
 	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.specularIntensity"), SpecularIntensity);
 	glUniform1f(glGetUniformLocation(Shader->programHandle, "material.specularPower"), SpecularPower);

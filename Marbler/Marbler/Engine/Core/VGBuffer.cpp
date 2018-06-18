@@ -93,6 +93,8 @@ void VGBuffer::BeginGeometryPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap
 
 	GeometryShader->useShader();
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glActiveTexture(GL_TEXTURE10);
 	glBindTexture(GL_TEXTURE_2D, ShadowMap);
 
@@ -109,8 +111,6 @@ void VGBuffer::BeginGeometryPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK); // Cull back-facing triangles -> draw only front-facing triangles
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glEnable(GL_DEPTH_TEST);
 
 	glDisable(GL_BLEND);
@@ -120,9 +120,9 @@ void VGBuffer::EndGeometryPass()
 {
 	// When we get here the depth buffer is already populated and the stencil pass
 	// depends on it, but it does not write to it.
-	glDepthMask(GL_FALSE);
+	//glDepthMask(GL_FALSE);
 
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 }
 
 void VGBuffer::StencilPass(VScene* Scene, VSceneObject* PointLight)
@@ -187,7 +187,7 @@ void VGBuffer::PointLightPass(VScene* Scene, VSceneObject* PointLight)
 	glUniform1f(glGetUniformLocation(PointLightShader->programHandle, "gPointLight.Atten.Exp"), LightComponent->GetPointLight().Attenuation.Exp);
 
 
-	glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
+	//glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendEquation(GL_FUNC_ADD);
@@ -249,7 +249,7 @@ void VGBuffer::FinalPass()
 	//Multisample
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, multisampleBuffer);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-	glReadBuffer(GL_COLOR_ATTACHMENT1);
+	glReadBuffer(GL_COLOR_ATTACHMENT4);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glBlitFramebuffer(0, 0, Width, Height,
 		0, 0, Width, Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);

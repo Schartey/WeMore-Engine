@@ -32,7 +32,7 @@ public:
 	~VInputComponent();
 
 protected:
-	float MovementSpeed = 100.0f;
+	float MovementSpeed = 10.0f;
 	glm::vec3 MovementVector = glm::vec3();
 };
 
