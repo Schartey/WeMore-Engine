@@ -14,6 +14,7 @@ VTextElement* VTextWidget::GetTextElement()
 
 void VTextWidget::RenderPass()
 {
+	if (!this->visibility) return;
 	TextElement->RenderPass();
 }
 

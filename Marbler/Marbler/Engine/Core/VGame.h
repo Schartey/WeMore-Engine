@@ -27,6 +27,7 @@ public:
 	std::string GetModelPath();
 	Configs* GetConfig();
 	VGUI* GetGUI();
+	bool GetFrustumCulling();
 
 	void SetConfig(Configs* config);
 	void SetWindow(VWindow* Window);
@@ -37,10 +38,15 @@ public:
 	VWindow* GetWindow() { return Window; }
 	VScene* GetActiveScene();
 	void SetActiveScene(VScene* Scene);
+	void ToggleFrustumCulling();
 
 	VScene* CreateScene(std::string Name);
 
 	std::function<void()> OnQuitDelegate;
+	std::function<void()> OnHelpDelegate;
+	std::function<void()> OnFPSDelegate;
+	std::function<void()> OnWireFrameDelegate;
+	std::function<void()> OnFrustumDelegate;
 
 	~VGame();
 
@@ -56,5 +62,7 @@ private:
 	VScene * ActiveScene;
 
 	std::vector<VScene*> Scenes;
+	bool frustumCulling = false;
+
 };
 

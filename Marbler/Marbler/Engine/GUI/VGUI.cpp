@@ -11,6 +11,11 @@ int VGUI::AddWidget(VUserWidget* UserWidget)
 	return WidgetCount;
 }
 
+VUserWidget* VGUI::GetWidgetById(int id)
+{
+	return Widgets.at(id);
+}
+
 void VGUI::RenderPass()
 {
 	glEnable(GL_BLEND);

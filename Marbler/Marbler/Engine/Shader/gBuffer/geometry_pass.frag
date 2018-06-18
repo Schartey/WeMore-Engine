@@ -50,7 +50,7 @@ float ShadowCalculation(vec4 pos)
 	vec3 projCoords = pos.xyz / pos.w;
 	projCoords = projCoords * 0.5 + 0.5;
 
-	float shadow = 0.0;
+	float shadow = 0.2;
 
 	for (int i=0;i<16;i++){
 	  shadow += textureProj( gShadowMap, vec4(projCoords.xy + poissonDisk[i]/941.0, projCoords.z - bias, 1.0)) / 16;
@@ -63,7 +63,6 @@ void main()
 { 
     WorldPosOut = fragVert; 
     NormalOut = normalize(fragNormal); 
-    //TexCoordOut = vec3(fragTexCoord, 0.0); 
 	
 	vec4 surfaceColor = vec4(material.diffuse, 1.0);
 	
@@ -78,9 +77,7 @@ void main()
 
 	float visibility = ShadowCalculation(directionalLightSpacePos);
 
-    DiffuseOut = visibility * vec3(surfaceColor);//vec3(depthValue);
-
-    //DiffuseOut = visibility * surfaceColor.xyz;
+    DiffuseOut = visibility * vec3(surfaceColor);
 
 	SpecularOut = visibility * vec3(material.specularIntensity, material.specularPower, 1.0);
 }

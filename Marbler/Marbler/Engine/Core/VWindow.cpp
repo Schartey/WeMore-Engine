@@ -79,6 +79,7 @@ bool VWindow::Initialize(int &error)
 	glViewport(0, 0, width, height);
 
 	glfwSetCursorPos(GlfwWindow, width / 2, height / 2);
+	glfwSetInputMode(GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	return true;
 }

@@ -14,6 +14,8 @@ public:
 	//TODO: Make this callable like VUserWidget* CreateWidget<WidgetType : VUserWidget>()
 	int AddWidget(VUserWidget* UserWidget);
 
+	VUserWidget* GetWidgetById(int id);
+
 	void RenderPass();
 
 	~VGUI();

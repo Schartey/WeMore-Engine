@@ -22,6 +22,7 @@ public:
 	void Setup(VGame* Game);
 	void Run();
 	void OnQuit();
+	void OnWireFrame();
 
 	void Pause();
 	VWindow* GetWindow();
@@ -43,6 +44,7 @@ private:
 
 	bool bPause = false;
 	bool bRunning = false;
+	bool wireframeMode = false;
 
 	void StepPhysics(float deltaTime);
 };

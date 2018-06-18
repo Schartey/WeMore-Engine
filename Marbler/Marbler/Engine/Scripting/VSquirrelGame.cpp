@@ -8,8 +8,10 @@
 #include "../Core/Components/VCameraComponent.h"
 #include "../GUI/Widgets/VTextWidget.h"
 #include "../GUI/Widgets/VImageWidget.h"
+#include "../Core/VDebugStatics.h"
 
 VGame* VSquirrelGame::Game = 0;
+VLogger* VSquirrelGame::Logger = 0;
 
 SQInteger func_createScene(HSQUIRRELVM v)
 {
@@ -22,8 +24,9 @@ SQInteger func_createScene(HSQUIRRELVM v)
 		if (sq_getstring(v, 2, &name) == 0)
 		{
 			id = VSquirrelGame::Game->GetObjectPool()->CreateScene(std::string(name));
-			printf("Created Scene %i", id);
-			printf("\n");
+			VSquirrelGame::Logger->Info("Squirrel", "Created Scene " + id);
+			//printf("Created Scene %i", id);
+			//printf("\n");
 		}
 	}
 	sq_pushinteger(v, id); //push the number of arguments as return value
@@ -44,14 +47,16 @@ SQInteger func_setActiveScene(HSQUIRRELVM v)
 		{
 			VSquirrelGame::Game->SetActiveScene(VSquirrelGame::Game->GetObjectPool()->GetSceneById(id));
 			std::string name = VSquirrelGame::Game->GetActiveScene()->GetName();
-			printf("Active Scene: %s", name.c_str());
-			printf("\n");
+			VSquirrelGame::Logger->Info("Squirrel", "Active Scene " + name);
+			//printf("Active Scene: %s", name.c_str());
+			//printf("\n");
 
-			bool success = true;
+			sq_pushbool(v, true);
+			return 1; //1 because 1 value is returned
 		}
 	}
 
-	sq_pushbool(v, success);
+	sq_pushbool(v, false);
 	return 1; //1 because 1 value is returned
 }
 
@@ -108,8 +113,9 @@ SQInteger func_createActor(HSQUIRRELVM v)
 										Actor->SetRotation(glm::vec3(rotX, rotY, rotZ));
 
 										id = VSquirrelGame::Game->GetObjectPool()->AddSceneObject(Actor);
-										printf("Created Actor: %s", Actor->GetName().c_str());
-										printf("\n");
+										VSquirrelGame::Logger->Info("Squirrel", "Created Actor: " + Actor->GetName());
+										//printf("Created Actor: %s", Actor->GetName().c_str());
+										//printf("\n");
 
 									}
 								}
@@ -125,6 +131,66 @@ SQInteger func_createActor(HSQUIRRELVM v)
 	return 1; //1 because 1 value is returned
 }
 
+SQInteger func_getSceneObjectPosition(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VSceneObject* SceneObject = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VSceneObject>(id);
+
+		sq_pushstring(v, "position", -1); //2
+		sq_newtable(v);
+		sq_pushstring(v, "x", -1);
+		sq_pushfloat(v, SceneObject->GetPosition().x);
+		sq_newslot(v,-3, SQTrue);
+		sq_pushstring(v, "y", -1);
+		sq_pushfloat(v, SceneObject->GetPosition().y);
+		sq_newslot(v, -3, SQTrue);
+		sq_pushstring(v, "z", -1);
+		sq_pushfloat(v, SceneObject->GetPosition().z);
+		sq_newslot(v, -3, SQTrue);
+
+		return 1;
+	}
+
+	sq_pushinteger(v, -1);
+	return 1;
+}
+
+SQInteger func_setSceneObjectPosition(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat posx = 0.0f;
+	SQFloat posy = 0.0f;
+	SQFloat posz = 0.0f;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &posx) == 0)
+		{
+			if (sq_gettype(v, 4) == OT_FLOAT && sq_getfloat(v, 4, &posy) == 0)
+			{
+				if (sq_gettype(v, 5) == OT_FLOAT && sq_getfloat(v, 5, &posz) == 0)
+				{
+					VSceneObject* SceneObject = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VSceneObject>(id);
+
+					if (SceneObject != nullptr)
+					{
+						SceneObject->SetPosition(glm::vec3(posx, posy, posz));
+
+						sq_pushbool(v, true); //push the number of arguments as return value
+						return 1; //1 because 1 value is returned
+					}
+				}
+			}
+		}
+	}
+
+	sq_pushbool(v, false); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
 SQInteger func_loadTexture(HSQUIRRELVM v)
 {
 	int id = -1;
@@ -136,8 +202,9 @@ SQInteger func_loadTexture(HSQUIRRELVM v)
 		Texture->Load();
 
 		id = VSquirrelGame::Game->GetObjectPool()->AddTexture(Texture);
-		printf("Created Texture: %s", name);
-		printf("\n");
+		VSquirrelGame::Logger->Info("Squirrel", "Created Texture: " + std::string(name));
+		//printf("Created Texture: %s", name);
+		//printf("\n");
 	}
 
 	sq_pushinteger(v, id); //push the number of arguments as return value
@@ -196,7 +263,7 @@ SQInteger func_setMeshTexture(HSQUIRRELVM v)
 		{
 			if (sq_gettype(v, 3) == OT_INTEGER && sq_getinteger(v, 3, &textureId) == 0)
 			{
-				VTexture* Texture = VSquirrelGame::Game->GetObjectPool()->GetTexture(id);
+				VTexture* Texture = VSquirrelGame::Game->GetObjectPool()->GetTexture(textureId);
 
 				if (Texture != nullptr)
 				{
@@ -253,7 +320,7 @@ SQInteger func_setActorMass(HSQUIRRELVM v)
 			if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &mass) == 0)
 			{
 				PxRigidActor* RigidActor = Actor->GetRigidActor();
-				PxRigidDynamic* RigidDynamic = dynamic_cast<PxRigidDynamic*>(Actor->GetRigidActor());
+				PxRigidDynamic* RigidDynamic = (PxRigidDynamic*)(Actor->GetRigidActor());
 				RigidDynamic->setMass(mass);
 				sq_pushbool(v, SQTrue); //push the number of arguments as return value
 				return 1; //1 because 1 value is returned
@@ -333,8 +400,9 @@ SQInteger func_createCameraComponent(HSQUIRRELVM v)
 									CameraComponent->SetRotation(glm::vec3(rotX, rotY, rotZ));
 
 									id = VSquirrelGame::Game->GetObjectPool()->AddComponent(CameraComponent);
-									printf("Created CameraComponent: %s", CameraComponent->GetName().c_str());
-									printf("\n");
+									VSquirrelGame::Logger->Info("Squirrel", "Created CameraComponent: " + CameraComponent->GetName());
+									//printf("Created CameraComponent: %s", CameraComponent->GetName().c_str());
+									//printf("\n");
 
 									VSquirrelGame::Game->GetActiveScene()->SetActiveSceneObject(SceneObject);
 
@@ -413,10 +481,75 @@ SQInteger func_createTextWidget(HSQUIRRELVM v)
 {
 	//Store this
 	VTextWidget* TextWidget = new VTextWidget();
-	TextWidget->GetTextElement()->SetText(Text("Hello World", 0.0f, 0.0f, 0.5f, glm::vec3(1, 1, 1)));
+	TextWidget->GetTextElement()->SetText(Text("", 0.0f, 0.0f, 0.5f, glm::vec3(1, 1, 1)));
 	int id = VSquirrelGame::Game->GetGUI()->AddWidget(TextWidget);
 
 	sq_pushinteger(v, id); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setTextWidgetText(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	const char* text;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_STRING && sq_getstring(v, 3, &text) == 0)
+		{
+			VTextWidget* TextWidget = (VTextWidget*)VSquirrelGame::Game->GetGUI()->GetWidgetById(id);
+			TextWidget->GetTextElement()->GetText()->text = text;
+
+			sq_pushbool(v, true); //push the number of arguments as return value
+			return 1; //1 because 1 value is returned
+		}
+	}
+	sq_pushbool(v, false); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setTextWidgetPosition(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat posx;
+	SQFloat posy;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &posx) == 0)
+		{
+			if (sq_gettype(v, 4) == OT_FLOAT && sq_getfloat(v, 4, &posy) == 0)
+			{
+				VTextWidget* TextWidget = (VTextWidget*)VSquirrelGame::Game->GetGUI()->GetWidgetById(id);
+				TextWidget->GetTextElement()->GetText()->posX = posx;
+				TextWidget->GetTextElement()->GetText()->posY = posy;
+
+				sq_pushbool(v, true); //push the number of arguments as return value
+				return 1; //1 because 1 value is returned
+			}
+		}
+	}
+	sq_pushbool(v, false); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setTextWidgetVisibility(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQBool visibility = false;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_BOOL && sq_getbool(v, 3, &visibility) == 0)
+		{
+			VTextWidget* TextWidget = (VTextWidget*)VSquirrelGame::Game->GetGUI()->GetWidgetById(id);
+			TextWidget->SetVisibility(visibility);
+
+			sq_pushbool(v, true); //push the number of arguments as return value
+			return 1; //1 because 1 value is returned
+		}
+	}
+	sq_pushbool(v, false); //push the number of arguments as return value
 	return 1; //1 because 1 value is returned
 }
 
@@ -513,8 +646,9 @@ SQInteger func_createMeshComponent(HSQUIRRELVM v)
 															MeshComponent->SetScale(glm::vec3(scaleX, scaleY, scaleZ));
 
 															id = VSquirrelGame::Game->GetObjectPool()->AddComponent(MeshComponent);
-															printf("Created MeshComponent: %s", MeshComponent->GetName().c_str());
-															printf("\n");
+															VSquirrelGame::Logger->Info("Squirrel", "Created MeshComponent: " + MeshComponent->GetName());
+															//printf("Created MeshComponent: %s", MeshComponent->GetName().c_str());
+															//printf("\n");
 
 
 														}
@@ -605,6 +739,14 @@ SQInteger func_createParticleComponent(HSQUIRRELVM v)
 	return 1; //1 because 1 value is returned
 }
 
+SQInteger func_getFPS(HSQUIRRELVM v)
+{
+	float fps = VDebugStatics::GetFPS();
+
+	sq_pushfloat(v, fps);
+	return 1;
+}
+
 SQInteger func_test_parameters(HSQUIRRELVM v)
 {
 	SQInteger nargs = sq_gettop(v); //number of arguments
@@ -671,8 +813,6 @@ SQInteger func_test_parameters(HSQUIRRELVM v)
 		}
 	}
 	printf("\n");
-	printf("Loaded actor");
-	printf("\n");
 	sq_pushinteger(v, nargs); //push the number of arguments as return value
 	return 1; //1 because 1 value is returned
 }
@@ -692,7 +832,9 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 {
 	this->v = v;
 	this->Game = Game;
+	this->Logger = VLogger::GetInstance();
 
+	//Creation
 	register_global_func(this->v, func_createScene, "createScene");
 	register_global_func(this->v, func_setActiveScene, "setActiveScene");
 	register_global_func(this->v, func_createActor, "createActor");
@@ -700,7 +842,19 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 	register_global_func(this->v, func_createInputComponent, "createInputComponent");
 	register_global_func(this->v, func_createParticleComponent, "createParticleComponent");
 	register_global_func(this->v, func_createSkybox, "createSkybox");
+
+	//Asset Loading
 	register_global_func(this->v, func_loadTexture, "loadTexture");
+
+	//Getter
+	register_global_func(this->v, func_getSceneObjectPosition, "getSceneObjectPosition");
+	register_global_func(this->v, func_getFPS, "getFPS");
+
+	//Setter
+	register_global_func(this->v, func_setTextWidgetText, "setTextWidgetText");
+	register_global_func(this->v, func_setTextWidgetVisibility, "setTextWidgetVisibility");
+	register_global_func(this->v, func_setTextWidgetPosition, "setTextWidgetPosition");
+	register_global_func(this->v, func_setSceneObjectPosition, "setSceneObjectPosition");
 	register_global_func(this->v, func_setMeshMaterial, "setMeshMaterial");
 	register_global_func(this->v, func_setMeshTexture, "setMeshTexture");
 	register_global_func(this->v, func_setMeshLightTexture, "setMeshLightTexture");
@@ -717,13 +871,67 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 
 void VSquirrelGame::OnInitialize()
 {
+	this->Game->OnHelpDelegate = std::bind(&VSquirrelGame::OnHelp, this);
+	this->Game->OnFPSDelegate = std::bind(&VSquirrelGame::OnFPS, this);
+	this->Game->OnFrustumDelegate = std::bind(&VSquirrelGame::OnFrustumCulling, this);
+
 	Game->OnInitialize();
 
 	sq_pushroottable(v);
-	sq_pushstring(v, "onInitialize", -1);
+	sq_pushstring(v, "OnInitialize", -1);
 	sq_get(v, -2); //get the function from the root table
 	sq_pushroottable(v); //'this' (function environment object)
-	sq_call(v, 1, SQFalse,SQFalse);
+	sq_call(v, 1, SQFalse, SQFalse);
+	sq_pop(v, 2); //pops the roottable and the function
+}
+
+void VSquirrelGame::OnUpdate(double deltaT)
+{
+	Game->Update(deltaT);
+
+	time += deltaT;
+
+	if (time > 0.2)
+	{
+		sq_pushroottable(v);
+		sq_pushstring(v, "OnTick", -1);
+		sq_get(v, -2); //get the function from the root table
+		sq_pushroottable(v); //'this' (function environment object)
+		sq_call(v, 1, SQFalse, SQFalse);
+		sq_pop(v, 2); //pops the roottable and the function
+		time = 0;
+	}
+}
+
+void VSquirrelGame::OnHelp()
+{
+	sq_pushroottable(v);
+	sq_pushstring(v, "OnHelp", -1);
+	sq_get(v, -2); //get the function from the root table
+	sq_pushroottable(v); //'this' (function environment object)
+	sq_call(v, 1, SQFalse, SQFalse);
+	sq_pop(v, 2); //pops the roottable and the function
+}
+
+void VSquirrelGame::OnFPS()
+{
+	sq_pushroottable(v);
+	sq_pushstring(v, "OnFPS", -1);
+	sq_get(v, -2); //get the function from the root table
+	sq_pushroottable(v); //'this' (function environment object)
+	sq_call(v, 1, SQFalse, SQFalse);
+	sq_pop(v, 2); //pops the roottable and the function
+}
+
+
+void VSquirrelGame::OnFrustumCulling()
+{
+	this->Game->ToggleFrustumCulling();
+	sq_pushroottable(v);
+	sq_pushstring(v, "OnFrustumCulling", -1);
+	sq_get(v, -2); //get the function from the root table
+	sq_pushroottable(v); //'this' (function environment object)
+	sq_call(v, 1, SQFalse, SQFalse);
 	sq_pop(v, 2); //pops the roottable and the function
 }
 

@@ -183,6 +183,9 @@
     <ClCompile Include="Engine\Core\VObjectPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\VLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\VEngine.h">
@@ -350,6 +353,9 @@
     <ClInclude Include="Engine\Core\VObjectPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\VLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />
@@ -379,5 +385,6 @@
     <None Include="Scripts\Main.nut" />
     <None Include="Engine\Shader\gBuffer\skybox.vert" />
     <None Include="Engine\Shader\gBuffer\skybox.frag" />
+    <None Include="Scripts\Engine.nut" />
   </ItemGroup>
 </Project>

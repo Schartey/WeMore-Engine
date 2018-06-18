@@ -2,6 +2,7 @@
 #include "IL/il.h"
 #include "VInputManager.h"
 #include "VDebugStatics.h"
+#include "VLogger.h"
 
 VEngine::VEngine()
 {
@@ -14,6 +15,16 @@ int VEngine::Initialize(const char* cfgpath)
 	if (!config->readFile(cfgpath)) {
 		std::cout << "Could not read config file" << std::endl;
 		return InitParsingError;
+	}
+
+	std::string debugMode = config->getValue("debug", "false").asString();
+	if (debugMode.compare("true") == 0) 
+	{
+		VLogger::GetInstance()->SetMode(VLogger::EMode::Debug);
+	}
+	else 
+	{
+		VLogger::GetInstance()->SetMode(VLogger::EMode::Info);
 	}
 
 	std::string GameName = config->getValue("name", "Game Name").asString();
@@ -66,6 +77,7 @@ void VEngine::Setup(VGame* Game)
 
 	this->Game = Game;
 	this->Game->OnQuitDelegate = std::bind(&VEngine::OnQuit, this);
+	this->Game->OnWireFrameDelegate = std::bind(&VEngine::OnWireFrame, this);
 	this->Game->SetConfig(config);
 	this->Game->SetWindow(Window);
 	this->Game->SetPhysics(Physics);
@@ -98,7 +110,8 @@ void VEngine::Run()
 		if (!bPause && deltaT > 0) {
 
 			StepPhysics(deltaT);
-			Game->Update(deltaT);
+			SquirrelGame->OnUpdate(deltaT);
+
 			if (Window->GetOpenGlMinor() >= 0) {
 				ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());
 				Game->RenderPass(ShadowBuffer->GetShadowLightShader(), RenderPassBufferType::ShadowBuffer);
@@ -143,6 +156,19 @@ void VEngine::OnQuit()
 {
 	SquirrelEmbedder->Close();
 	bRunning = false;
+}
+
+void VEngine::OnWireFrame()
+{
+	if (wireframeMode)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	else 
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	wireframeMode = !wireframeMode;
 }
 
 void VEngine::Pause()

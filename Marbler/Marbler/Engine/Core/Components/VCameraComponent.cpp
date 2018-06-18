@@ -1,6 +1,7 @@
 #include "VCameraComponent.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/norm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -26,7 +27,10 @@ float VCameraComponent::GetTheta()
 void VCameraComponent::IncreasePhi(float Phi)
 {
 	LastCameraInteractionTime = 0.0f;
-	this->Phi += Phi;
+	if (this->Phi + Phi > -1.8 && this->Phi + Phi < 1.28)
+	{
+		this->Phi += Phi;
+	}
 }
 
 void VCameraComponent::IncreaseTheta(float Theta)

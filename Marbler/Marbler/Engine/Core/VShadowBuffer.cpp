@@ -71,7 +71,7 @@ void VShadowBuffer::RenderDirectionalLightDepth(VDirectionalLight* DirectionalLi
 	// Clear the screen
 	ShadowLightShader->useShader();
 
-	glm::mat4 DepthProjection = glm::ortho<float>(-20, +20, -20, +20, -10, 30);
+	glm::mat4 DepthProjection = glm::ortho<float>(-50, +50, -50, +50, -10, 50);
 	glm::mat4 DepthViewMatrix = glm::lookAt(glm::vec3(0,0,0), DirectionalLight->GetDirection(), glm::vec3(0,1,0));
 	DepthVP = DepthProjection * DepthViewMatrix;
 

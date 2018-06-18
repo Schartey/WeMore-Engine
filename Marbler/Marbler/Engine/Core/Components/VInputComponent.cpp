@@ -29,6 +29,11 @@ void VInputComponent::OnInitialize()
 	VInputManager::BindAction("Right", KEY_D, VActionType::Released, *this, &VInputComponent::OnRightReleased);
 	VInputManager::BindAction("Up", KEY_SPACE, VActionType::Released, *this, &VInputComponent::OnUpReleased);
 	VInputManager::BindAction("Down", KEY_LEFT_SHIFT, VActionType::Released, *this, &VInputComponent::OnDownReleased);
+	VInputManager::BindAction("Space", KEY_SPACE, VActionType::Pressed, *this, &VInputComponent::OnSpaceBarPressed);
+	VInputManager::BindAction("F1", KEY_F1, VActionType::Pressed, *this, &VInputComponent::OnF1Pressed);
+	VInputManager::BindAction("F2", KEY_F2, VActionType::Pressed, *this, &VInputComponent::OnF2Pressed);
+	VInputManager::BindAction("F3", KEY_F3, VActionType::Pressed, *this, &VInputComponent::OnF3Pressed);
+	VInputManager::BindAction("F8", KEY_F8, VActionType::Pressed, *this, &VInputComponent::OnF8Pressed);
 
 	VInputManager::BindAction("Quit", KEY_ESC, VActionType::Pressed, *this, &VInputComponent::OnQuitPressed);
 
@@ -97,6 +102,33 @@ void VInputComponent::OnUpReleased()
 void VInputComponent::OnDownReleased()
 {
 }
+
+void VInputComponent::OnSpaceBarPressed()
+{
+	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
+	((PxRigidDynamic*)ActorOwner->GetRigidActor())->addForce(PhysxUtils::ConvertGVec3ToPxVec3(glm::vec3(0.0f, 1.0f, 0.0f)*JumpForce));
+}
+
+void VInputComponent::OnF1Pressed()
+{
+	VGameStatics::GetGame()->OnHelpDelegate();
+}
+
+void VInputComponent::OnF2Pressed()
+{
+	VGameStatics::GetGame()->OnFPSDelegate();
+}
+
+void VInputComponent::OnF3Pressed()
+{
+	VGameStatics::GetGame()->OnWireFrameDelegate();
+}
+
+void VInputComponent::OnF8Pressed()
+{
+	VGameStatics::GetGame()->OnFrustumDelegate();
+}
+
 
 void VInputComponent::OnQuitPressed()
 {

@@ -9,6 +9,7 @@ public:
 	VTextWidget();
 
 	VTextElement* GetTextElement();
+
 	void RenderPass() override;
 
 	~VTextWidget();

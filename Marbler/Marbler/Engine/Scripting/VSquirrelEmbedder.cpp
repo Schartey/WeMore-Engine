@@ -36,10 +36,12 @@ void call_scriptLoaded(HSQUIRRELVM v, const SQChar *s)
 
 void printfunc(HSQUIRRELVM v, const SQChar *s, ...)
 {
+	VSquirrelGame::Logger->Info("Squirrel", "Print: ");
 	va_list arglist;
 	va_start(arglist, s);
 	scvprintf(s, arglist);
 	va_end(arglist);
+	VSquirrelGame::Logger->Info("", "");
 }
 
 SQInteger error_handler(HSQUIRRELVM v)
@@ -118,9 +120,9 @@ VSquirrelGame* VSquirrelEmbedder::Setup(VGame* Game)
 	v = sq_open(1024); //creates a VM with initial stack size 1024
 
 	sq_pushroottable(v);
-	sq_pushstring(v, "error_handler", -1);
-	sq_newclosure(v, error_handler, 0); //create a new function
-	sq_newslot(v, -3, SQFalse);
+	//sq_pushstring(v, "error_handler", -1);
+	//sq_newclosure(v, error_handler, 0); //create a new function
+	//sq_newslot(v, -3, SQFalse);
 	sqstd_seterrorhandlers(v);
 
 	sq_setprintfunc(v, printfunc, NULL); //sets the print function

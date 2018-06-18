@@ -7,6 +7,8 @@
 #include <GL/wglew.h>
 #include <GLFW/glfw3.h>
 
+#include "VLogger.h"
+
 class Debugger
 {
 public:
@@ -20,5 +22,7 @@ public:
 
 private:
 	static std::string FormatDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, const char* msg);
+
+	static VLogger* Logger;
 };
 

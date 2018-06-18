@@ -33,6 +33,16 @@ void VGame::QuitGame()
 	OnQuitDelegate();
 }
 
+void VGame::ToggleFrustumCulling()
+{
+	this->frustumCulling = !this->frustumCulling;
+}
+
+bool VGame::GetFrustumCulling()
+{
+	return this->frustumCulling;
+}
+
 std::string VGame::GetTexturePath()
 {
 	return this->config->getValue("textures", "Textures\\").asString();

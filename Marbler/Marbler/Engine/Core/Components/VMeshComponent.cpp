@@ -14,6 +14,8 @@
 
 #include "../Objects/VScene.h"
 #include "VCameraComponent.h"
+#include "../VGameStatics.h"
+#include "../VGame.h"
 
 VMeshComponent::VMeshComponent(VScene* Scene, std::string Name) : VSceneComponent(Scene, Name)
 {
@@ -142,7 +144,7 @@ void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix, Re
 {
 	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
-	if (CameraComponent->IsWithinFrustum(this->Mesh->GetBoundingBox())) {
+	if (CameraComponent->IsWithinFrustum(this->Mesh->GetBoundingBox()) || !VGameStatics::GetGame()->GetFrustumCulling()) {
 		glm::mat4 CMT = ParentModelMatrix * ModelMatrix;
 
 		VSceneComponent::RenderPass(Shader, CMT, Type);
