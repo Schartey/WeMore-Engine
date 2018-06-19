@@ -115,14 +115,21 @@ SQInteger error_handler(HSQUIRRELVM v)
 	return 1; //1 because 1 value is returned
 }
 
+void debug_hook(HSQUIRRELVM v, SQInteger type, const SQChar * sourcename, SQInteger line, const SQChar * funcname)
+{
+
+}
+
 VSquirrelGame* VSquirrelEmbedder::Setup(VGame* Game)
 {
 	v = sq_open(1024); //creates a VM with initial stack size 1024
 
-	sq_pushroottable(v);
+	//sq_pushroottable(v);
 	//sq_pushstring(v, "error_handler", -1);
 	//sq_newclosure(v, error_handler, 0); //create a new function
 	//sq_newslot(v, -3, SQFalse);
+	sq_setnativedebughook(v, debug_hook);
+
 	sqstd_seterrorhandlers(v);
 
 	sq_setprintfunc(v, printfunc, NULL); //sets the print function

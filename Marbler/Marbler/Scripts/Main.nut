@@ -22,6 +22,7 @@ function OnInitialize()
 	
 	//Assets
 	local lightMapTexture = Engine.Texture("Lightmap.png");
+	local lightMapPlatformTexture = Engine.Texture("PlatformLightmap.png");
 	local marbleTexture = Engine.Texture("marble_2.jpg");
 	local platformTexture = Engine.Texture("floor13.jpg");
 	local boxTexture = Engine.Texture("9452.jpg");
@@ -31,7 +32,7 @@ function OnInitialize()
 	local platform = Engine.Platform();
 	platform.SetPosition(0.0, -5.0, 0.0);
 	platform.SetTexture(platformTexture);
-	platform.SetLightMapTexture(lightMapTexture);
+	//platform.SetLightMapTexture(lightMapPlatformTexture);
 	platform.SetSpecularMapTexture(platformSpecularTexture);
 
 	local platform2 = Engine.Platform();
@@ -39,6 +40,10 @@ function OnInitialize()
 	platform2.SetTexture(platformTexture);
 	platform2.SetLightMapTexture(lightMapTexture);
 	platform2.SetSpecularMapTexture(platformSpecularTexture);
+
+	//Walls
+	local smallWall = Engine.SmallWall();
+	smallWall.SetPosition(0.0, -3.0, -9.0);
 
 	//Boxes
 	local box = Engine.Box();
@@ -63,7 +68,7 @@ function OnInitialize()
 
 	helpTextWidget = Engine.TextWidget();
 	helpTextWidget.SetPosition(0.0, 100.0);
-	helpTextWidget.SetText("Help: F1 - Help, F2 - FPS, F3 - WireFrame, F8 - FrustumCulling, Objective - Get to the furthest right red point!");
+	helpTextWidget.SetText("Help: F1 - Help, F2 - FPS, F3 - WireFrame, F4 - Recompile, F8 - FrustumCulling, Objective - Get to the furthest right red point!");
 
 	frustumTextWidget = Engine.TextWidget();
 	frustumTextWidget.SetPosition(75.0, 0.0);

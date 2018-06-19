@@ -28,6 +28,7 @@ void VInputManager::Initialize(VWindow* Window)
 	inputMap[GLFW_KEY_F1] = KEY_F1;
 	inputMap[GLFW_KEY_F2] = KEY_F2;
 	inputMap[GLFW_KEY_F3] = KEY_F3;
+	inputMap[GLFW_KEY_F4] = KEY_F4;
 	inputMap[GLFW_KEY_F8] = KEY_F8;
 
 	glfwGetCursorPos(Window->GetGLFWWindow(), &oldXPos, &oldYPos);

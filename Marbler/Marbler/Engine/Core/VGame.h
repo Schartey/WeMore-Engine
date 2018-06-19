@@ -47,6 +47,7 @@ public:
 	std::function<void()> OnFPSDelegate;
 	std::function<void()> OnWireFrameDelegate;
 	std::function<void()> OnFrustumDelegate;
+	std::function<void()> OnRecompileDelegate;
 
 	~VGame();
 

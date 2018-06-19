@@ -84,6 +84,42 @@ class Engine.Box {
 	}
 }
 
+class Engine.SmallWall {
+	id = null;
+	meshId = null;
+
+    constructor()
+    {
+		local smallWallActorId = createActor("SmallWallActor", true, true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		id = smallWallActorId;
+
+		local smallWallMeshComponentId = createMeshComponent("SmallWallMeshComponent", "box.fbx", "Box", true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 2.0, 1.0, smallWallActorId);
+		meshId = smallWallMeshComponentId;
+
+		setMeshMaterial(smallWallMeshComponentId, 1.0, 1.0, 1.0, 0.0, 0.0);
+    }
+    function SetPosition(x, y, z)
+    {
+		::print("Setting Position");
+        setSceneObjectPosition(id, x, y ,z);
+    }
+
+	function SetRotation(x,y,z)
+	{
+		
+	}
+
+	function SetTexture(texture)
+	{
+		setMeshTexture(meshId, texture.id);
+	}
+
+	function SetLightMapTexture(texture)
+	{
+		setMeshLightTexture(meshId, texture.id);
+	}
+}
+
 class Engine.Marble {
 	id = null;
 	meshId = null;

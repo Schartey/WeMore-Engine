@@ -26,6 +26,7 @@ public:
 	void OnF1Pressed();
 	void OnF2Pressed();
 	void OnF3Pressed();
+	void OnF4Pressed();
 	void OnF8Pressed();
 
 	void OnQuitPressed();

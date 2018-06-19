@@ -23,6 +23,7 @@ public:
 	void Run();
 	void OnQuit();
 	void OnWireFrame();
+	void OnRecompileSquirrel();
 
 	void Pause();
 	VWindow* GetWindow();

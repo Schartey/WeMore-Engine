@@ -33,6 +33,7 @@ void VInputComponent::OnInitialize()
 	VInputManager::BindAction("F1", KEY_F1, VActionType::Pressed, *this, &VInputComponent::OnF1Pressed);
 	VInputManager::BindAction("F2", KEY_F2, VActionType::Pressed, *this, &VInputComponent::OnF2Pressed);
 	VInputManager::BindAction("F3", KEY_F3, VActionType::Pressed, *this, &VInputComponent::OnF3Pressed);
+	VInputManager::BindAction("F4", KEY_F4, VActionType::Pressed, *this, &VInputComponent::OnF4Pressed);
 	VInputManager::BindAction("F8", KEY_F8, VActionType::Pressed, *this, &VInputComponent::OnF8Pressed);
 
 	VInputManager::BindAction("Quit", KEY_ESC, VActionType::Pressed, *this, &VInputComponent::OnQuitPressed);
@@ -122,6 +123,11 @@ void VInputComponent::OnF2Pressed()
 void VInputComponent::OnF3Pressed()
 {
 	VGameStatics::GetGame()->OnWireFrameDelegate();
+}
+
+void VInputComponent::OnF4Pressed()
+{
+	VGameStatics::GetGame()->OnRecompileDelegate();
 }
 
 void VInputComponent::OnF8Pressed()

@@ -78,6 +78,7 @@ void VEngine::Setup(VGame* Game)
 	this->Game = Game;
 	this->Game->OnQuitDelegate = std::bind(&VEngine::OnQuit, this);
 	this->Game->OnWireFrameDelegate = std::bind(&VEngine::OnWireFrame, this);
+	this->Game->OnRecompileDelegate = std::bind(&VEngine::OnRecompileSquirrel, this);
 	this->Game->SetConfig(config);
 	this->Game->SetWindow(Window);
 	this->Game->SetPhysics(Physics);
@@ -169,6 +170,15 @@ void VEngine::OnWireFrame()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	wireframeMode = !wireframeMode;
+}
+
+void VEngine::OnRecompileSquirrel()
+{
+	SquirrelEmbedder->Close();
+	GUI = new VGUI();
+	this->Game->SetGUI(GUI);
+	SquirrelGame = SquirrelEmbedder->Setup(this->Game);
+	SquirrelGame->OnInitialize();
 }
 
 void VEngine::Pause()
