@@ -25,17 +25,20 @@ function OnInitialize()
 	local marbleTexture = Engine.Texture("marble_2.jpg");
 	local platformTexture = Engine.Texture("floor13.jpg");
 	local boxTexture = Engine.Texture("9452.jpg");
+	local platformSpecularTexture = Engine.Texture("floor13s.jpg");
 
 	// Platforms
 	local platform = Engine.Platform();
 	platform.SetPosition(0.0, -5.0, 0.0);
 	platform.SetTexture(platformTexture);
 	platform.SetLightMapTexture(lightMapTexture);
+	platform.SetSpecularMapTexture(platformSpecularTexture);
 
 	local platform2 = Engine.Platform();
 	platform2.SetPosition(20.0, -10.0, 0.0);
 	platform2.SetTexture(platformTexture);
 	platform2.SetLightMapTexture(lightMapTexture);
+	platform2.SetSpecularMapTexture(platformSpecularTexture);
 
 	//Boxes
 	local box = Engine.Box();

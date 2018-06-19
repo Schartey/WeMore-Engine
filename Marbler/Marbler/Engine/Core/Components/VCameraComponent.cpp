@@ -73,6 +73,9 @@ glm::mat4 VCameraComponent::GetViewMatrix()
 		glm::vec3 thePosition = glm::toMat4(QuatPitch*QuatYaw) * Translation * glm::vec4(1.0f);
 		thePosition += Target->GetGlobalPosition();
 
+		Model = glm::translate(glm::mat4(), thePosition);
+
+
 		ViewMatrix = glm::lookAt(thePosition,
 			Target->GetGlobalPosition(),
 			glm::vec3(0.0f, 1.0f, 0.0f));

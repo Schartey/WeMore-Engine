@@ -291,11 +291,39 @@ SQInteger func_setMeshLightTexture(HSQUIRRELVM v)
 		{
 			if (sq_gettype(v, 3) == OT_INTEGER && sq_getinteger(v, 3, &textureId) == 0)
 			{
-				VTexture* Texture = VSquirrelGame::Game->GetObjectPool()->GetTexture(id);
+				VTexture* Texture = VSquirrelGame::Game->GetObjectPool()->GetTexture(textureId);
 
 				if (Texture != nullptr)
 				{
 					MeshComponent->GetMaterial()->AddLightMapTexture(Texture);
+					sq_pushbool(v, SQTrue); //push the number of arguments as return value
+					return 1; //1 because 1 value is returned
+				}
+
+			}
+		}
+	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setMeshSpecularTexture(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQInteger textureId = -1;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VMeshComponent* MeshComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VMeshComponent>(id);
+		if (MeshComponent != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_INTEGER && sq_getinteger(v, 3, &textureId) == 0)
+			{
+				VTexture* Texture = VSquirrelGame::Game->GetObjectPool()->GetTexture(textureId);
+
+				if (Texture != nullptr)
+				{
+					MeshComponent->GetMaterial()->SetSpecularMapTexture(Texture);
 					sq_pushbool(v, SQTrue); //push the number of arguments as return value
 					return 1; //1 because 1 value is returned
 				}
@@ -469,7 +497,7 @@ SQInteger func_createPointLight(HSQUIRRELVM v)
 	PointLight1->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(1.0, 0.09, 0.032);
 
 	PointLight1->SetScale(glm::vec3(50.0f));
-	PointLight1->SetPosition(glm::vec3(0.0f, 3.0f, 0.0f));
+	PointLight1->SetPosition(glm::vec3(10.0f, 1.0f, 0.0f));
 
 	int id = VSquirrelGame::Game->GetObjectPool()->AddSceneObject(PointLight1);
 
@@ -851,13 +879,17 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 	register_global_func(this->v, func_getFPS, "getFPS");
 
 	//Setter
+	//Material
+	register_global_func(this->v, func_setMeshMaterial, "setMeshMaterial");
+	register_global_func(this->v, func_setMeshTexture, "setMeshTexture");
+	register_global_func(this->v, func_setMeshLightTexture, "setMeshLightTexture");
+	register_global_func(this->v, func_setMeshSpecularTexture, "setMeshSpecularTexture");
+
 	register_global_func(this->v, func_setTextWidgetText, "setTextWidgetText");
 	register_global_func(this->v, func_setTextWidgetVisibility, "setTextWidgetVisibility");
 	register_global_func(this->v, func_setTextWidgetPosition, "setTextWidgetPosition");
 	register_global_func(this->v, func_setSceneObjectPosition, "setSceneObjectPosition");
-	register_global_func(this->v, func_setMeshMaterial, "setMeshMaterial");
-	register_global_func(this->v, func_setMeshTexture, "setMeshTexture");
-	register_global_func(this->v, func_setMeshLightTexture, "setMeshLightTexture");
+
 	register_global_func(this->v, func_createCameraComponent, "createCameraComponent");
 	register_global_func(this->v, func_attachComponentToSceneObject, "attachComponentToSceneObject");
 	register_global_func(this->v, func_setCameraTarget, "setCameraTarget");

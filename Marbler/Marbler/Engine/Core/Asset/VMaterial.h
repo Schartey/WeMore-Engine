@@ -28,6 +28,7 @@ public:
 
 	void AddDiffuseTexture(VTexture* Texture);
 	void AddLightMapTexture(VTexture* Texture);
+	void SetSpecularMapTexture(VTexture* Texture);
 
 	~VMaterial();
 
@@ -39,6 +40,10 @@ private:
 	glm::vec3 SpecularColor;
 	float SpecularIntensity;
 	float SpecularPower;
+
+	VTexture* DiffuseTexture;
+	VTexture* LightMapTexture;
+	VTexture* SpecularMapTexture;
 
 	std::vector<VTexture*> DiffuseTextures;
 	std::vector<VTexture*> LightMapTextures;

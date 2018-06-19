@@ -25,7 +25,7 @@ class Engine.Platform {
 		meshId = floorMeshComponentId;
 
 		//local lightBoxTextureId = loadTexture("Lightmap.png");
-		setMeshMaterial(floorMeshComponentId, 1.0, 1.0, 1.0, 1.0, 1);
+		setMeshMaterial(floorMeshComponentId, 1.0, 1.0, 1.0, 0.1, 23.0);
 		//attachComponentToSceneObject(floorMeshComponentId, floorActorId);
     }
     function SetPosition(x, y, z)
@@ -43,6 +43,12 @@ class Engine.Platform {
 	{
 		setMeshTexture(meshId, texture.id);
 	}
+
+	function SetSpecularMapTexture(texture)
+	{
+		::print(texture.id);
+		setMeshSpecularTexture(meshId, texture.id);
+	}
 }
 
 class Engine.Box {
@@ -58,7 +64,7 @@ class Engine.Box {
 		meshId = boxMeshComponentId;
 
 		//local lightBoxTextureId = loadTexture("Lightmap.png");
-		setMeshMaterial(boxMeshComponentId, 1.0, 1.0, 1.0, 1.0, 1);
+		setMeshMaterial(boxMeshComponentId, 1.0, 1.0, 1.0, 0.0, 0.0);
 		//attachComponentToSceneObject(floorMeshComponentId, floorActorId);
     }
     function SetPosition(x, y, z)
@@ -94,7 +100,7 @@ class Engine.Marble {
 		meshId = marbleMeshComponentId;
 
 		//local marbleTextureId = loadTexture("marble_2.jpg");
-		setMeshMaterial(marbleMeshComponentId, 1.0, 1.0, 1.0, 1.0, 32);
+		setMeshMaterial(marbleMeshComponentId, 1.0, 1.0, 1.0, 0.4, 2.0);
 		local cameraComponentId = createCameraComponent("CameraComponent", 0.0, 5.0, 20.0, 0.0, 0.0, 0.0, cameraActorId);
 		//attachComponentToSceneObject(cameraComponendId, cameraActorId);
 		setCameraTarget(cameraComponentId, marbleMeshComponentId);

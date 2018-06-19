@@ -22,6 +22,7 @@ uniform sampler2D gSpecularMap;
 uniform vec2 gScreenSize;
 uniform DirectionalLight gDirectionalLight;
 uniform mat4 view;
+uniform mat4 eye;
 uniform float gSpecularPower;
 uniform float gMatSpecularIntensity;
 
@@ -42,7 +43,7 @@ vec4 CalcLightInternal(BaseLight Light,
 					   vec3 Normal,
 					   vec2 Specular)
 {
-	vec3 eyeWorldPos = vec3(view*vec4(1.0));
+	vec3 eyeWorldPos = vec3(eye*vec4(1.0));
     vec4 AmbientColor = vec4(Light.Color, 1.0f) * Light.Ambient;
     float DiffuseFactor = dot(Normal, -LightDirection);
 
@@ -54,6 +55,8 @@ vec4 CalcLightInternal(BaseLight Light,
 
         vec3 VertexToEye = normalize(eyeWorldPos - WorldPos);
         vec3 LightReflect = normalize(reflect(LightDirection, Normal));
+		LightReflect = -2*Normal*(dot(LightDirection, Normal)) + LightDirection;
+
         float SpecularFactor = dot(VertexToEye, LightReflect);
         SpecularFactor = pow(SpecularFactor, Specular.y);
         if (SpecularFactor > 0) {
@@ -61,7 +64,7 @@ vec4 CalcLightInternal(BaseLight Light,
         }
     }
 
-    return (AmbientColor + DiffuseColor);// + SpecularColor);
+    return (AmbientColor + DiffuseColor + SpecularColor);
 }
 
 vec4 CalcDirectionalLight(vec3 WorldPos, vec3 Normal, vec2 Specular)

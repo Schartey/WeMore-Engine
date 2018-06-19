@@ -17,6 +17,8 @@ uniform int lightmapTextureSize;
 
 uniform sampler2D diffuseTexture[4];
 uniform sampler2D lightmapTexture[4];
+uniform sampler2D specularMapTexture;
+uniform int specularMapSet;
 
 uniform sampler2DShadow gShadowMap;
 
@@ -79,5 +81,15 @@ void main()
 
     DiffuseOut = visibility * vec3(surfaceColor);
 
-	SpecularOut = visibility * vec3(material.specularIntensity, material.specularPower, 1.0);
+	float specularIntensity = 0.0f;
+
+	if(specularMapSet == 1) 
+	{
+		specularIntensity = texture(specularMapTexture, fragTexCoord).x*material.specularIntensity;
+	} else 
+	{
+		specularIntensity = material.specularIntensity;
+	}
+	
+	SpecularOut = vec3(visibility * specularIntensity, material.specularPower, 1.0);
 }

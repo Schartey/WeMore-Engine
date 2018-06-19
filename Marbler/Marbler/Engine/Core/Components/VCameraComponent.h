@@ -17,6 +17,7 @@ public:
 	bool IsWithinFrustum(BBox Box);
 
 	glm::mat4 GetViewMatrix();
+	glm::mat4 GetModel() { return Model; }
 	glm::mat4 GetProjectionMatrix();
 	void SetTarget(VSceneComponent* SceneComponent);
 	void SetProjectionMatrix(float Fov, int Width, int Height, float NearPlane, float FarPlane);
@@ -34,6 +35,7 @@ private:
 	glm::mat4 ViewMatrix = glm::mat4();
 	glm::mat4 ProjectionMatrix = glm::mat4();
 	glm::vec3 LookAt = glm::vec3();
+	glm::mat4 Model = glm::mat4();
 
 	float Phi;
 	float Theta;
