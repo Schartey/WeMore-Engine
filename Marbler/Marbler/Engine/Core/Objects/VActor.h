@@ -12,6 +12,10 @@ public:
 	bool bPhysics = false;
 
 	virtual void SetPosition(glm::vec3 Position) override;
+	virtual void SetRotationDeg(glm::vec3 Rotation) override;
+
+	void RestrictMotionLinear(bool lX, bool lY, bool lZ);
+	void RestrictMotionAngular(bool rX, bool rY, bool rZ);
 
 	PxRigidActor* GetRigidActor()
 	{

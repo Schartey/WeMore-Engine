@@ -8,7 +8,7 @@ class VSkybox : public VSceneObject
 public:
 	VSkybox(VScene* Scene, std::string Name, VTextureCube* TextureCube);
 
-	void RenderPass();
+	void RenderPass(VShader* Shader);
 
 	~VSkybox();
 

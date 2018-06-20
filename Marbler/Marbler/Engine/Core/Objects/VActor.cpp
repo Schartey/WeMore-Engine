@@ -20,6 +20,47 @@ void VActor::SetPosition(glm::vec3 Position)
 		this->RigidActor->setGlobalPose(PxTransform(PhysxUtils::ConvertGVec3ToPxVec3(this->Position)));
 	}
 }
+
+void VActor::SetRotationDeg(glm::vec3 Rotation)
+{
+	VSceneObject::SetRotationDeg(Rotation);
+
+	if (this->RigidActor != nullptr)
+	{
+		this->RigidActor->setGlobalPose(PxTransform(PhysxUtils::ConvertGVec3ToPxVec3(this->Position), PhysxUtils::ConvertGVecQuatToPxQuat(this->Rotation)));
+	}
+}
+
+void VActor::RestrictMotionLinear(bool lX, bool lY, bool lZ)
+{
+	if (this->RigidActor != nullptr)
+	{
+		PxRigidDynamic* RigidDynamic = (PxRigidDynamic*)RigidActor;
+
+		if (RigidDynamic != nullptr)
+		{
+			RigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_X, lX);
+			RigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, lY);
+			RigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Z, lZ);
+		}
+	}
+}
+
+void VActor::RestrictMotionAngular(bool rX, bool rY, bool rZ)
+{
+	if (this->RigidActor != nullptr)
+	{
+		PxRigidDynamic* RigidDynamic = (PxRigidDynamic*)RigidActor;
+
+		if (RigidDynamic != nullptr)
+		{
+			RigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, rX);
+			RigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, rY);
+			RigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, rZ);
+		}
+	}
+}
+
 glm::vec3 VActor::GetMovementVector()
 {
 	if (this->RigidActor != nullptr)

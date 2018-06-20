@@ -137,6 +137,8 @@ void VEngine::Run()
 					GBuffer->DirectionalLightPass(Game->GetActiveScene(), ShadowBuffer->GetTestMap(), ShadowBuffer->GetShadowMap(), ShadowBuffer->GetDepthVP());
 				}
 
+				//Draw Skybox
+				//GBuffer->DrawSkybox(Game->GetActiveScene());
 				GUI->RenderPass();
 
 				GBuffer->FinalPass();

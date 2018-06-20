@@ -33,6 +33,13 @@ void PhysxUtils::ConvertPxTransformToGVecQuat(PxTransform Transform, vec3 &Posit
 	Rotation.w = Transform.q.w;
 }
 
+PxQuat PhysxUtils::ConvertGVecQuatToPxQuat(quat Rotation)
+{
+	PxQuat quat = PxQuat(Rotation.x, Rotation.y, Rotation.z, Rotation.w);
+
+	return quat;
+}
+
 PxVec3 PhysxUtils::ConvertGVec3ToPxVec3(glm::vec3 Vector)
 {
 	return PxVec3(Vector.x, Vector.y, Vector.z);

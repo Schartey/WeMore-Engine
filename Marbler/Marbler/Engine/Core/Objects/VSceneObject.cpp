@@ -2,6 +2,7 @@
 
 #include "../../Utils/Assimp/VAssimpUtils.h"
 #include "glm/gtx/transform.hpp"
+#include "glm/gtx/euler_angles.hpp"
 
 
 VSceneObject::VSceneObject(VScene* Scene, std::string Name)
@@ -45,6 +46,16 @@ std::string VSceneObject::GetName()
 void VSceneObject::SetPosition(glm::vec3 Position)
 {
 	this->Position = Position;
+}
+
+void VSceneObject::SetRotationDeg(glm::vec3 Rotation)
+{
+	/*glm::quat QuatAroundX = glm::quat(glm::vec3(1.0, 0.0, 0.0), Rotation.x);
+	glm::quat QuatAroundY = glm::quat(glm::vec3(0.0, 1.0, 0.0), Rotation.y);
+	glm::quat QuatAroundZ = glm::quat(glm::vec3(0.0, 0.0, 1.0), Rotation.z);
+	glm::quat finalOrientation = QuatAroundX * QuatAroundY * QuatAroundZ;*/
+
+	this->Rotation = glm::quat((glm::radians<float>(Rotation)));
 }
 
 void VSceneObject::SetRotation(glm::quat Rotation)

@@ -5,6 +5,8 @@ local frustumTextWidget = null;
 local goalTextWidget = null;
 local game = null;
 
+local box2 = null;
+
 function OnInitialize()
 {
 	print("Main initialized!");
@@ -41,15 +43,28 @@ function OnInitialize()
 	platform2.SetLightMapTexture(lightMapTexture);
 	platform2.SetSpecularMapTexture(platformSpecularTexture);
 
+	local platform3 = Engine.Platform();
+	platform3.SetPosition(60.0, -10.0, 0.0);
+	platform3.SetTexture(platformTexture);
+	platform3.SetLightMapTexture(lightMapTexture);
+	platform3.SetSpecularMapTexture(platformSpecularTexture);
+
 	//Walls
 	local smallWall = Engine.SmallWall();
 	smallWall.SetPosition(0.0, -3.0, -9.0);
+	smallWall.SetRotationDeg(0.0, 0.0, 0.0);
 
 	//Boxes
-	local box = Engine.Box();
+	local box = Engine.Box(false);
 	box.SetPosition(20.0, -5.0, 0.0);
 	box.SetTexture(boxTexture);
-	//box.SetLightMapTexture(lightMapTexture);
+
+	box2 = Engine.Box(true);
+	box2.SetPosition(40.0, -10.0, 0.0);
+	box2.SetTexture(boxTexture);
+	box2.SetScale(10.0, 1.0, 1.0);
+	//box2.RestrictMotionLinear(true, true, true);
+	//box2.RestrictMotionAngular(true, false, true);
 
 	//Player
 	marble = Engine.Marble();
@@ -57,7 +72,7 @@ function OnInitialize()
 	marble.SetTexture(marbleTexture);
 	
 	
-	//local skyboxId = createSkybox();
+	local skyboxId = createSkybox();
 
 	setDirectionalLight();
 	local pointLightId = createPointLight();
@@ -95,6 +110,13 @@ function OnTick()
 	{
 		fpsTextWidget.SetText(game.GetFPS().tostring());
 	}
+
+	local rotation = box2.GetRotationDeg();
+
+	if(rotation.y > 89)
+		rotation.y = -90;
+	box2.SetRotationDeg(rotation.x, rotation.y + 1.0, rotation.z);
+
 }
 
 function OnFPS()

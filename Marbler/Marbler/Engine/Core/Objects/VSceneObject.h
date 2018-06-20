@@ -21,6 +21,7 @@ public:
 	std::string GetName();
 
 	virtual void SetPosition(glm::vec3 Position);
+	virtual void SetRotationDeg(glm::vec3 Rotation);
 	void SetRotation(glm::quat Rotation);
 	void SetScale(glm::vec3 Scale);
 

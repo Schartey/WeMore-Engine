@@ -16,6 +16,7 @@ bool VGBuffer::Initialize(int Width, int Height, int MSAASamples)
 	PointLightShader = new VShader("Engine/Shader/gBuffer/light_pass.vert", "Engine/Shader/gBuffer/pointlight_pass.frag");
 	DirectionalLightShader = new VShader("Engine/Shader/gBuffer/light_pass.vert", "Engine/Shader/gBuffer/directionallight_pass.frag");
 	NullShader = new VShader("Engine/Shader/gBuffer/null.vert", "Engine/Shader/gBuffer/null.frag");
+	SkyboxShader = new VShader("Engine/Shader/gBuffer/skybox.vert", "Engine/Shader/gBuffer/skybox.frag");
 
 	this->Width = Width;
 	this->Height = Height;
@@ -244,6 +245,24 @@ void VGBuffer::DirectionalLightPass(VScene* Scene, GLuint TestMap, GLuint Shadow
 	Scene->GetDirectionalLight()->Draw();
 
 	glDisable(GL_BLEND);
+}
+
+void VGBuffer::DrawSkybox(VScene* Scene)
+{
+	//glCullFace(GL_FRONT);
+	//glDepthFunc(GL_LEQUAL);
+
+	SkyboxShader->useShader();
+
+	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
+
+	glUniformMatrix4fv(glGetUniformLocation(SkyboxShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(SkyboxShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(glm::mat4()));
+
+	Scene->GetSkybox()->RenderPass(SkyboxShader);
+
+	//glDepthFunc(GL_LESS);
+	//glCullFace(GL_BACK);
 }
 
 void VGBuffer::FinalPass()

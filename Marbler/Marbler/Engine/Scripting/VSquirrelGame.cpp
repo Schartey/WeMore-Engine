@@ -143,12 +143,41 @@ SQInteger func_getSceneObjectPosition(HSQUIRRELVM v)
 		sq_newtable(v);
 		sq_pushstring(v, "x", -1);
 		sq_pushfloat(v, SceneObject->GetPosition().x);
-		sq_newslot(v,-3, SQTrue);
+		sq_newslot(v, -3, SQTrue);
 		sq_pushstring(v, "y", -1);
 		sq_pushfloat(v, SceneObject->GetPosition().y);
 		sq_newslot(v, -3, SQTrue);
 		sq_pushstring(v, "z", -1);
 		sq_pushfloat(v, SceneObject->GetPosition().z);
+		sq_newslot(v, -3, SQTrue);
+
+		return 1;
+	}
+
+	sq_pushinteger(v, -1);
+	return 1;
+}
+
+SQInteger func_getSceneObjectRotation(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VSceneObject* SceneObject = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VSceneObject>(id);
+
+		glm::vec3 eulerAngles = glm::degrees<float>(glm::eulerAngles(SceneObject->GetRotation()));
+
+		sq_pushstring(v, "rotation", -1); //2
+		sq_newtable(v);
+		sq_pushstring(v, "x", -1);
+		sq_pushfloat(v, eulerAngles.x);
+		sq_newslot(v, -3, SQTrue);
+		sq_pushstring(v, "y", -1);
+		sq_pushfloat(v, eulerAngles.y);
+		sq_newslot(v, -3, SQTrue);
+		sq_pushstring(v, "z", -1);
+		sq_pushfloat(v, eulerAngles.z);
 		sq_newslot(v, -3, SQTrue);
 
 		return 1;
@@ -178,6 +207,72 @@ SQInteger func_setSceneObjectPosition(HSQUIRRELVM v)
 					if (SceneObject != nullptr)
 					{
 						SceneObject->SetPosition(glm::vec3(posx, posy, posz));
+
+						sq_pushbool(v, true); //push the number of arguments as return value
+						return 1; //1 because 1 value is returned
+					}
+				}
+			}
+		}
+	}
+
+	sq_pushbool(v, false); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setSceneObjectRotationDeg(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat rotx = 0.0f;
+	SQFloat roty = 0.0f;
+	SQFloat rotz = 0.0f;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &rotx) == 0)
+		{
+			if (sq_gettype(v, 4) == OT_FLOAT && sq_getfloat(v, 4, &roty) == 0)
+			{
+				if (sq_gettype(v, 5) == OT_FLOAT && sq_getfloat(v, 5, &rotz) == 0)
+				{
+					VSceneObject* SceneObject = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VSceneObject>(id);
+
+					if (SceneObject != nullptr)
+					{
+						SceneObject->SetRotationDeg(glm::vec3(rotx, roty, rotz));
+
+						sq_pushbool(v, true); //push the number of arguments as return value
+						return 1; //1 because 1 value is returned
+					}
+				}
+			}
+		}
+	}
+
+	sq_pushbool(v, false); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setMeshComponentScale(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat scaleX = 0.0f;
+	SQFloat scaleY = 0.0f;
+	SQFloat scaleZ = 0.0f;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &scaleX) == 0)
+		{
+			if (sq_gettype(v, 4) == OT_FLOAT && sq_getfloat(v, 4, &scaleY) == 0)
+			{
+				if (sq_gettype(v, 5) == OT_FLOAT && sq_getfloat(v, 5, &scaleZ) == 0)
+				{
+					VMeshComponent* MeshComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VMeshComponent>(id);
+
+					if (MeshComponent != nullptr)
+					{
+						MeshComponent->SetScale(glm::vec3(scaleX, scaleY, scaleZ));
 
 						sq_pushbool(v, true); //push the number of arguments as return value
 						return 1; //1 because 1 value is returned
@@ -358,6 +453,69 @@ SQInteger func_setActorMass(HSQUIRRELVM v)
 	sq_pushbool(v, SQFalse); //push the number of arguments as return value
 	return 1; //1 because 1 value is returned
 }
+
+SQInteger func_restrictActorMotionLinear(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQBool rX = false;
+	SQBool rY = false;
+	SQBool rZ = false;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VActor* Actor = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VActor>(id);
+		if (Actor != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_BOOL && sq_getbool(v, 3, &rX) == 0)
+			{
+				if (sq_gettype(v, 4) == OT_BOOL && sq_getbool(v, 4, &rY) == 0)
+				{
+					if (sq_gettype(v, 5) == OT_BOOL && sq_getbool(v, 5, &rZ) == 0)
+					{
+						Actor->RestrictMotionLinear(rX, rY, rZ);
+
+						sq_pushbool(v, SQTrue); //push the number of arguments as return value
+						return 1; //1 because 1 value is returned
+					}
+				}
+			}
+		}
+	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_restrictActorMotionAngular(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQBool rX = false;
+	SQBool rY = false;
+	SQBool rZ = false;
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VActor* Actor = VSquirrelGame::Game->GetObjectPool()->GetSceneObject<VActor>(id);
+		if (Actor != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_BOOL && sq_getbool(v, 3, &rX) == 0)
+			{
+				if (sq_gettype(v, 4) == OT_BOOL && sq_getbool(v, 4, &rY) == 0)
+				{
+					if (sq_gettype(v, 5) == OT_BOOL && sq_getbool(v, 5, &rZ) == 0)
+					{
+						Actor->RestrictMotionAngular(rX, rY, rZ);
+
+						sq_pushbool(v, SQTrue); //push the number of arguments as return value
+						return 1; //1 because 1 value is returned
+					}
+				}
+			}
+		}
+	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
 SQInteger func_attachComponentToSceneObject(HSQUIRRELVM v)
 {
 	SQInteger id = -1;
@@ -876,8 +1034,9 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 
 	//Getter
 	register_global_func(this->v, func_getSceneObjectPosition, "getSceneObjectPosition");
+	register_global_func(this->v, func_getSceneObjectRotation, "getSceneObjectRotation");
 	register_global_func(this->v, func_getFPS, "getFPS");
-
+	
 	//Setter
 	//Material
 	register_global_func(this->v, func_setMeshMaterial, "setMeshMaterial");
@@ -885,15 +1044,21 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 	register_global_func(this->v, func_setMeshLightTexture, "setMeshLightTexture");
 	register_global_func(this->v, func_setMeshSpecularTexture, "setMeshSpecularTexture");
 
+	//PhysX
+	register_global_func(this->v, func_setActorMass, "setActorMass");
+	register_global_func(this->v, func_restrictActorMotionLinear, "restrictActorMotionLinear");
+	register_global_func(this->v, func_restrictActorMotionAngular, "restrictActorMotionAngular");
+
 	register_global_func(this->v, func_setTextWidgetText, "setTextWidgetText");
 	register_global_func(this->v, func_setTextWidgetVisibility, "setTextWidgetVisibility");
 	register_global_func(this->v, func_setTextWidgetPosition, "setTextWidgetPosition");
 	register_global_func(this->v, func_setSceneObjectPosition, "setSceneObjectPosition");
+	register_global_func(this->v, func_setSceneObjectRotationDeg, "setSceneObjectRotationDeg");
+	register_global_func(this->v, func_setMeshComponentScale, "setMeshComponentScale");
 
 	register_global_func(this->v, func_createCameraComponent, "createCameraComponent");
 	register_global_func(this->v, func_attachComponentToSceneObject, "attachComponentToSceneObject");
 	register_global_func(this->v, func_setCameraTarget, "setCameraTarget");
-	register_global_func(this->v, func_setActorMass, "setActorMass");
 	register_global_func(this->v, func_test_parameters, "testParameters");
 	register_global_func(this->v, func_setDirectionalLight, "setDirectionalLight");
 	register_global_func(this->v, func_createPointLight, "createPointLight");
@@ -923,7 +1088,7 @@ void VSquirrelGame::OnUpdate(double deltaT)
 
 	time += deltaT;
 
-	if (time > 0.2)
+	if (time > 0.02)
 	{
 		sq_pushroottable(v);
 		sq_pushstring(v, "OnTick", -1);

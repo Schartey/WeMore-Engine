@@ -27,6 +27,7 @@ public:
 	void StencilPass(VScene* Scene, VSceneObject* PointLight);
 	void PointLightPass(VScene* Scene, VSceneObject* PointLight);
 	void DirectionalLightPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap, glm::mat4 DepthVP);
+	void DrawSkybox(VScene* Scene);
 	void FinalPass();
 
 	VShader* GetGeometryShader();
@@ -47,6 +48,7 @@ private:
 	VShader* PointLightShader;
 	VShader* DirectionalLightShader;
 	VShader* NullShader;
+	VShader* SkyboxShader;
 
 	unsigned int gBuffer;
 	unsigned int multisampleBuffer;

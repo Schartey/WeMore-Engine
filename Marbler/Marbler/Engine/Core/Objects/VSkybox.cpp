@@ -20,23 +20,13 @@ VSkybox::VSkybox(VScene* Scene, std::string Name, VTextureCube* TextureCube) : V
 	glBufferData(GL_ARRAY_BUFFER, sizeof(this->Vertices), this->Vertices, GL_STATIC_DRAW);
 }
 
-void VSkybox::RenderPass()
+void VSkybox::RenderPass(VShader* Shader)
 {
-	glDepthMask(GL_FALSE);
-	SkyboxShader->useShader();
-
-	VCameraComponent* CameraComponent = this->Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
-	glm::mat4 view = glm::mat4(glm::mat3(CameraComponent->GetViewMatrix()));
-	// ... set view and projection matrix
-	glUniformMatrix4fv(glGetUniformLocation(SkyboxShader->programHandle, "view"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(SkyboxShader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(CameraComponent->GetProjectionMatrix()));
-
-	glUniform1i(glGetUniformLocation(SkyboxShader->programHandle, ("skybox")), 0);
+	glUniform1i(glGetUniformLocation(Shader->programHandle, ("skybox")), 0);
 
 	glBindVertexArray(this->VAO);
 	TextureCube->Bind(0);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glDepthMask(GL_TRUE);
 }
 
 VSkybox::~VSkybox()

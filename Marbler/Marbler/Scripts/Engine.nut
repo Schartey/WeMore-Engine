@@ -12,27 +12,39 @@ class Engine.Texture {
 	}
 }
 
-class Engine.Platform {
+class Engine.Actor {
+
 	id = null;
 	meshId = null;
+	
+	function GetPosition()
+	{
+		local position = getSceneObjectPosition(id);
+		return position;
+	}
 
-    constructor()
-    {
-		local floorActorId = createActor("FloorActor", true, true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-		id = floorActorId;
+	function GetRotationDeg()
+	{
+		local rotation = getSceneObjectRotation(id);
+		return rotation;
+	}
 
-		local floorMeshComponentId = createMeshComponent("FloorMeshComponent", "box.fbx", "Box", true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 0.1, 10.0, floorActorId);
-		meshId = floorMeshComponentId;
-
-		//local lightBoxTextureId = loadTexture("Lightmap.png");
-		setMeshMaterial(floorMeshComponentId, 1.0, 1.0, 1.0, 0.1, 23.0);
-		//attachComponentToSceneObject(floorMeshComponentId, floorActorId);
-    }
     function SetPosition(x, y, z)
     {
 		::print("Setting Position");
         setSceneObjectPosition(id, x, y ,z);
     }
+
+	function SetRotationDeg(x,y,z)
+	{
+		setSceneObjectRotationDeg(id, x, y, z);
+	}
+
+	function SetScale(x, y, z)
+	{
+		setMeshComponentScale(meshId, x, y, z);
+	}
+
 
 	function SetLightMapTexture(texture)
 	{
@@ -49,15 +61,43 @@ class Engine.Platform {
 		::print(texture.id);
 		setMeshSpecularTexture(meshId, texture.id);
 	}
+	
+	function SetMass(mass)
+	{
+		setActorMass(id, mass);
+	}
+
+	function RestrictMotionLinear(x, y, z)
+	{
+		restrictActorMotionLinear(id, x, y, z);
+	}
+
+	function RestrictMotionAngular(x, y, z)
+	{
+		restrictActorMotionAngular(id, x, y, z);
+	}
 }
 
-class Engine.Box {
-	id = null;
-	meshId = null;
-
+class Engine.Platform extends Engine.Actor {
     constructor()
     {
-		local boxActorId = createActor("BoxActor", true, false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		local floorActorId = createActor("FloorActor", true, true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		id = floorActorId;
+
+		local floorMeshComponentId = createMeshComponent("FloorMeshComponent", "box.fbx", "Box", true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 0.1, 10.0, floorActorId);
+		meshId = floorMeshComponentId;
+
+		//local lightBoxTextureId = loadTexture("Lightmap.png");
+		setMeshMaterial(floorMeshComponentId, 1.0, 1.0, 1.0, 0.1, 23.0);
+		//attachComponentToSceneObject(floorMeshComponentId, floorActorId);
+    }
+}
+
+class Engine.Box extends Engine.Actor {
+
+    constructor(isStatic)
+    {
+		local boxActorId = createActor("BoxActor", true, isStatic, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		id = boxActorId;
 
 		local boxMeshComponentId = createMeshComponent("BoxMeshComponent", "box.fbx", "Box", true, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, boxActorId);
@@ -67,26 +107,9 @@ class Engine.Box {
 		setMeshMaterial(boxMeshComponentId, 1.0, 1.0, 1.0, 0.0, 0.0);
 		//attachComponentToSceneObject(floorMeshComponentId, floorActorId);
     }
-    function SetPosition(x, y, z)
-    {
-		::print("Setting Position");
-        setSceneObjectPosition(id, x, y ,z);
-    }
-
-	function SetTexture(texture)
-	{
-		setMeshTexture(meshId, texture.id);
-	}
-
-	function SetLightMapTexture(texture)
-	{
-		setMeshLightTexture(meshId, texture.id);
-	}
 }
 
-class Engine.SmallWall {
-	id = null;
-	meshId = null;
+class Engine.SmallWall extends Engine.Actor {
 
     constructor()
     {
@@ -98,29 +121,9 @@ class Engine.SmallWall {
 
 		setMeshMaterial(smallWallMeshComponentId, 1.0, 1.0, 1.0, 0.0, 0.0);
     }
-    function SetPosition(x, y, z)
-    {
-		::print("Setting Position");
-        setSceneObjectPosition(id, x, y ,z);
-    }
-
-	function SetRotation(x,y,z)
-	{
-		
-	}
-
-	function SetTexture(texture)
-	{
-		setMeshTexture(meshId, texture.id);
-	}
-
-	function SetLightMapTexture(texture)
-	{
-		setMeshLightTexture(meshId, texture.id);
-	}
 }
 
-class Engine.Marble {
+class Engine.Marble extends Engine.Actor {
 	id = null;
 	meshId = null;
 
@@ -143,34 +146,20 @@ class Engine.Marble {
 		local inputComponentId = createInputComponent("InputComponent", cameraActorId);
 		//local particleComponentId = createParticleComponent("ParticleComponent", floorActorId);
     }
-
-	function GetPosition()
-	{
-		local position = getSceneObjectPosition(id);
-		return position;
-	}
-
-	function SetTexture(texture)
-	{
-		setMeshTexture(meshId, texture.id);
-	}
-
-	function SetMass(mass)
-	{
-		setActorMass(id, mass);
-	}
-
-    function DoSomething()
-    {
-        ::print("DoSomething()")
-    }
 }
 
-class Engine.TextWidget
+class Engine.UserWidget
 {
 	id = null;
 	visibility = false;
 
+	function GetVisibility()
+	{
+		return visibility;
+	}
+}
+class Engine.TextWidget extends Engine.UserWidget
+{
 	constructor()
 	{
 		local textWidgetId = createTextWidget();
@@ -185,11 +174,6 @@ class Engine.TextWidget
 	function SetPosition(posx, posy)
 	{
 		setTextWidgetPosition(id, posx, posy);
-	}
-
-	function GetVisibility()
-	{
-		return visibility;
 	}
 
 	function ToggleVisibility()
