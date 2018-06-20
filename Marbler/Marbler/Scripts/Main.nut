@@ -2,6 +2,7 @@ local marble = null;
 local fpsTextWidget = null;
 local helpTextWidget = null;
 local frustumTextWidget = null;
+local objectsCountTextWidget = null;
 local goalTextWidget = null;
 local game = null;
 
@@ -89,6 +90,10 @@ function OnInitialize()
 	frustumTextWidget.SetPosition(75.0, 0.0);
 	frustumTextWidget.SetText("FC active!");
 
+	objectsCountTextWidget = Engine.TextWidget();
+	objectsCountTextWidget.SetPosition(90.0, 0.0);
+	objectsCountTextWidget.ToggleVisibility();
+
 	goalTextWidget = Engine.TextWidget();
 	goalTextWidget.SetPosition(300.0, 300.0);
 	goalTextWidget.SetText("Goal reached!");
@@ -110,6 +115,8 @@ function OnTick()
 	{
 		fpsTextWidget.SetText(game.GetFPS().tostring());
 	}
+
+	objectsCountTextWidget.SetText("Objects: " + game.GetObjectsCount().tostring());
 
 	local rotation = box2.GetRotationDeg();
 

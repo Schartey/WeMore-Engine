@@ -2,6 +2,7 @@
 
 VDebugStatics* VDebugStatics::instance = 0;
 int VDebugStatics::FPS = 0;
+int VDebugStatics::Objects = 0;
 
 void VDebugStatics::Update(int FPS)
 {

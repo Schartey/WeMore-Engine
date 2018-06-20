@@ -212,4 +212,10 @@ class Engine.Game {
 		local fps = getFPS();
 		return fps;
 	}
+
+	function GetObjectsCount()
+	{
+		local objects = getObjectsCount();
+		return objects;
+	}
 }

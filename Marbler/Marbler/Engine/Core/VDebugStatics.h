@@ -15,6 +15,8 @@ public:
 
 	~VDebugStatics() { delete instance; };
 
+	static int Objects; 
+
 private:
 	static VDebugStatics* instance;
 

@@ -101,7 +101,7 @@ void VEngine::Run()
 		deltaT = (float)(time - lastTime);
 		lastTime = time;
 
-		VDebugStatics::Update((int)(deltaT*10000));
+		VDebugStatics::Update((int)(deltaT * 10000));
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
@@ -112,6 +112,7 @@ void VEngine::Run()
 
 			StepPhysics(deltaT);
 			SquirrelGame->OnUpdate(deltaT);
+			VDebugStatics::Objects = 0;
 
 			if (Window->GetOpenGlMinor() >= 0) {
 				ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());

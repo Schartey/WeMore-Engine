@@ -933,6 +933,12 @@ SQInteger func_getFPS(HSQUIRRELVM v)
 	return 1;
 }
 
+SQInteger func_getObjectsCount(HSQUIRRELVM v)
+{
+	sq_pushfloat(v, VDebugStatics::Objects);
+	return 1;
+}
+
 SQInteger func_test_parameters(HSQUIRRELVM v)
 {
 	SQInteger nargs = sq_gettop(v); //number of arguments
@@ -1035,7 +1041,6 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 	//Getter
 	register_global_func(this->v, func_getSceneObjectPosition, "getSceneObjectPosition");
 	register_global_func(this->v, func_getSceneObjectRotation, "getSceneObjectRotation");
-	register_global_func(this->v, func_getFPS, "getFPS");
 	
 	//Setter
 	//Material
@@ -1048,6 +1053,10 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 	register_global_func(this->v, func_setActorMass, "setActorMass");
 	register_global_func(this->v, func_restrictActorMotionLinear, "restrictActorMotionLinear");
 	register_global_func(this->v, func_restrictActorMotionAngular, "restrictActorMotionAngular");
+
+	//Debug
+	register_global_func(this->v, func_getFPS, "getFPS");
+	register_global_func(this->v, func_getObjectsCount, "getObjectsCount");
 
 	register_global_func(this->v, func_setTextWidgetText, "setTextWidgetText");
 	register_global_func(this->v, func_setTextWidgetVisibility, "setTextWidgetVisibility");
