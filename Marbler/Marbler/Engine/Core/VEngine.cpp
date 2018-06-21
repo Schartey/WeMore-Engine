@@ -94,6 +94,7 @@ void VEngine::Run()
 	auto deltaT = 0.0;
 	auto lastTime = glfwGetTime();
 	double lastTimeMS = glfwGetTime();
+	double physicsTime = 0;
 
 	while (bRunning)
 	{
@@ -110,14 +111,22 @@ void VEngine::Run()
 
 		if (!bPause && deltaT > 0) {
 
-			StepPhysics(deltaT);
+			physicsTime += deltaT;
+
+			if (physicsTime > 0.01667) 
+			{
+				StepPhysics(physicsTime);
+				physicsTime = 0;
+			}
 			SquirrelGame->OnUpdate(deltaT);
 			VDebugStatics::Objects = 0;
 
 			if (Window->GetOpenGlMinor() >= 0) {
-				ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());
-				Game->RenderPass(ShadowBuffer->GetShadowLightShader(), RenderPassBufferType::ShadowBuffer);
-				
+				if (!wireframeMode)
+				{
+					ShadowBuffer->RenderDirectionalLightDepth(Game->GetActiveScene()->GetDirectionalLight());
+					Game->RenderPass(ShadowBuffer->GetShadowLightShader(), RenderPassBufferType::ShadowBuffer);
+				}
 				//ShadowBuffer->Test();
 				//Game->GetActiveScene()->GetSkybox()->RenderPass();
 				GBuffer->StartFrame();
@@ -125,24 +134,27 @@ void VEngine::Run()
 				Game->RenderPass(GBuffer->GetGeometryShader(), RenderPassBufferType::GBuffer);
 				GBuffer->EndGeometryPass();
 
-				glEnable(GL_STENCIL_TEST);
-
-				for (unsigned int i = 0; i < Game->GetActiveScene()->GetPointLights().size(); i++) {
-					GBuffer->StencilPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
-					GBuffer->PointLightPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
-				}
-				glDisable(GL_STENCIL_TEST);
-
-				if (Game->GetActiveScene()->GetDirectionalLight() != nullptr)
+				if (!wireframeMode)
 				{
-					GBuffer->DirectionalLightPass(Game->GetActiveScene(), ShadowBuffer->GetTestMap(), ShadowBuffer->GetShadowMap(), ShadowBuffer->GetDepthVP());
+					glEnable(GL_STENCIL_TEST);
+
+					for (unsigned int i = 0; i < Game->GetActiveScene()->GetPointLights().size(); i++) {
+						GBuffer->StencilPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
+						GBuffer->PointLightPass(Game->GetActiveScene(), Game->GetActiveScene()->GetPointLights().at(i));
+					}
+					glDisable(GL_STENCIL_TEST);
+
+					if (Game->GetActiveScene()->GetDirectionalLight() != nullptr)
+					{
+						GBuffer->DirectionalLightPass(Game->GetActiveScene(), ShadowBuffer->GetTestMap(), ShadowBuffer->GetShadowMap(), ShadowBuffer->GetDepthVP());
+					}
 				}
 
 				//Draw Skybox
 				//GBuffer->DrawSkybox(Game->GetActiveScene());
 				GUI->RenderPass();
 
-				GBuffer->FinalPass();
+				GBuffer->FinalPass(wireframeMode);
 			}
 			else
 			{
@@ -201,7 +213,7 @@ VPhysics* VEngine::GetPhysics()
 
 void VEngine::StepPhysics(float deltaTime)
 {
-	PX_UNUSED(true);
+	PX_UNUSED(false);
 	Game->GetActiveScene()->GetPhysicsScene()->simulate(deltaTime);
 	Game->GetActiveScene()->GetPhysicsScene()->fetchResults(true);
 }

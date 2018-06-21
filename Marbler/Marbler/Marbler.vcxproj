@@ -185,6 +185,7 @@
     <ClCompile Include="Engine\Scripting\VSquirrelCompiler.cpp" />
     <ClCompile Include="Engine\Scripting\VSquirrelGame.cpp" />
     <ClCompile Include="Engine\Core\VObjectPool.cpp" />
+    <ClCompile Include="Engine\Core\VFrustum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\DebugUtils.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="Engine\Scripting\VSquirrelGame.h" />
     <ClInclude Include="Engine\Core\VObjectPool.h" />
     <ClInclude Include="Engine\Core\VLogger.h" />
+    <ClInclude Include="Engine\Core\VFrustum.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

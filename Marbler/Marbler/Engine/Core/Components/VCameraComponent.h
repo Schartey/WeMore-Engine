@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 #include "VSceneComponent.h"
 #include "../Asset/VMesh.h"
+#include "../VFrustum.h"
 
 class VCameraComponent : public VSceneComponent
 {
@@ -14,11 +15,10 @@ public:
 	void IncreasePhi(float Phi);
 	void IncreaseTheta(float Theta);
 
-	bool IsWithinFrustum(BBox Box);
-
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetModel() { return Model; }
 	glm::mat4 GetProjectionMatrix();
+	VFrustum* GetFrustum();
 	void SetTarget(VSceneComponent* SceneComponent);
 	void SetProjectionMatrix(float Fov, int Width, int Height, float NearPlane, float FarPlane);
 
@@ -31,6 +31,7 @@ private:
 	float CameraSwitchTime = 3000.0f;
 	float BlendSpeed = 1.0f;
 	VSceneComponent* Target;
+	VFrustum* Frustum;
 
 	glm::mat4 ViewMatrix = glm::mat4();
 	glm::mat4 ProjectionMatrix = glm::mat4();
@@ -44,5 +45,9 @@ private:
 	float NearPlane;
 	float FarPlane;
 	float Ratio;
+	float WidthNear;
+	float HeightNear;
+	float WidthFar;
+	float HeightFar;
 };
 

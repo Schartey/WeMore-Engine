@@ -91,7 +91,7 @@ function OnInitialize()
 	frustumTextWidget.SetText("FC active!");
 
 	objectsCountTextWidget = Engine.TextWidget();
-	objectsCountTextWidget.SetPosition(90.0, 0.0);
+	objectsCountTextWidget.SetPosition(200.0, 0.0);
 	objectsCountTextWidget.ToggleVisibility();
 
 	goalTextWidget = Engine.TextWidget();

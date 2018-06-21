@@ -145,9 +145,14 @@ void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix, Re
 {
 	VCameraComponent* CameraComponent = Scene->GetActiveSceneObject()->GetComponentByClass<VCameraComponent>();
 
-	if (CameraComponent->IsWithinFrustum(this->Mesh->GetBoundingBox()) || !VGameStatics::GetGame()->GetFrustumCulling()) {
-		VDebugStatics::Objects++;
-		glm::mat4 CMT = ParentModelMatrix * ModelMatrix;
+	glm::mat4 CMT = ParentModelMatrix * ModelMatrix;
+
+	if (!VGameStatics::GetGame()->GetFrustumCulling() || (CameraComponent->GetFrustum()->pointInFrustum(CMT * glm::vec4(this->Mesh->GetBoundingBox().max, 1)) == VFrustum::F_INSIDE && CameraComponent->GetFrustum()->pointInFrustum(CMT * glm::vec4(this->Mesh->GetBoundingBox().min, 1)) == VFrustum::F_INSIDE))
+	{
+		if(Type == RenderPassBufferType::GBuffer)
+			VDebugStatics::Objects++;
+
+	//if (CameraComponent->IsWithinFrustum(this->Mesh->GetBoundingBox()) || !VGameStatics::GetGame()->GetFrustumCulling()) {
 
 		VSceneComponent::RenderPass(Shader, CMT, Type);
 
@@ -165,6 +170,7 @@ void VMeshComponent::RenderPass(VShader* Shader, glm::mat4 ParentModelMatrix, Re
 			Mesh->RenderPass();
 		}
 	}
+	//}
 }
 
 void VMeshComponent::Draw(glm::mat4 ParentModelMatrix)

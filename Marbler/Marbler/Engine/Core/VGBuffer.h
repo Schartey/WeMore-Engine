@@ -28,7 +28,7 @@ public:
 	void PointLightPass(VScene* Scene, VSceneObject* PointLight);
 	void DirectionalLightPass(VScene* Scene, GLuint TestMap, GLuint ShadowMap, glm::mat4 DepthVP);
 	void DrawSkybox(VScene* Scene);
-	void FinalPass();
+	void FinalPass(bool wireframeMode);
 
 	VShader* GetGeometryShader();
 

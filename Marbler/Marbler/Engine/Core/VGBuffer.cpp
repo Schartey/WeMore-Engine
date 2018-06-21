@@ -265,12 +265,16 @@ void VGBuffer::DrawSkybox(VScene* Scene)
 	//glCullFace(GL_BACK);
 }
 
-void VGBuffer::FinalPass()
+void VGBuffer::FinalPass(bool wireframeMode)
 {
 	//Multisample
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, multisampleBuffer);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
-	glReadBuffer(GL_COLOR_ATTACHMENT4);
+	if(wireframeMode)
+		glReadBuffer(GL_COLOR_ATTACHMENT1);
+	else
+		glReadBuffer(GL_COLOR_ATTACHMENT4);
+
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glBlitFramebuffer(0, 0, Width, Height,
 		0, 0, Width, Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);

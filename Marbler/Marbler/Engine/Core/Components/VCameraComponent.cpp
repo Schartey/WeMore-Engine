@@ -11,7 +11,7 @@
 
 VCameraComponent::VCameraComponent(VScene* Scene, std::string Name) : VSceneComponent(Scene, Name)
 {
-
+	Frustum = new VFrustum();
 }
 
 float VCameraComponent::GetPhi()
@@ -75,6 +75,7 @@ glm::mat4 VCameraComponent::GetViewMatrix()
 
 		Model = glm::translate(glm::mat4(), thePosition);
 
+		Frustum->setCamDef(thePosition, Target->GetGlobalPosition(), glm::vec3(0, 1, 0));
 
 		ViewMatrix = glm::lookAt(thePosition,
 			Target->GetGlobalPosition(),
@@ -96,27 +97,14 @@ glm::mat4 VCameraComponent::GetViewMatrix()
 	return ViewMatrix;
 }
 
-bool VCameraComponent::IsWithinFrustum(BBox Box)
-{	
-	//Frustum Culling with Radar Approach onto BoundingBox
-	//Check Z
-	if (!(Box.min.z > NearPlane || Box.min.z < FarPlane || Box.max.z > NearPlane || Box.max.z < FarPlane))
-		return false;
-	//Check Y
-	float FrustumHeight = Box.min.y * 2 * glm::tan(glm::degrees(Fov) / 2);
-	
-	if (!(Box.min.y > -FrustumHeight / 2 || Box.min.y < FrustumHeight / 2 || Box.max.y > -FrustumHeight / 2 || Box.max.y < FrustumHeight))
-		return false;
-	//Check X
-	float FrustumWidth = FrustumHeight * Ratio;
-	if (!(Box.min.x > -FrustumWidth / 2 || Box.min.x < FrustumWidth / 2 || Box.max.x > -FrustumWidth / 2 || Box.max.x < FrustumWidth))
-		return false;
-	return true;
-}
-
 glm::mat4 VCameraComponent::GetProjectionMatrix()
 {
 	return ProjectionMatrix;
+}
+
+VFrustum* VCameraComponent::GetFrustum()
+{
+	return Frustum;
 }
 
 void VCameraComponent::SetTarget(VSceneComponent* SceneComponent)
@@ -136,6 +124,13 @@ void VCameraComponent::SetProjectionMatrix(float Fov, int Width, int Height, flo
 	this->NearPlane = NearPlane;
 	this->FarPlane = FarPlane;
 	this->Ratio = Width / (float)Height;
+	this->HeightNear = 2 * glm::tan(Fov / 2)*NearPlane;
+	this->WidthNear = HeightNear * this->Ratio;
+	this->HeightFar = 2 * glm::tan(Fov / 2)*FarPlane;
+	this->WidthFar = HeightFar * this->Ratio;
+
+
+	Frustum->setCamInternals(Fov, this->Ratio, NearPlane, FarPlane);
 
 	this->ProjectionMatrix = glm::perspective(glm::radians(Fov), Width / (float)Height, NearPlane, FarPlane);
 }
