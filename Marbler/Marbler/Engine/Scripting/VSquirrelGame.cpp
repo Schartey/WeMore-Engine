@@ -647,18 +647,56 @@ SQInteger func_setDirectionalLight(HSQUIRRELVM v)
 
 SQInteger func_createPointLight(HSQUIRRELVM v)
 {
-	//This has to be stored in the Object stuff
-	VPointLight2* PointLight1 = VSquirrelGame::Game->GetActiveScene()->CreatePointLight("Pointlight1");
-	PointLight1->GetLightComponent()->GetPointLight().Ambient = 0.0f;
-	PointLight1->GetLightComponent()->GetPointLight().Diffuse = 0.8f;
-	PointLight1->GetLightComponent()->GetPointLight().Color = glm::vec3(1.0f, 1.0f, 1.0f);
-	PointLight1->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(1.0, 0.09, 0.032);
+	int id = -1;
 
-	PointLight1->SetScale(glm::vec3(50.0f));
-	PointLight1->SetPosition(glm::vec3(10.0f, 1.0f, 0.0f));
+	float ambient;
+	float diffuse;
+	float AttenuationC;
+	float AttenuationL;
+	float AttenuationE;
+	float Scale;
+	float posX;
+	float posY;
+	float posZ;
 
-	int id = VSquirrelGame::Game->GetObjectPool()->AddSceneObject(PointLight1);
+	if (sq_gettype(v, 2) == OT_FLOAT && sq_getfloat(v, 2, &ambient) == 0)
+	{
+		if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &diffuse) == 0)
+		{
+			if (sq_gettype(v, 4) == OT_FLOAT && sq_getfloat(v, 4, &AttenuationC) == 0)
+			{
+				if (sq_gettype(v, 5) == OT_FLOAT && sq_getfloat(v, 5, &AttenuationL) == 0)
+				{
+					if (sq_gettype(v, 6) == OT_FLOAT && sq_getfloat(v, 6, &AttenuationE) == 0)
+					{
+						if (sq_gettype(v, 7) == OT_FLOAT && sq_getfloat(v, 7, &Scale) == 0)
+						{
+							if (sq_gettype(v, 8) == OT_FLOAT && sq_getfloat(v, 8, &posX) == 0)
+							{
+								if (sq_gettype(v, 9) == OT_FLOAT && sq_getfloat(v, 9, &posY) == 0)
+								{
+									if (sq_gettype(v, 10) == OT_FLOAT && sq_getfloat(v, 10, &posZ) == 0)
+									{
+										//This has to be stored in the Object stuff
+										VPointLight2* PointLight = VSquirrelGame::Game->GetActiveScene()->CreatePointLight("Pointlight");
+										PointLight->GetLightComponent()->GetPointLight().Ambient = ambient;
+										PointLight->GetLightComponent()->GetPointLight().Diffuse = diffuse;
+										PointLight->GetLightComponent()->GetPointLight().Color = glm::vec3(1.0f, 1.0f, 1.0f);
+										PointLight->GetLightComponent()->GetPointLight().Attenuation = VAttenuation(AttenuationC, AttenuationL, AttenuationE);
 
+										PointLight->SetScale(glm::vec3(Scale));
+										PointLight->SetPosition(glm::vec3(posX, posY, posZ));
+
+										id = VSquirrelGame::Game->GetObjectPool()->AddSceneObject(PointLight);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	sq_pushinteger(v, id); //push the number of arguments as return value
 	return 1; //1 because 1 value is returned
 }
