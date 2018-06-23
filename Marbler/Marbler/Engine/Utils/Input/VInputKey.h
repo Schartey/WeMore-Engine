@@ -5,6 +5,7 @@ enum VInputKey {
 	KEY_S,
 	KEY_A,
 	KEY_D,
+	KEY_M,
 	KEY_F1,
 	KEY_F2,
 	KEY_F3,

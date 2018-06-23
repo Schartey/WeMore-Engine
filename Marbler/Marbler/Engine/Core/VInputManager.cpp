@@ -17,6 +17,7 @@ void VInputManager::Initialize(VWindow* Window)
 	inputMap[GLFW_KEY_S] = KEY_S;
 	inputMap[GLFW_KEY_A] = KEY_A;
 	inputMap[GLFW_KEY_D] = KEY_D;
+	inputMap[GLFW_KEY_M] = KEY_M;
 	inputMap[GLFW_KEY_UP] = KEY_UP;
 	inputMap[GLFW_KEY_DOWN] = KEY_DOWN;
 	inputMap[GLFW_KEY_LEFT] = KEY_LEFT;

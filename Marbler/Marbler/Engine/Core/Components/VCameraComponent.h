@@ -15,6 +15,7 @@ public:
 	void IncreasePhi(float Phi);
 	void IncreaseTheta(float Theta);
 
+	glm::vec3 GetForward();
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetModel() { return Model; }
 	glm::mat4 GetProjectionMatrix();

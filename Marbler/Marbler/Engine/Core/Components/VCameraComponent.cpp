@@ -39,6 +39,13 @@ void VCameraComponent::IncreaseTheta(float Theta)
 	this->Theta += Theta;
 }
 
+glm::vec3 VCameraComponent::GetForward()
+{
+	glm::vec3 Position = GetModel()*glm::vec4(1.0f);
+
+	return glm::normalize(Target->GetGlobalPosition() - Position);
+}
+
 glm::mat4 VCameraComponent::GetViewMatrix()
 {
 	if (bHasTarget)
