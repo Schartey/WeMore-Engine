@@ -454,6 +454,78 @@ SQInteger func_setActorMass(HSQUIRRELVM v)
 	return 1; //1 because 1 value is returned
 }
 
+SQInteger func_setInputMovementSpeed(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat speed = 0.0f;
+
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VInputComponent* InputComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VInputComponent>(id);
+
+		if (InputComponent != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &speed) == 0)
+			{
+				InputComponent->SetMovementSpeed(speed);
+				sq_pushbool(v, SQTrue); //push the number of arguments as return value
+				return 1; //1 because 1 value is returned
+			}
+		}
+	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setInputJumpForce(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat force = 0.0f;
+
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VInputComponent* InputComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VInputComponent>(id);
+
+		if (InputComponent != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &force) == 0)
+			{
+				InputComponent->SetJumpForce(force);
+				sq_pushbool(v, SQTrue); //push the number of arguments as return value
+				return 1; //1 because 1 value is returned
+			}
+		}
+	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
+SQInteger func_setInputMaxSpeed(HSQUIRRELVM v)
+{
+	SQInteger id = -1;
+	SQFloat maxSpeed = 7.0f;
+
+
+	if (sq_gettype(v, 2) == OT_INTEGER && sq_getinteger(v, 2, &id) == 0)
+	{
+		VInputComponent* InputComponent = VSquirrelGame::Game->GetObjectPool()->GetComponent<VInputComponent>(id);
+
+		if (InputComponent != nullptr)
+		{
+			if (sq_gettype(v, 3) == OT_FLOAT && sq_getfloat(v, 3, &maxSpeed) == 0)
+			{
+				InputComponent->SetMaxSpeed(maxSpeed);
+				sq_pushbool(v, SQTrue); //push the number of arguments as return value
+				return 1; //1 because 1 value is returned
+			}
+		}
+	}
+	sq_pushbool(v, SQFalse); //push the number of arguments as return value
+	return 1; //1 because 1 value is returned
+}
+
 SQInteger func_restrictActorMotionLinear(HSQUIRRELVM v)
 {
 	SQInteger id = -1;
@@ -705,7 +777,7 @@ SQInteger func_createTextWidget(HSQUIRRELVM v)
 {
 	//Store this
 	VTextWidget* TextWidget = new VTextWidget();
-	TextWidget->GetTextElement()->SetText(Text("", 0.0f, 0.0f, 0.5f, glm::vec3(1, 1, 1)));
+	TextWidget->GetTextElement()->SetText(Text("", 0.0f, 0.0f, 0.5f, glm::vec4(1, 1, 1, 1)));
 	int id = VSquirrelGame::Game->GetGUI()->AddWidget(TextWidget);
 
 	sq_pushinteger(v, id); //push the number of arguments as return value
@@ -757,7 +829,7 @@ SQInteger func_setTextWidgetPosition(HSQUIRRELVM v)
 	return 1; //1 because 1 value is returned
 }
 
-SQInteger func_setTextWidgetVisibility(HSQUIRRELVM v)
+SQInteger func_setUserWidgetVisibility(HSQUIRRELVM v)
 {
 	SQInteger id = -1;
 	SQBool visibility = false;
@@ -766,8 +838,8 @@ SQInteger func_setTextWidgetVisibility(HSQUIRRELVM v)
 	{
 		if (sq_gettype(v, 3) == OT_BOOL && sq_getbool(v, 3, &visibility) == 0)
 		{
-			VTextWidget* TextWidget = (VTextWidget*)VSquirrelGame::Game->GetGUI()->GetWidgetById(id);
-			TextWidget->SetVisibility(visibility);
+			VUserWidget* UserWidget = VSquirrelGame::Game->GetGUI()->GetWidgetById(id);
+			UserWidget->SetVisibility(visibility);
 
 			sq_pushbool(v, true); //push the number of arguments as return value
 			return 1; //1 because 1 value is returned
@@ -1089,15 +1161,18 @@ VSquirrelGame::VSquirrelGame(HSQUIRRELVM v, VGame* Game)
 
 	//PhysX
 	register_global_func(this->v, func_setActorMass, "setActorMass");
+	register_global_func(this->v, func_setInputMovementSpeed, "setInputMovementSpeed");
+	register_global_func(this->v, func_setInputJumpForce, "setInputJumpForce");
+	register_global_func(this->v, func_setInputMaxSpeed, "setInputMaxSpeed");
 	register_global_func(this->v, func_restrictActorMotionLinear, "restrictActorMotionLinear");
 	register_global_func(this->v, func_restrictActorMotionAngular, "restrictActorMotionAngular");
-
+	
 	//Debug
 	register_global_func(this->v, func_getFPS, "getFPS");
 	register_global_func(this->v, func_getObjectsCount, "getObjectsCount");
 
 	register_global_func(this->v, func_setTextWidgetText, "setTextWidgetText");
-	register_global_func(this->v, func_setTextWidgetVisibility, "setTextWidgetVisibility");
+	register_global_func(this->v, func_setUserWidgetVisibility, "setUserWidgetVisibility");
 	register_global_func(this->v, func_setTextWidgetPosition, "setTextWidgetPosition");
 	register_global_func(this->v, func_setSceneObjectPosition, "setSceneObjectPosition");
 	register_global_func(this->v, func_setSceneObjectRotationDeg, "setSceneObjectRotationDeg");

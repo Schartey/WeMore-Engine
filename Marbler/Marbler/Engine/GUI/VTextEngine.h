@@ -23,10 +23,10 @@ struct Text {
 	GLfloat posX;
 	GLfloat posY;
 	GLfloat scale;
-	glm::vec3 color;
+	glm::vec4 color;
 
 	Text() : text("Text"), scale(1.0f) {}
-	Text(std::string text, GLfloat posX, GLfloat posY, GLfloat scale, glm::vec3 color) : text(text), posX(posX), posY(posY), scale(scale), color(color) {}
+	Text(std::string text, GLfloat posX, GLfloat posY, GLfloat scale, glm::vec4 color) : text(text), posX(posX), posY(posY), scale(scale), color(color) {}
 };
 
 class VTextEngine

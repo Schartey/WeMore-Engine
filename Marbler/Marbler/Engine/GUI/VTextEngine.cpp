@@ -99,7 +99,7 @@ void VTextEngine::DrawText(Text text)
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glUniformMatrix4fv(glGetUniformLocation(Shader->programHandle, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-	glUniform3f(glGetUniformLocation(Shader->programHandle, "textColor"), text.color.x, text.color.y, text.color.z);
+	glUniform4f(glGetUniformLocation(Shader->programHandle, "textColor"), text.color.x, text.color.y, text.color.z, text.color.w);
 	glUniform1i(glGetUniformLocation(Shader->programHandle, "text"), 0);
 
 	glActiveTexture(GL_TEXTURE0);

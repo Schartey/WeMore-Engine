@@ -95,6 +95,7 @@ void VEngine::Run()
 	auto lastTime = glfwGetTime();
 	double lastTimeMS = glfwGetTime();
 	double physicsTime = 0;
+	double startupTime = 0;
 
 	while (bRunning)
 	{
@@ -110,10 +111,12 @@ void VEngine::Run()
 
 
 		if (!bPause && deltaT > 0) {
+			startupTime += deltaT;
 
-			physicsTime += deltaT;
+			if(startupTime > 1)
+				physicsTime += deltaT;
 
-			if (physicsTime > 0.01667) 
+			if (physicsTime > 0.01667)
 			{
 				StepPhysics(physicsTime);
 				physicsTime = 0;
@@ -166,11 +169,11 @@ void VEngine::Run()
 		//_gui->draw();
 		Window->Draw();
 	}
+	SquirrelEmbedder->Close();
 }
 
 void VEngine::OnQuit()
 {
-	SquirrelEmbedder->Close();
 	bRunning = false;
 }
 

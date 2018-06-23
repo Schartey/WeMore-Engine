@@ -13,6 +13,7 @@ VImageElement* VImageWidget::GetImageElement()
 
 void VImageWidget::RenderPass()
 {
+	if (!this->visibility) return;
 	ImageElement->RenderPass();
 }
 VImageWidget::~VImageWidget()

@@ -123,9 +123,24 @@ class Engine.SmallWall extends Engine.Actor {
     }
 }
 
+class Engine.Stone extends Engine.Actor {
+
+    constructor()
+    {
+		local stoneActorId = createActor("StoneActor", false, false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		id = stoneActorId;
+
+		local stoneMeshComponentId = createMeshComponent("StoneMeshComponentId", "Rock_6/Rock_6.OBJ", "Box", false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, stoneActorId);
+		meshId = stoneMeshComponentId;
+
+		//setMeshMaterial(smallWallMeshComponentId, 1.0, 1.0, 1.0, 0.0, 0.0);
+    }
+}
+
 class Engine.Marble extends Engine.Actor {
 	id = null;
 	meshId = null;
+	inputId = null;
 
     constructor()
     {
@@ -144,8 +159,24 @@ class Engine.Marble extends Engine.Actor {
 		//attachComponentToSceneObject(cameraComponendId, cameraActorId);
 		setCameraTarget(cameraComponentId, marbleMeshComponentId);
 		local inputComponentId = createInputComponent("InputComponent", cameraActorId);
+		inputId = inputComponentId;
 		//local particleComponentId = createParticleComponent("ParticleComponent", floorActorId);
     }
+
+	function SetMovementSpeed(speed)
+	{
+		setInputMovementSpeed(inputId, speed);
+	}
+
+	function SetJumpForce(force)
+	{
+		setInputJumpForce(inputId, force);
+	}
+
+	function SetMaxSpeed(maxSpeed)
+	{
+		setInputMaxSpeed(inputId, maxSpeed);
+	}
 }
 
 class Engine.UserWidget
@@ -156,6 +187,13 @@ class Engine.UserWidget
 	function GetVisibility()
 	{
 		return visibility;
+	}
+
+	function ToggleVisibility()
+	{
+		::print("test");
+		visibility = !visibility;
+		setUserWidgetVisibility(id, visibility);
 	}
 }
 class Engine.TextWidget extends Engine.UserWidget
@@ -175,11 +213,13 @@ class Engine.TextWidget extends Engine.UserWidget
 	{
 		setTextWidgetPosition(id, posx, posy);
 	}
-
-	function ToggleVisibility()
+}
+class Engine.ImageWidget extends Engine.UserWidget
+{
+	constructor()
 	{
-		visibility = !visibility;
-		setTextWidgetVisibility(id, visibility);
+		local imageWidgetId = createImageWidget();
+		id = imageWidgetId;
 	}
 }
 

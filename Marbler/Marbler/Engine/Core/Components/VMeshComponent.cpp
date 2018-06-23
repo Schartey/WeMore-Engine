@@ -102,9 +102,13 @@ void VMeshComponent::SetBPhysics(bool bPhysics)
 	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
 
 	this->bPhysics = bPhysics;
-	ActorOwner->GetRigidActor()->detachShape(*this->PhysicsShape);
-	this->PhysicsShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, bPhysics);
-	ActorOwner->GetRigidActor()->attachShape(*this->PhysicsShape);
+
+	if (ActorOwner->GetRigidActor() != nullptr)
+	{
+		ActorOwner->GetRigidActor()->detachShape(*this->PhysicsShape);
+		this->PhysicsShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, bPhysics);
+		ActorOwner->GetRigidActor()->attachShape(*this->PhysicsShape);
+	}
 }
 
 void VMeshComponent::AttachBasicPhysicsShape(PxBoxGeometry Geometry, PxMaterial* Material)

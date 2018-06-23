@@ -36,6 +36,7 @@ public:
 
 	void SetJumpForce(float JumpForce);
 	void SetMovementSpeed(float MovementSpeed);
+	void SetMaxSpeed(float MaxSpeed);
 
 	void OnMouseMoved(double deltaX, double deltaY);
 
@@ -46,6 +47,7 @@ public:
 protected:
 	bool InputMode;
 	VScene * Scene;
+	float MaxSpeed = 7.0f;
 	float MovementSpeed = 10.0f;
 	float JumpForce = 300.0f;
 	glm::vec3 MovementVector = glm::vec3();

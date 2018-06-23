@@ -188,6 +188,15 @@ void VInputComponent::SetMovementSpeed(float MovementSpeed)
 	this->MovementSpeed = MovementSpeed;
 }
 
+void VInputComponent::SetMaxSpeed(float MaxSpeed)
+{
+	this->MaxSpeed = MaxSpeed;
+
+	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
+
+	((PxRigidDynamic*)ActorOwner->GetRigidActor())->setMaxAngularVelocity(this->MaxSpeed);
+}
+
 void VInputComponent::OnMouseMoved(double deltaX, double deltaY)
 {
 	VActor* ActorOwner = dynamic_cast<VActor*>(this->Owner);
