@@ -23,6 +23,7 @@ public:
 	void OnUpReleased();
 	void OnDownReleased();
 	void OnSpaceBarPressed();
+	void OnMPressed();
 	void OnF1Pressed();
 	void OnF2Pressed();
 	void OnF3Pressed();
@@ -31,6 +32,11 @@ public:
 
 	void OnQuitPressed();
 
+	void ChangeInputMode(bool InputMode);
+
+	void SetJumpForce(float JumpForce);
+	void SetMovementSpeed(float MovementSpeed);
+
 	void OnMouseMoved(double deltaX, double deltaY);
 
 	virtual void Update(double deltaT) override;
@@ -38,6 +44,8 @@ public:
 	~VInputComponent();
 
 protected:
+	bool InputMode;
+	VScene * Scene;
 	float MovementSpeed = 10.0f;
 	float JumpForce = 300.0f;
 	glm::vec3 MovementVector = glm::vec3();
