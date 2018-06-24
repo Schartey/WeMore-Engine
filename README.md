@@ -2,10 +2,13 @@
 Development on Marbler has started with my 4th Semester at the Technical University Vienna. As part of the Course "Computergraphik", it 
 was essential to create a game in C++ and OpenGL with at least two major effects implemented. The Game was split into an Engine and the Game itself. Development will continue after the lecture.
 
-## Effects
-Deferred Lighting
-Shadow Mapping
-Script - Engine (Squirrel)
+## Features
+* Deferred Lighting
+* Shadow Mapping
+* Script - Engine (Squirrel)
+* Complex Object Loading with Assimp
+* PhysX
+* GUI-System
 
 ## Todo
 The whole project needs restructuring, a lot of implementation aspects have to be rethought, since they were added on the fly, without much time for planning. Every aspect has to become more robust.
@@ -23,3 +26,6 @@ The whole project needs restructuring, a lot of implementation aspects have to b
 * Cel - Shading
 * Brush - Strokes
 * Lighting - Forward+
+* Better GUI-System
+* Complex Mesh file import
+* Persistent Asset Manager
